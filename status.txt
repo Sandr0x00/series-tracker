@@ -1,0 +1,125 @@
+Dragonball Super;E00015;-6px
+Gotham;S03E16;-4px
+One Piece;E00786;-5px
+Lucifer;S02E14;0px
+Rick and Morty;S03E02;-5px
+The Flash;S03E19;-2px
+Vikings;S02E05;-11px
+RWBY;S05E01;-4px
+Naruto Shippuuden;E00375;-9px
+Sherlock;S05E01;-4px
+Archer;S08E01;-6px
+Breaking Bad;S04E01;-3px
+Daredevil;S02E03;--0px
+Game of Thrones;S07E01;-10px
+Tokyo Ghoul;S03E01;-5px
+Arrow;S05E01;-3px
+Limitless;S02E01;-2px
+Dexter;S08E01;-10px
+Fairy Tail;E00216;-5px
+Sense8;S02E01;-6px
+Heroes Reborn;S02E01;-10px
+Spawn;S02E01;-0px
+One Punch Man;S02E01;-5px
+Momo;E00005;--1px
+Shore Stein Papier;E00126;-14px
+Beyblade;S02E01;-2px
+Minority Report;S01E03;-3px
+How i met your Mother;S07E14;-7px
+Hawaii Five-0;S05E08;-2px
+Black Lagoon;S04E01;-4px
+2 Broke Girls;S02E15;-4px
+Mirai Nikki;E00011;-8px
+Graceland;S01E01;-5px
+Magi;S03E01;-14px
+Deadman Wonderland;S02E01;-6px
+Hannibal;S03E01;-6px
+Steins Gate;E00015;-7px
+Ghost Whisperer;S04E08;-9px
+Two and a Half Men;S08E17;-2px
+Attack on Titan;S02E01;-4px
+Btooom;S02E01;-6px
+Digimon;S06E01;-6px
+Ben 10 - Omniverse;S01E06;-5px
+Green Lantern - The Animated Series;S02E01;-3px
+Criminal Minds;S09E07;-2px
+Cougar Town;S04E16;-7px
+The Walking Dead;S02E02;-3px
+Navy CIS;S01E01;-10px
+Vampire Diaries;S02E07;-6px
+American Dad;S04E06;-6px
+Family Guy;S01E07;-4px
+Desperate Housewives;S03E01;-6px
+Big Bang Theory;S05E01;-3px
+Detective Conan;E00140;-6px
+The Mentalist;S05E01;-3px
+Supernatural;S08E01;-2px
+Leverage;S05E01;-3px
+New Girl;S02E01;-3px
+Eureka;S04E14;-3px
+Castle;S05E01;-4px
+GSG9;S01E07;-2px
+Lost;S01E01;-2px
+Shaman King;Exxxxx;-9px
+Death Note;Exxxxx;-2px
+Chuck;SxxExx;-10px
+Firefly;SxxExx;-6px
+Scrubs;SxxExx;-6px
+Naruto;Exxxxx;-6px
+Reaper;SxxExx;-2px
+Heroes;SxxExx;-2px
+Hellsing;Exxxxx;-6px
+Primeval;SxxExx;-3px
+Elfen Lied;Exxxxx;-1px
+Numb3rs;SxxExx;-6px
+Lie to Me;SxxExx;-5px
+Soul Eater;Exxxxx;-3px
+Moonlight;SxxExx;-9px
+Stripperella;SxxExx;-3px
+Dragonball;Exxxxx;-8px
+Dragonball Z;Exxxxx;-5px
+Dragonball GT;Exxxxx;-7px
+Dead Like Me;SxxExx;-8px
+My Name is Earl;SxxExx;-6px
+V - Die Besucher;SxxExx;-9px
+No Ordinary Family;SxxExx;-26px
+Ben 10;SxxExx;-2px
+Ben 10 - Alien Force;SxxExx;-1px
+Ben 10 - Ultimate Alien;SxxExx;-2px
+Human Target;SxxExx;-0px
+Wolf's Rain;Exxxxx;-6px
+Spartacus;SxxExx;-2px
+Fringe;SxxExx;-3px
+Inuyasha;Exxxxx;-4px
+Weeds;SxxExx;-3px
+Bleach;Exxxxx;-10px
+Avatar - The Last Airbender;BxxExx;-2px
+Californication;SxxExx;-10px
+Cowboy Bebop;Exxxxx;-9px
+Samurai Champloo;Exxxxx;-5px
+Code Geass;SxxExx;-5px
+Fullmetal Alchemist;Exxxxx;-6px
+Claymore;SxxExx;-6px
+Hellsing Ultimate;Exxxxx;-7px
+YU-GI-OH;Exxxxx;-6px
+Gungrave;Exxxxx;-5px
+Avatar - The Legend of Korra;BxxExx;-3px
+The Boondocks;SxxExx;-9px
+Burn Notice;SxxExx;-8px
+Fate Zero;SxxExx;-2px
+Darker than Black;SxxExx;-10px
+Afro Samurai;Exxxxx;-6px
+Black Cat;Exxxxx;-9px
+Code Breaker;Exxxxx;-6px
+Berserk;Exxxxx;-7px
+Another;Exxxxx;-5px
+Warehouse 13;SxxExx;-3px
+Gurren Lagann;Exxxxx;-5px
+Das Geheimnis der Mumie;SxxExx;-4px
+Psycho Pass;SxxExx;-6px
+Parasyte;Exxxxx;-6px
+Pokemon Origins;Exxxxx;-6px
+Hunter X Hunter;Exxxxx;-6px
+Samurai7;Exxxxx;-2px
+Ugly Americans;Exxxxx;-6px
+Fate stay night UBW;Exxxxx;-5px

@@ -12,9 +12,6 @@
 <?php
 require 'helper.php';
 
-$displayWidth = '130';
-$displayHeight = '200';
-
 ?>
 <style type='text/css'>
 * {
@@ -37,7 +34,7 @@ body {
   font-size: 0;
   display: inline-block;
   position: relative;
-  width: <?= $displayWidth ?>px;
+  width: <?= DISPLAY_WIDTH ?>px;
   overflow: hidden;
 }
 
@@ -60,7 +57,7 @@ img {
 }
 
 .series.x {
-  background: #555 url(img/<?= $displayHeight ?>/x.png) no-repeat;
+  background: #555 url(img/<?= DISPLAY_HEIGHT ?>/x.png) no-repeat;
 }
 
 img.x {
@@ -197,46 +194,44 @@ $serien = file('status.txt');
 
 $titelList = array ();
 
-foreach ( $serien as $zeile ) {
-  $realHeight = $displayHeight;
+foreach ($serien as $zeile) {
   if (! Helper::startsWith($zeile, '#')) {
     $margin = '0px';
     $serie = explode(SEPARATOR, $zeile);
-    $titel = $serie ['0'];
-    $serie ['1'] = trim($serie ['1']);
+    $titel = $serie['0'];
+    $serie['1'] = trim($serie['1']);
     if (sizeof($serie) > 2) {
-      $margin = $serie ['2'];
+      $margin = $serie['2'];
     }
     $titel_ = str_replace(' ', '_', $titel);
-    if (Helper::endsWith($serie ['1'], 'x')) {
+    if (Helper::endsWith($serie['1'], 'x')) {
       $class = 'x';
     } else {
       $class = '';
     }
     $imgLocation = '';
-    for($h = 300; $h <= 500; $h += 100) {
+    for ($h = 300; $h <= 500; $h += 100) {
       $imgLocation = "img/$h/$titel.jpg";
       if (file_exists($imgLocation)) {
         if ($margin != '0px') {
           break;
         }
         list ( $width, $height, $type, $attr ) = getimagesize($imgLocation);
-        $margin = '-' . round(($width * $displayHeight / $height - $displayWidth) / 2) . 'px';
+        $margin = '-' . round(($width * DISPLAY_HEIGHT / $height - DISPLAY_WIDTH) / 2) . 'px';
         break;
       }
     }
     if (! file_exists($imgLocation)) {
-      $imgLocation = "img/$displayHeight/unknown.jpg";
+      $imgLocation = 'img/' . DISPLAY_HEIGHT . '/unknown.jpg';
     }
     // see series.js
-    echo '<a class="series '.$class.'" id="'.$titel_.'">';
-    echo '<img class="' . $class . '" id="' . $titel_ . '_pic" style="margin-left:' . $margin . ';" src="' . $imgLocation . '" height="' . $realHeight . 'px" width="' . $displayWidth . 'px" alt="' . $titel . '"/>';
-    echo '<span class="shadow" id="'. $titel_ . '1"><br>' . $serie ['1'] . '</span>';
+    echo '<a class="series ' . $class . '" id="' . $titel_ . '">';
+    echo '<img class="' . $class . '" id="' . $titel_ . '_pic" style="margin-left:' . $margin . ';" src="' . $imgLocation . '" height="' . DISPLAY_HEIGHT . 'px" width="' . DISPLAY_WIDTH . 'px" alt="' . $titel . '"/>';
+    echo '<span class="shadow" id="' . $titel_ . '1"><br>' . $serie['1'] . '</span>';
     echo '</a>';
     echo "\n";
     array_push($titelList, $titel);
   }
-  $displayHeight = $realHeight;
 }
 ?>
 <div id="bg"></div>
@@ -262,14 +257,13 @@ foreach ( $serien as $zeile ) {
   </div>
   <datalist id="titelList">
     <?php
-    foreach ( $titelList as $element ) {
+    foreach ($titelList as $element) {
       echo '<option value="' . $element . '" />';
     }
     ?>
 </datalist>
   <script type="text/javascript" src="jquery.js"></script>
-  <script type="text/javascript"
-    src="bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bootstrap-3.3.5/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="series.js"></script>
 </body>
 </html>

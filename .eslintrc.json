@@ -1,0 +1,19 @@
+{
+  "env": {
+    "browser": true,
+    "jquery": true,
+    "es6": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "no-compare-neg-zero": "error",
+    "no-alert": "error",
+    "eqeqeq": ["error", "always", {"null": "ignore"}],
+    "no-var": "error",
+    "indent": ["error", 4, { "SwitchCase": 1 }],
+    "no-trailing-spaces": "error",
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "brace-style": ["error", "1tbs"],
+    "semi": ["error", "always"]
+  }
+}

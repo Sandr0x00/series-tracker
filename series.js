@@ -1,27 +1,26 @@
-Number.prototype.pad = function(size) {
-    var s = String(this);
+Number.prototype.pad = function (size) {
+    let s = String(this);
     while (s.length < size) {
-        s = "0" + s;
+        s = '0' + s;
     }
     return s;
-}
+};
 
-$(document).ready(function() {
-    var KEY = {
-        ESCAPE : 27,
-        ENTER : 13
+$(document).ready(function () {
+    const KEY = {
+        ESCAPE: 27,
+        ENTER: 13
     };
-    var oldStand = '';
-    var rExpAll = "^((S|B)[0-9]{2}E[0-9]{2}|E[0-9]{5})$";
-    var rExpB = "^B[0-9]{2}E[0-9]{2}$";
-    var rExpS = "^S[0-9]{2}E[0-9]{2}$";
-    var rExpE = "^E[0-9]{5}$";
-    var marginLeft = "";
-	
+    let oldStand = '';
+    let rExpAll = '^((S|B)[0-9]{2}E[0-9]{2}|E[0-9]{5})$';
+    let rExpB = '^B[0-9]{2}E[0-9]{2}$';
+    let rExpS = '^S[0-9]{2}E[0-9]{2}$';
+    let rExpE = '^E[0-9]{5}$';
+    let marginLeft = '';
+
     function show(btn) {
-        var titel_ = $(btn).attr('id');
-        if (titel_ == 'plus') {
-            add = true;
+        let titel_ = $(btn).attr('id');
+        if (titel_ === 'plus') {
             $('#titel').val('');
             $('#titel').prop('readonly', false);
             $('#stand').val('');
@@ -30,24 +29,23 @@ $(document).ready(function() {
             showButtons(oldStand);
             // $('#titel').focus();
         } else {
-            add = false;
             // /g - search all
-            var titel = titel_.replace(/_/g, " ");
-            var stand = $('#' + titel_ + '1').html();
-            marginLeft = $("#" + titel_ + "_pic").css('margin-left');
+            let titel = titel_.replace(/_/g, ' ');
+            let stand = $('#' + titel_ + '1').html();
+            marginLeft = $('#' + titel_ + '_pic').css('margin-left');
             stand = stand.split('>')[1];
             oldStand = stand;
             $('#titel').val(titel);
             $('#titel').prop('readonly', true);
             $('#stand').val(stand);
-            var found = false;
-            for (i = 300; i <= 500 && !found; i += 100) {
-                var picUrl = 'img/' + i + '/' + titel + '.jpg';
+            let found = false;
+            for (let i = 300; i <= 500 && !found; i += 100) {
+                let picUrl = 'img/' + i + '/' + titel + '.jpg';
                 $.ajax({
-                    url : picUrl,
-                    type : 'HEAD',
-                    async : false,
-                    success : function() {
+                    url: picUrl,
+                    type: 'HEAD',
+                    async: false,
+                    success: () => {
                         showBig(picUrl);
                         found = true;
                     }
@@ -58,10 +56,11 @@ $(document).ready(function() {
             }
             showButtons(stand);
             // $('#stand').focus();
-            // $('#stand').setSelectionRange(stand[1].length, stand[1].length);
+            // $('#stand').setSelectionRange(stand[1].length,
+            // stand[1].length);
         }
     }
-    
+
     function showButtons(stand) {
         if (stand.match(rExpAll)) {
             $('#EUP').css('display', 'inline-block');
@@ -101,88 +100,93 @@ $(document).ready(function() {
         $('#dialog').css('display', 'none');
     }
 
-    $('a').click(function() {
+    $('a').click(() => {
         show(this);
     });
 
-    $('#titel').keyup(function(e) {
-        if (e.keyCode == KEY.ENTER) {
+    $('#titel').keyup((e) => {
+        if (e.keyCode === KEY.ENTER) {
             $('#stand').focus();
         }
     });
 
-    $('#stand').keyup(function(e) {
+    $('#stand').keyup((e) => {
         showButtons($('#stand').val());
-        if (e.keyCode == KEY.ENTER) {
+        if (e.keyCode === KEY.ENTER) {
             // check form validity
             if ($('#form')[0].checkValidity()) {
                 $('#form').submit();
             }
         }
     });
-    
-    $('#submit').click(function() {
+
+    $('#submit').click(() => {
         if ($('#form')[0].checkValidity()) {
             $('#form').submit();
-        } 
+        }
     });
 
-    $('#form').submit(function(event) {
-        var titel = $('#titel').val();
-        var stand = $('#stand').val();
-        if (oldStand != stand) {
+    $('#form').submit(() => {
+        let titel = $('#titel').val();
+        let stand = $('#stand').val();
+        if (oldStand !== stand) {
             // new state is entered
-            var titel_ = titel.replace(/ /g, "_");
-            // TODO: wenn schon vorhanden, dann in else rein
+            let titel_ = titel.replace(/ /g, '_');
+            // TODO: wenn schon vorhanden, dann
+            // in else rein
             if (!oldStand || 0 === oldStand.length) {
                 // same logic in series.php
                 // insert new serie
-                $('body').prepend($('<a class="n" id="' + titel_ + '"><img src="img/200/unknown.jpg" height="200px" width="130px" alt="' + titel + '"/><span class="n" id="' + titel_ + '1"><br>' + stand + '</span></a>'));
-                $('body').delegate('#' + titel_, 'click', function() {
-                    show(this);
-                });
+                $('body').prepend(
+                    $('<a class="n" id="' + titel_ + '"><img src="img/200/unknown.jpg" height="200px" width="130px" alt="' + titel + '"/><span class="n" id="' + titel_ + '1"><br>' + stand + '</span></a>'));
+                $('body').delegate(
+                    '#' + titel_,
+                    'click',
+                    () => {
+                        show(this);
+                    });
             } else {
                 // update old serie
-                $("#" + titel_ + "1").html("<br>" + stand);
+                $('#' + titel_ + '1').html('<br>' + stand);
             }
-            if (marginLeft != "") {
-                $.post("seriesPost.php", {
-                    titel  : titel,
-                    stand  : stand,
-                    margin : marginLeft
+            // send the data using post
+            if (marginLeft !== '') {
+                $.post('seriesPost.php', {
+                    titel: titel,
+                    stand: stand,
+                    margin: marginLeft
                 });
             } else {
-                // send the data using post
-                $.post("seriesPost.php", {
-                    titel : titel,
-                    stand : stand
+                $.post('seriesPost.php', {
+                    titel: titel,
+                    stand: stand
                 });
-            	
+
             }
         }
         hide();
     });
 
-    $(window).keypress(function(e) {
-        if (e.keyCode == KEY.ESCAPE) {
+    $(window).keypress((e) => {
+        if (e.keyCode === KEY.ESCAPE) {
             hide();
         }
     });
 
-    $('#bg').click(function() {
+    $('#bg').click(() => {
         hide();
     });
 
-    $('#SUP').click(function() {
-        var stand = $('#stand').val();
+    $('#SUP').click(() => {
+        let stand = $('#stand').val();
         if (stand.match(rExpAll)) {
-            var season = stand.split('E')[0];
+            let season = stand.split('E')[0];
             if (stand.match(rExpB)) {
                 season = season.split('B')[1];
-                stand = 'B'
+                stand = 'B';
             } else if (stand.match(rExpS)) {
                 season = season.split('S')[1];
-                stand = 'S'
+                stand = 'S';
             }
             season = parseInt(season);
             season++;
@@ -193,11 +197,11 @@ $(document).ready(function() {
         }
     });
 
-    $('#EUP').click(function() {
-        var stand = $('#stand').val();
+    $('#EUP').click(function () {
+        let stand = $('#stand').val();
         if (stand.match(rExpAll)) {
-            var episode = stand.split('E')[1];
-            var epSize = episode.length;
+            let episode = stand.split('E')[1];
+            let epSize = episode.length;
             episode = parseInt(episode);
             episode++;
             episode = episode.pad(epSize);
@@ -211,9 +215,9 @@ $(document).ready(function() {
 
 function refresh() {
     $.ajax({
-        type: "GET",
-        url: "recalculate.php" ,
-        success : function() { 
+        type: 'GET',
+        url: 'recalculate.php',
+        success: function () {
             location.reload();
 
         }

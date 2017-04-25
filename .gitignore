@@ -1,3 +1,5 @@
 # Eclipse settings
 .settings/
 .settings
+/.project
+/.buildpath

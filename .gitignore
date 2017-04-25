@@ -1,5 +1,2 @@
 # Eclipse settings
 .settings/
-
-# status should not be in the rep
-status.txt

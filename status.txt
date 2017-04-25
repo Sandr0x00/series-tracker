@@ -1,10 +1,10 @@
+Vikings;S03E01;-11px
 Dragonball Super;E00015;-6px
 Gotham;S03E16;-4px
 One Piece;E00786;-5px
 Lucifer;S02E14;0px
 Rick and Morty;S03E02;-5px
 The Flash;S03E19;-2px
-Vikings;S02E05;-11px
 RWBY;S05E01;-4px
 Naruto Shippuuden;E00375;-9px
 Sherlock;S05E01;-4px

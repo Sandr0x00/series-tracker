@@ -172,17 +172,12 @@ input:invalid, .input:invalid {
     <div class="container-fluid">
       <div class="navbar-header pull-left">
         <ul class="nav">
-          <li><a id="plus" class="btn btn-default" type="button"> <span
-              class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-          </a></li>
+          <li><a id="plus" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></li>
         </ul>
       </div>
       <div class="navbar-header pull-right">
         <ul class="nav">
-          <li><a id="refresh" href="javascript:refresh();"
-            class="btn btn-default" type="button"> <span
-              class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-          </a></li>
+          <li><a id="refresh" href="javascript:refresh();" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
         </ul>
       </div>
     </div>
@@ -238,15 +233,11 @@ foreach ($serien as $zeile) {
   <div id="dialog">
     <img id="pic" src="" alt="" height="300px" />
     <form id="form" action="javascript:void(0);">
-      <input id="titel" name="titel" type="text"
-        pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required
-        placeholder="Titel" autocomplete="off" list="titelList">
+      <input id="titel" name="titel" type="text" pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required placeholder="Titel" autocomplete="off" list="titelList">
       <button id="SUP" class="btn btn-default" type="button">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"> </span>
       </button>
-      <input id="stand" name="stand" type="text"
-        pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required
-        placeholder="N&auml;chste Episode" autocomplete="off">
+      <input id="stand" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required placeholder="N&auml;chste Episode" autocomplete="off">
       <button id="EUP" class="btn btn-default" type="button">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"> </span>
       </button>

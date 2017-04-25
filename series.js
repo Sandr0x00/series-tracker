@@ -11,12 +11,12 @@ $(document).ready(function () {
         ESCAPE: 27,
         ENTER: 13
     };
-    let oldStand = '';
-    let rExpAll = '^((S|B)[0-9]{2}E[0-9]{2}|E[0-9]{5})$';
-    let rExpB = '^B[0-9]{2}E[0-9]{2}$';
-    let rExpS = '^S[0-9]{2}E[0-9]{2}$';
-    let rExpE = '^E[0-9]{5}$';
+    const REGEX_ALL = '^((S|B)[0-9]{2}E[0-9]{2}|E[0-9]{5})$';
+    const REGEX_B = '^B[0-9]{2}E[0-9]{2}$';
+    const REGEX_S = '^S[0-9]{2}E[0-9]{2}$';
+    const REGEX_E = '^E[0-9]{5}$';
     let marginLeft = '';
+    let oldStand = '';
 
     function show(btn) {
         let titel_ = $(btn).attr('id');
@@ -62,9 +62,9 @@ $(document).ready(function () {
     }
 
     function showButtons(stand) {
-        if (stand.match(rExpAll)) {
+        if (stand.match(REGEX_ALL)) {
             $('#EUP').css('display', 'inline-block');
-            if (stand.match(rExpE)) {
+            if (stand.match(REGEX_E)) {
                 $('#SUP').css('display', 'none');
             } else {
                 $('#SUP').css('display', 'inline-block');
@@ -179,12 +179,12 @@ $(document).ready(function () {
 
     $('#SUP').click(() => {
         let stand = $('#stand').val();
-        if (stand.match(rExpAll)) {
+        if (stand.match(REGEX_ALL)) {
             let season = stand.split('E')[0];
-            if (stand.match(rExpB)) {
+            if (stand.match(REGEX_B)) {
                 season = season.split('B')[1];
                 stand = 'B';
-            } else if (stand.match(rExpS)) {
+            } else if (stand.match(REGEX_S)) {
                 season = season.split('S')[1];
                 stand = 'S';
             }
@@ -197,9 +197,9 @@ $(document).ready(function () {
         }
     });
 
-    $('#EUP').click(function () {
+    $('#EUP').click(() => {
         let stand = $('#stand').val();
-        if (stand.match(rExpAll)) {
+        if (stand.match(REGEX_ALL)) {
             let episode = stand.split('E')[1];
             let epSize = episode.length;
             episode = parseInt(episode);

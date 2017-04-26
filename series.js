@@ -100,7 +100,7 @@ $(document).ready(function () {
         $('#dialog').css('display', 'none');
     }
 
-    $('a').click(() => {
+    $('a').click(function() {
         show(this);
     });
 
@@ -126,7 +126,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#form').submit(() => {
+    $('#form').submit(function() {
         let titel = $('#titel').val();
         let stand = $('#stand').val();
         if (oldStand !== stand) {
@@ -142,7 +142,7 @@ $(document).ready(function () {
                 $('body').delegate(
                     '#' + titel_,
                     'click',
-                    () => {
+                    function() {
                         show(this);
                     });
             } else {

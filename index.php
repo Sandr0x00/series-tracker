@@ -164,6 +164,9 @@ input:invalid, .input:invalid {
   z-index: 5;
   border-radius: 0px 0px 4px 4px;
 }
+a:hover {
+  cursor: pointer;
+}
 </style>
 <base target="_self">
 </head>

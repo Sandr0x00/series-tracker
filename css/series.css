@@ -25,6 +25,10 @@ body {
   color: #fafafa;
 }
 
+.shadow.x {
+  text-decoration: line-through;
+}
+
 .series {
   font-size: 0;
   display: inline-block;

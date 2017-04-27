@@ -50,7 +50,6 @@ foreach ($serien as $zeile) {
         for ($h = 300; $h <= 500; $h += 100) {
             $imgLocation = "img/$h/$titel.jpg";
             if (file_exists($imgLocation)) {
-                list ($width, $height, $type, $attr) = getimagesize($imgLocation);
                 break;
             }
         }
@@ -60,11 +59,11 @@ foreach ($serien as $zeile) {
         ?>
         <a class="series <?= $class ?>" id="<?= $titel_ ?>"
             <?php
-            if ($imgLocation) { ?>
-           style="background-image: url('<?= $imgLocation ?>');">
+            if ($imgLocation != null) { ?>
+           style="background-image: url('<?= str_replace('\'', '\\\'', $imgLocation) ?>');"
             <?php }
             ?>
-            <span class="shadow" id="<?= $titel_ ?>1"><br><?= $serie['1'] ?></span>
+        ><span class="shadow <?= $class ?>" id="<?= $titel_ ?>1"><br><?= $serie['1'] ?></span>
         </a>
         <?php
         array_push($titelList, $titel);

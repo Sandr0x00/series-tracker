@@ -143,7 +143,7 @@ $(document).ready(function () {
                 // insert new serie
                 let body = $('body');
                 body.prepend(
-                    $('<a class="n" id="' + titel_ + '"><img src="img/200/unknown.jpg" height="200px" width="130px" alt="' + titel + '"/><span class="n" id="' + titel_ + '1"><br>' + stand + '</span></a>'));
+                    $('<a class="n" id="' + titel_ + '"><img src="../img/200/unknown.jpg" height="200px" width="130px" alt="' + titel + '"/><span class="n" id="' + titel_ + '1"><br>' + stand + '</span></a>'));
                 body.delegate(
                     '#' + titel_,
                     'click',

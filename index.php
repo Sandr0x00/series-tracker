@@ -8,9 +8,6 @@
     <link type='text/css' href="bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link type="text/css" href="css/series.css" rel="stylesheet">
     <title>Serien</title>
-    <?php
-    require 'helper.php';
-    ?>
     <base target="_self">
 </head>
 <body>
@@ -32,6 +29,8 @@
 </nav>
 
 <?php
+require 'helper.php';
+
 $serien = file('status.txt');
 
 $titelList = array();
@@ -96,8 +95,8 @@ foreach ($serien as $zeile) {
         <option value="<?= $element ?>"/>
     <?php } ?>
 </datalist>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="series.js"></script>
+<script type="text/javascript" src="js/series.js"></script>
 </body>
 </html>

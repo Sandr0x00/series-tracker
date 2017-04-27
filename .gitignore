@@ -3,3 +3,7 @@
 .settings
 /.project
 /.buildpath
+
+# PHPStorm settings
+.idea
+.idea/

@@ -1,11 +1,8 @@
 <?php
 const SEPARATOR = ';';
-const DISPLAY_WIDTH = '130';
-const DISPLAY_HEIGHT = '200';
 
 const POST_TITEL = 'titel';
 const POST_STAND = 'stand';
-const POST_MARGIN = 'margin';
 
 class Helper {
 
@@ -23,4 +20,3 @@ class Helper {
     return (substr($check, strlen($check) - strlen($endStr), strlen($endStr)) === $endStr);
   }
 }
-?>

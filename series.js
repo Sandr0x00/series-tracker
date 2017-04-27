@@ -15,15 +15,16 @@ $(document).ready(function () {
     const REGEX_B = '^B[0-9]{2}E[0-9]{2}$';
     const REGEX_S = '^S[0-9]{2}E[0-9]{2}$';
     const REGEX_E = '^E[0-9]{5}$';
-    let marginLeft = '';
     let oldStand = '';
 
     function show(btn) {
         let titel_ = $(btn).attr('id');
+        let titleElement = $('#titel');
+        let standElement = $('#stand');
         if (titel_ === 'plus') {
-            $('#titel').val('');
-            $('#titel').prop('readonly', false);
-            $('#stand').val('');
+            titleElement.val('');
+            titleElement.prop('readonly', false);
+            standElement.val('');
             oldStand = '';
             showSmall();
             showButtons(oldStand);
@@ -32,12 +33,11 @@ $(document).ready(function () {
             // /g - search all
             let titel = titel_.replace(/_/g, ' ');
             let stand = $('#' + titel_ + '1').html();
-            marginLeft = $('#' + titel_ + '_pic').css('margin-left');
             stand = stand.split('>')[1];
             oldStand = stand;
-            $('#titel').val(titel);
-            $('#titel').prop('readonly', true);
-            $('#stand').val(stand);
+            titleElement.val(titel);
+            titleElement.prop('readonly', true);
+            standElement.val(stand);
             let found = false;
             for (let i = 300; i <= 500 && !found; i += 100) {
                 let picUrl = 'img/' + i + '/' + titel + '.jpg';
@@ -76,10 +76,11 @@ $(document).ready(function () {
     }
 
     function showBoth(height) {
-        $('#dialog').css('height', height + 'px');
-        $('#dialog').css('margin-top', '-' + height / 2 + 'px');
+        let dialog = $('#dialog');
+        dialog.css('height', height + 'px');
+        dialog.css('margin-top', '-' + height / 2 + 'px');
         $('#bg').css('display', 'block');
-        $('#dialog').css('display', 'block');
+        dialog.css('display', 'block');
     }
 
     function showSmall() {
@@ -89,8 +90,9 @@ $(document).ready(function () {
     }
 
     function showBig(pic) {
-        $('#pic').attr('src', pic);
-        $('#pic').css('display', 'inline-block');
+        let picElem = $('#pic');
+        picElem.attr('src', pic);
+        picElem.css('display', 'inline-block');
         $('#titel').css('display', 'none');
         showBoth(432);
     }
@@ -114,15 +116,17 @@ $(document).ready(function () {
         showButtons($('#stand').val());
         if (e.keyCode === KEY.ENTER) {
             // check form validity
-            if ($('#form')[0].checkValidity()) {
-                $('#form').submit();
+            let form = $('#form');
+            if (form[0].checkValidity()) {
+                form.submit();
             }
         }
     });
 
     $('#submit').click(() => {
-        if ($('#form')[0].checkValidity()) {
-            $('#form').submit();
+        let form = $('#form');
+        if (form[0].checkValidity()) {
+            form.submit();
         }
     });
 
@@ -137,9 +141,10 @@ $(document).ready(function () {
             if (!oldStand || 0 === oldStand.length) {
                 // same logic in series.php
                 // insert new serie
-                $('body').prepend(
+                let body = $('body');
+                body.prepend(
                     $('<a class="n" id="' + titel_ + '"><img src="img/200/unknown.jpg" height="200px" width="130px" alt="' + titel + '"/><span class="n" id="' + titel_ + '1"><br>' + stand + '</span></a>'));
-                $('body').delegate(
+                body.delegate(
                     '#' + titel_,
                     'click',
                     function() {
@@ -150,19 +155,10 @@ $(document).ready(function () {
                 $('#' + titel_ + '1').html('<br>' + stand);
             }
             // send the data using post
-            if (marginLeft !== '') {
-                $.post('seriesPost.php', {
-                    titel: titel,
-                    stand: stand,
-                    margin: marginLeft
-                });
-            } else {
-                $.post('seriesPost.php', {
-                    titel: titel,
-                    stand: stand
-                });
-
-            }
+            $.post('seriesPost.php', {
+                titel: titel,
+                stand: stand
+            });
         }
         hide();
     });
@@ -178,7 +174,8 @@ $(document).ready(function () {
     });
 
     $('#SUP').click(() => {
-        let stand = $('#stand').val();
+        let standElem = $('#stand');
+        let stand = standElem.val();
         if (stand.match(REGEX_ALL)) {
             let season = stand.split('E')[0];
             if (stand.match(REGEX_B)) {
@@ -192,13 +189,14 @@ $(document).ready(function () {
             season++;
             season = season.pad(2);
             stand = stand + season + 'E01';
-            $('#stand').val(stand);
-            $('#stand').focus();
+            standElem.val(stand);
+            standElem.focus();
         }
     });
 
     $('#EUP').click(() => {
-        let stand = $('#stand').val();
+        let standElem = $('#stand');
+        let stand = standElem.val();
         if (stand.match(REGEX_ALL)) {
             let episode = stand.split('E')[1];
             let epSize = episode.length;
@@ -207,8 +205,8 @@ $(document).ready(function () {
             episode = episode.pad(epSize);
             stand = stand.split('E')[0];
             stand = stand + 'E' + episode;
-            $('#stand').val(stand);
-            $('#stand').focus();
+            standElem.val(stand);
+            standElem.focus();
         }
     });
 });
@@ -219,7 +217,6 @@ function refresh() {
         url: 'recalculate.php',
         success: function () {
             location.reload();
-
         }
     });
 }

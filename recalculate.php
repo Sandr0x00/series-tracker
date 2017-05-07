@@ -3,6 +3,7 @@ ignore_user_abort(true);
 const FILE = 'status.txt';
 
 require 'helper.php';
+require 'DbConnection.php';
 
 $serien = file(FILE);
 $f = fopen(FILE, 'w');
@@ -10,19 +11,17 @@ $f = fopen(FILE, 'w');
 foreach ($serien as $zeile) {
     if (!Helper::startsWith($zeile, '#')) {
         $serie = explode(SEPARATOR, $zeile);
-        $titel = trim($serie['0']);
-        $stand = trim($serie['1']);
-        $imgLocation = '';
-        for ($h = 300; $h <= 500; $h += 100) {
-            $imgLocation = "img/$h/$titel.jpg";
-            if (file_exists($imgLocation)) {
-                list ($width, $height, $type, $attr) = getimagesize($imgLocation);
-                break;
-            }
-        }
+        $title = trim($serie['0']);
+        $status = trim($serie['1']);
+
+        $serie = new Serie();
+        $serie->title = $title;
+        $serie->status = $status;
+
+        // write to db
+        DbConnection::getInstance()->upsert($serie);
+
         // write to file
-        $output = $titel . SEPARATOR . $stand . "\n";
-        fwrite($f, $output);
-        echo $output . '<br>';
+        FileHandler::writeLine($f, $title, $status);
     }
 }

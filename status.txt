@@ -1,4 +1,5 @@
-Vikings;S03E01
+Kill la Kill;S01E03
+Vikings;S03E02
 Dragonball Super;E00015
 Gotham;S03E16
 One Piece;E00786

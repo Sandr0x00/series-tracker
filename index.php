@@ -15,8 +15,7 @@
     <div class="container-fluid">
         <div class="navbar-header pull-left">
             <ul class="nav">
-                <li><a id="plus" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-plus"
-                                                                              aria-hidden="true"></span></a></li>
+                <li><a id="plus" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></li>
             </ul>
         </div>
         <div class="navbar-header pull-right">
@@ -29,45 +28,42 @@
 </nav>
 
 <?php
-require 'helper.php';
-
-$serien = file('status.txt');
+require_once 'helper.php';
+require_once 'FileHandler.php';
 
 $titelList = array();
 
-foreach ($serien as $zeile) {
-    if (!Helper::startsWith($zeile, '#')) {
-        $serie = explode(SEPARATOR, $zeile);
-        $titel = $serie['0'];
-        $serie['1'] = trim($serie['1']);
-        $titel_ = str_replace(' ', '_', $titel);
-        if (Helper::endsWith($serie['1'], 'x')) {
-            $class = 'x';
-        } else {
-            $class = '';
+$serien = FileHandler::read();
+
+foreach ($serien as $title => $serie) {
+    //settype($serie, 'Serie/Serie');
+    $titel_ = str_replace(' ', '_', $title);
+
+    // try to find image for serie
+    $imgLocation = '';
+    for ($h = 300; $h <= 500; $h += 100) {
+        $imgLocation = "img/$h/$title.jpg";
+        if (file_exists($imgLocation)) {
+            break;
         }
-        $imgLocation = '';
-        for ($h = 300; $h <= 500; $h += 100) {
-            $imgLocation = "img/$h/$titel.jpg";
-            if (file_exists($imgLocation)) {
-                break;
-            }
-        }
-        if (!file_exists($imgLocation)) {
-            $imgLocation = null;
-        }
-        ?>
-        <a class="series <?= $class ?>" id="<?= $titel_ ?>"
-            <?php
-            if ($imgLocation != null) { ?>
-           style="background-image: url('<?= str_replace('\'', '\\\'', $imgLocation) ?>');"
-            <?php }
-            ?>
-        ><span class="shadow <?= $class ?>" id="<?= $titel_ ?>1"><br><?= $serie['1'] ?></span>
-        </a>
-        <?php
-        array_push($titelList, $titel);
     }
+    if (!file_exists($imgLocation)) {
+        // no image found
+        $imgLocation = null;
+    }
+    // write html
+    ?>
+    <a class="series <?= $serie->class ?>" id="<?= $titel_ ?>"
+        <?php
+        if ($imgLocation != null) { ?>
+       style="background-image: url('<?= str_replace('\'', '\\\'', $imgLocation) ?>');"
+        <?php }
+        ?>
+    ><span class="shadow <?= $serie->class ?>" id="<?= $titel_ ?>1"><br><?= $serie->status ?></span>
+    </a>
+    <?php
+    // add serie to array for auto completion
+    array_push($titelList, $title);
 }
 ?>
 <div id="bg"></div>
@@ -90,9 +86,11 @@ foreach ($serien as $zeile) {
     </form>
 </div>
 <datalist id="titelList">
-    <?php foreach ($titelList as $element) { ?>
-        <option value="<?= $element ?>"/>
-    <?php } ?>
+    <?php
+    foreach ($titelList as $element) {
+        echo "<option value='$element'/>";
+    }
+    ?>
 </datalist>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="bootstrap-3.3.5/js/bootstrap.min.js"></script>

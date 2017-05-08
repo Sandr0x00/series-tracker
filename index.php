@@ -69,14 +69,15 @@ foreach ($serien as $title => $serie) {
     }
     // write html
     ?>
-    <a class="series <?= $serie->class ?>" id="<?= $titel_ ?>"
-        <?php
-        if ($imgLocation != null) { ?>
-       style="background-image: url('<?= str_replace('\'', '\\\'', $imgLocation) ?>');"
-        <?php }
-        ?>
-    ><span class="shadow <?= $serie->class ?>" id="<?= $titel_ ?>1"><br><?= $serie->status ?></span>
-    </a>
+    <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">
+        <a class="series <?= $serie->class ?>" id="<?= $titel_ ?>"<?php
+            if ($imgLocation != null) { ?>
+           style="background-image: url('<?= str_replace('\'', '\\\'', $imgLocation) ?>');"
+            <?php }
+            ?>>
+            <span class="shadow <?= $serie->class ?>" id="<?= $titel_ ?>1"><br><?= $serie->status ?></span>
+        </a>
+    </div>
     <?php
     // add serie to array for auto completion
     array_push($titelList, $title);

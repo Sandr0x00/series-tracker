@@ -71,12 +71,16 @@ body {
   border-width: 2px;
 }
 
-input, .input {
-  position: absolute;
-  left: 88px;
+input, .input, #submit {
+  /*left: 88px;*/
   width: 324px;
-  background: #FFF;
-  line-height: 30px;
+  /*background: #FFF;*/
+  /*line-height: 30px;*/
+}
+
+input, #EUP, #SUP, #submit {
+  height: 42px;
+  margin: 2px;
 }
 
 input[readonly], .input[readonly] {
@@ -92,46 +96,10 @@ input:invalid, .input:invalid {
   -moz-box-shadow: none;
 }
 
-#stand {
-  bottom: 64px;
-}
-
-#SUP, #EUP {
-  position: absolute;
-  bottom: 64px;
-  width: 34px;
-  background: #FFF;
-  height: 34px;
-  line-height: 30px;
-}
-
-#SUP {
-  left: 48px;
-}
-
-#EUP {
-  left: 418px;
-}
-
-#submit {
-  position: absolute;
-  bottom: 20px;
-  width: 324px;
-  background: #FFF;
-  height: 34px;
-  line-height: 30px;
-  font-weight: bold;
-}
-
-.btn, #dialog, input {
+#dialog {
   border: 2px solid #333;
   padding: 0 0 0 2px;
   border-radius: 4px;
-}
-
-.navbar-nav>li>a {
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
 }
 
 .navbar {

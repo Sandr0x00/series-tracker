@@ -62,16 +62,28 @@ $(document).ready(function () {
     }
 
     function showButtons(stand) {
+        let sup = $('#SUP');
+        let eup = $('#EUP');
         if (stand.match(REGEX_ALL)) {
-            $('#EUP').css('display', 'inline-block');
+            // enable EUP
+            eup.attr('disabled', false);
+            eup.removeClass('disabled');
+
             if (stand.match(REGEX_E)) {
-                $('#SUP').css('display', 'none');
+                // disable SUP
+                sup.attr('disabled', true);
+                sup.addClass('disabled');
             } else {
-                $('#SUP').css('display', 'inline-block');
+                // enable SUP
+                sup.removeClass('disabled');
+                sup.attr('disabled', false);
             }
         } else {
-            $('#EUP').css('display', 'none');
-            $('#SUP').css('display', 'none');
+            // disable SUP and EUP
+            sup.attr('disabled', true);
+            eup.attr('disabled', true);
+            sup.addClass('disabled');
+            eup.addClass('disabled');
         }
     }
 
@@ -85,16 +97,16 @@ $(document).ready(function () {
 
     function showSmall() {
         $('#pic').css('display', 'none');
-        $('#titel').css('display', 'block');
-        showBoth(162);
+        $('#titleDiv').css('display', 'inline-flex');
+        showBoth(182);
     }
 
     function showBig(pic) {
         let picElem = $('#pic');
         picElem.attr('src', pic);
         picElem.css('display', 'inline-block');
-        $('#titel').css('display', 'none');
-        showBoth(432);
+        $('#titleDiv').css('display', 'none');
+        showBoth(492);
     }
 
     function hide() {
@@ -141,7 +153,7 @@ $(document).ready(function () {
             if (!oldStand || 0 === oldStand.length) {
                 // same logic in series.php
                 // insert new serie
-                let body = $('body');
+                let body = $('#seriesContent');
                 body.prepend(
                     $('<a class="n" id="' + titel_ + '"><img src="../img/200/unknown.jpg" height="200px" width="130px" alt="' + titel + '"/><span class="n" id="' + titel_ + '1"><br>' + stand + '</span></a>'));
                 body.delegate(

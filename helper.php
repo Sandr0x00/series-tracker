@@ -19,4 +19,8 @@ class Helper {
     }
     return (substr($check, strlen($check) - strlen($endStr), strlen($endStr)) === $endStr);
   }
+
+  public static function replaceHyphen(string $subject) {
+      return str_replace('\'', '\\\'', $subject);
+  }
 }

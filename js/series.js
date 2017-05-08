@@ -11,36 +11,52 @@ $(document).ready(function () {
         ESCAPE: 27,
         ENTER: 13
     };
-    const REGEX_ALL = '^((S|B)[0-9]{2}E[0-9]{2}|E[0-9]{5})$';
-    const REGEX_B = '^B[0-9]{2}E[0-9]{2}$';
     const REGEX_S = '^S[0-9]{2}E[0-9]{2}$';
     const REGEX_E = '^E[0-9]{5}$';
+
+    const TITLE_ID = '#titel';
+    const STATUS_ID = '#stand';
+
+    const SUBMIT_ID = '#submit';
+    const EUP_ID = '#EUP';
+    const SUP_ID = '#SUP';
+
+    const BG_ID = '#bg';
+
+    let dialog = $('#dialog');
+
+    let titleElement = document.getElementById('titel');
+    let statusElement = document.getElementById('stand');
+    let titleJQuery = $(TITLE_ID);
+    let statusJQuery = $(STATUS_ID);
+    let picJQuery = $('#pic');
+
     let oldStand = '';
+    let title = null;
+    let status = null;
 
     function show(btn) {
         let titel_ = $(btn).attr('id');
-        let titleElement = $('#titel');
-        let standElement = $('#stand');
         if (titel_ === 'plus') {
-            titleElement.val('');
-            titleElement.prop('readonly', false);
-            standElement.val('');
+            titleJQuery.val('');
+            titleJQuery.prop('readonly', false);
+            statusJQuery.val('');
             oldStand = '';
             showSmall();
-            showButtons(oldStand);
-            // $('#titel').focus();
+            updateButtons();
+            titleJQuery.focus();
         } else {
             // /g - search all
-            let titel = titel_.replace(/_/g, ' ');
-            let stand = $('#' + titel_ + '1').html();
-            stand = stand.split('>')[1];
-            oldStand = stand;
-            titleElement.val(titel);
-            titleElement.prop('readonly', true);
-            standElement.val(stand);
+            let title = titel_.replace(/_/g, ' ');
+            status = $('#' + titel_ + '1').html();
+            status = status.split('>')[1];
+            oldStand = status;
+            titleJQuery.val(title);
+            titleJQuery.prop('readonly', true);
+            statusJQuery.val(status);
             let found = false;
             for (let i = 300; i <= 500 && !found; i += 100) {
-                let picUrl = 'img/' + i + '/' + titel + '.jpg';
+                let picUrl = 'img/' + i + '/' + title + '.jpg';
                 $.ajax({
                     url: picUrl,
                     type: 'HEAD',
@@ -54,78 +70,145 @@ $(document).ready(function () {
             if (!found) {
                 showSmall();
             }
-            showButtons(stand);
-            // $('#stand').focus();
-            // $('#stand').setSelectionRange(stand[1].length,
+            updateButtons();
+            statusJQuery.focus();
+            // $(STATUS_ID).setSelectionRange(stand[1].length,
             // stand[1].length);
         }
     }
 
-    function showButtons(stand) {
-        let sup = $('#SUP');
-        let eup = $('#EUP');
-        if (stand.match(REGEX_ALL)) {
-            // enable EUP
-            eup.attr('disabled', false);
-            eup.removeClass('disabled');
+    /**
+     * Enables and disables the buttons
+     */
+    function updateButtons() {
+        updateTitle();
+        let sup = $(SUP_ID);
+        let eup = $(EUP_ID);
+        let submit = $(SUBMIT_ID);
 
-            if (stand.match(REGEX_E)) {
-                // disable SUP
-                sup.attr('disabled', true);
-                sup.addClass('disabled');
+        if (status && statusElement.checkValidity()) {
+            enable(eup);
+            enable(submit);
+
+            if (status.match(REGEX_E)) {
+                disable(sup);
             } else {
-                // enable SUP
-                sup.removeClass('disabled');
-                sup.attr('disabled', false);
+                enable(sup);
             }
         } else {
-            // disable SUP and EUP
-            sup.attr('disabled', true);
-            eup.attr('disabled', true);
-            sup.addClass('disabled');
-            eup.addClass('disabled');
+            disable(eup);
+            disable(sup);
+            disable(submit);
+        }
+
+        if (titleElement && !titleElement.checkValidity()) {
+            disable(submit);
         }
     }
 
+    /**
+     * Disables a button
+     * @param button button to disable
+     */
+    function disable(button) {
+        button.attr('disabled', true);
+        button.addClass('disabled');
+    }
+
+    /**
+     * Enables a button.
+     * @param button button to enable
+     */
+    function enable(button) {
+        button.attr('disabled', false);
+        button.removeClass('disabled');
+    }
+
     function showBoth(height) {
-        let dialog = $('#dialog');
         dialog.css('height', height + 'px');
         dialog.css('margin-top', '-' + height / 2 + 'px');
-        $('#bg').css('display', 'block');
+        $(BG_ID).css('display', 'block');
         dialog.css('display', 'block');
     }
 
     function showSmall() {
-        $('#pic').css('display', 'none');
+        picJQuery.css('display', 'none');
         $('#titleDiv').css('display', 'inline-flex');
         showBoth(182);
     }
 
     function showBig(pic) {
-        let picElem = $('#pic');
-        picElem.attr('src', pic);
-        picElem.css('display', 'inline-block');
+        picJQuery.attr('src', pic);
+        picJQuery.css('display', 'inline-block');
         $('#titleDiv').css('display', 'none');
         showBoth(492);
     }
 
     function hide() {
-        $('#bg').css('display', 'none');
-        $('#dialog').css('display', 'none');
+        $(BG_ID).css('display', 'none');
+        dialog.css('display', 'none');
+    }
+
+    function getData(title) {
+        if (!titleElement.checkValidity()) {
+            // title string is invalid
+            showSmall();
+            return;
+        }
+
+        let serie = series[title];
+        if (serie) {
+            // serie is already known
+            statusJQuery.val(serie.status);
+            showBig(serie.image);
+
+            // TODO: load picture
+            //picJQuery.attr('src', pic);
+        } else {
+            // serie is not known
+            showSmall();
+        }
+        // TODO: get data from db, lazyload
+    }
+
+    function updateStatus() {
+        status = $(STATUS_ID).val();
+        status = status.trim();
+    }
+
+    function updateTitle() {
+        title = titleJQuery.val();
+        title = title.trim();
     }
 
     $('a').click(function() {
         show(this);
     });
 
-    $('#titel').keyup((e) => {
+    function titleChanged() {
+        updateTitle();
+        getData(title);
+        updateButtons();
+    }
+
+    titleJQuery.change(titleChanged);
+
+    titleJQuery.keyup(function(e) {
+        titleChanged();
         if (e.keyCode === KEY.ENTER) {
-            $('#stand').focus();
+            $(STATUS_ID).focus();
         }
     });
 
-    $('#stand').keyup((e) => {
-        showButtons($('#stand').val());
+    function statusChanged() {
+        updateStatus();
+        updateButtons();
+    }
+
+    statusJQuery.change(statusChanged);
+
+    statusJQuery.keyup(function(e) {
+        statusChanged();
         if (e.keyCode === KEY.ENTER) {
             // check form validity
             let form = $('#form');
@@ -135,7 +218,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#submit').click(() => {
+    $(SUBMIT_ID).click(() => {
         let form = $('#form');
         if (form[0].checkValidity()) {
             form.submit();
@@ -143,11 +226,11 @@ $(document).ready(function () {
     });
 
     $('#form').submit(function() {
-        let titel = $('#titel').val();
-        let stand = $('#stand').val();
-        if (oldStand !== stand) {
+        updateTitle();
+        updateStatus();
+        if (oldStand !== status) {
             // new state is entered
-            let titel_ = titel.replace(/ /g, '_');
+            let titel_ = title.replace(/ /g, '_');
             // TODO: wenn schon vorhanden, dann
             // in else rein
             if (!oldStand || 0 === oldStand.length) {
@@ -155,7 +238,7 @@ $(document).ready(function () {
                 // insert new serie
                 let body = $('#seriesContent');
                 body.prepend(
-                    $('<a class="n" id="' + titel_ + '"><img src="../img/200/unknown.jpg" height="200px" width="130px" alt="' + titel + '"/><span class="n" id="' + titel_ + '1"><br>' + stand + '</span></a>'));
+                    $('<a class="n" id="' + titel_ + '"><img src="../img/200/unknown.jpg" height="200px" width="130px" alt="' + title + '"/><span class="n" id="' + titel_ + '1"><br>' + status + '</span></a>'));
                 body.delegate(
                     '#' + titel_,
                     'click',
@@ -164,12 +247,12 @@ $(document).ready(function () {
                     });
             } else {
                 // update old serie
-                $('#' + titel_ + '1').html('<br>' + stand);
+                $('#' + titel_ + '1').html('<br>' + status);
             }
             // send the data using post
             $.post('seriesPost.php', {
-                titel: titel,
-                stand: stand
+                titel: title,
+                stand: status
             });
         }
         hide();
@@ -181,44 +264,41 @@ $(document).ready(function () {
         }
     });
 
-    $('#bg').click(() => {
+    $(BG_ID).click(() => {
         hide();
     });
 
-    $('#SUP').click(() => {
-        let standElem = $('#stand');
-        let stand = standElem.val();
-        if (stand.match(REGEX_ALL)) {
-            let season = stand.split('E')[0];
-            if (stand.match(REGEX_B)) {
-                season = season.split('B')[1];
-                stand = 'B';
-            } else if (stand.match(REGEX_S)) {
+    $(SUP_ID).click(() => {
+        updateStatus();
+        if (statusElement.checkValidity()) {
+            // increment season
+            let season = status.split('E')[0];
+            if (status.match(REGEX_S)) {
                 season = season.split('S')[1];
-                stand = 'S';
+                status = 'S';
             }
             season = parseInt(season);
             season++;
             season = season.pad(2);
-            stand = stand + season + 'E01';
-            standElem.val(stand);
-            standElem.focus();
+            status = status + season + 'E01';
+            statusJQuery.val(status);
+            statusJQuery.focus();
         }
     });
 
-    $('#EUP').click(() => {
-        let standElem = $('#stand');
-        let stand = standElem.val();
-        if (stand.match(REGEX_ALL)) {
-            let episode = stand.split('E')[1];
+    $(EUP_ID).click(() => {
+        updateStatus();
+        if (statusElement.checkValidity()) {
+            // increment episode
+            let episode = status.split('E')[1];
             let epSize = episode.length;
             episode = parseInt(episode);
             episode++;
             episode = episode.pad(epSize);
-            stand = stand.split('E')[0];
-            stand = stand + 'E' + episode;
-            standElem.val(stand);
-            standElem.focus();
+            status = status.split('E')[0];
+            status = status + 'E' + episode;
+            statusJQuery.val(status);
+            statusJQuery.focus();
         }
     });
 });

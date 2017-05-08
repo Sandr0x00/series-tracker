@@ -66,21 +66,24 @@ foreach ($serien as $title => $serie) {
     if (!file_exists($imgLocation)) {
         // no image found
         $imgLocation = null;
+    } else {
+        $imgLocation = Helper::replaceHyphen($imgLocation);
     }
+    $serie->image = $imgLocation;
     // write html
     ?>
     <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">
         <a class="series <?= $serie->class ?>" id="<?= $titel_ ?>"<?php
-            if ($imgLocation != null) { ?>
-           style="background-image: url('<?= str_replace('\'', '\\\'', $imgLocation) ?>');"
-            <?php }
+            if ($imgLocation != null) {
+            ?> style="background-image: url('<?= $imgLocation ?>');"<?php
+            }
             ?>>
             <span class="shadow <?= $serie->class ?>" id="<?= $titel_ ?>1"><br><?= $serie->status ?></span>
         </a>
     </div>
-    <?php
+<?php
     // add serie to array for auto completion
-    array_push($titelList, $title);
+    array_push($titelList, Helper::replaceHyphen($title));
 }
 ?>
 </div> <!-- /container -->
@@ -119,5 +122,20 @@ foreach ($serien as $title => $serie) {
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/series.js"></script>
+<script type="text/javascript">
+    const series = {
+    <?php
+            $first = true;
+    foreach ($serien as $serie) {
+        if ($first) {
+            $first = false;
+        } else {
+            echo ",";
+        }
+        echo "'" . Helper::replaceHyphen($serie->title) . "': { status: '" . $serie->status . "', image: '" . $serie->image . "'}\n";
+    }
+    ?>
+    };
+</script>
 </body>
 </html>

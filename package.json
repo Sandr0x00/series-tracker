@@ -19,7 +19,8 @@
     "eslint": "^3.17.1"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0-alpha.6"
+    "bootstrap": "^4.0.0-alpha.6",
+    "material-design-icons": "^3.0.1"
   },
   "main": "index.php",
   "keywords": []

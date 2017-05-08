@@ -41,20 +41,21 @@ body {
   background: url(../img/200/unknown.jpg) center, no-repeat;
   width: 100%;
   background-size: cover;
+  margin: 5px 5px 5px 5px;
 }
 
 .seriesDiv {
-  min-width: 120px;
-  padding-left: 5px;
-  padding-right: 5px;
   position: relative;
+  overflow: hidden;
+  padding: 0;
+  min-width: 130px;
   width: 100%; /* desired width */
 }
 
 .seriesDiv:before{
   content: "";
   display: block;
-  padding-top: 165%;
+  padding-top: 165%; /* Ratio */
 }
 
 #bg, #dialog {
@@ -124,6 +125,12 @@ input:invalid, .input:invalid {
   z-index: 5;
   border-radius: 0 0 4px 4px;
 }
+
+.nav-item {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 a:hover {
   cursor: pointer;
 }

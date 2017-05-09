@@ -19,11 +19,6 @@
             <a id="plus" class="nav-link" type="button"><i class="material-icons">add</i></a>
         </li>
     </ul>
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a id="refresh" class="nav-link" href="javascript:refresh();" type="button"><i class="material-icons">loop</i></a>
-        </li>
-    </ul>
 </nav>
 <div id="seriesContent" class="container-fluid">
 <?php
@@ -104,11 +99,9 @@ foreach ($serien as $title => $serie) {
 <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Lazy Loading -->
 <script type="text/javascript" src="node_modules/jquery-lazy/jquery.lazy.min.js"></script>
-<!-- Local Stuff -->
-<script type="text/javascript" src="js/series.js"></script>
 <!-- Fill const -->
 <script type="text/javascript">
-    const series = {
+    let allSeries = {
     <?php
     $first = true;
     foreach ($serien as $serie) {
@@ -122,5 +115,7 @@ foreach ($serien as $title => $serie) {
     ?>
     };
 </script>
+<!-- Local Stuff -->
+<script type="text/javascript" src="js/series.js"></script>
 </body>
 </html>

@@ -7,6 +7,8 @@ Number.prototype.pad = function (size) {
 };
 
 $(document).ready(function () {
+    let series = allSeries;
+
     const KEY = {
         ESCAPE: 27,
         ENTER: 13
@@ -21,9 +23,8 @@ $(document).ready(function () {
     const EUP_ID = '#EUP';
     const SUP_ID = '#SUP';
 
-    const BG_ID = '#bg';
-
     let dialog = $('#dialog');
+    let bg = $('#bg');
 
     let titleElement = document.getElementById('titel');
     let statusElement = document.getElementById('stand');
@@ -31,60 +32,72 @@ $(document).ready(function () {
     let statusJQuery = $(STATUS_ID);
     let picJQuery = $('#pic');
 
-    let image = null;
     let uploaded = false;
 
-    let oldStand = '';
+    // Cache variables
+    let image = null;
     let title = null;
     let status = null;
+
+    let oldStand = '';
 
     function show(btn) {
         let titel_ = $(btn).attr('id');
         if (titel_ === 'plus') {
-            titleJQuery.val('');
+            setVariables(null, null, null);
             titleJQuery.prop('readonly', false);
-            statusJQuery.val('');
             oldStand = '';
-            showBig(null);
-            updateButtons();
+            showDialog();
             titleJQuery.focus();
         } else {
             // /g - search all
             let title = titel_.replace(/_/g, ' ');
-            status = $('#' + titel_ + '1').html();
-            status = status.split('>')[1];
+            setVariables(title, series[title].status, series[title].image);
             oldStand = status;
-            titleJQuery.val(title);
             titleJQuery.prop('readonly', true);
-            statusJQuery.val(status);
-            let found = false;
-            for (let i = 300; i <= 500 && !found; i += 100) {
-                let picUrl = 'img/' + i + '/' + title + '.jpg';
-                $.ajax({
-                    url: picUrl,
-                    type: 'HEAD',
-                    async: false,
-                    success: () => {
-                        showBig(picUrl);
-                        found = true;
-                    }
-                });
-            }
-            if (!found) {
-                showBig(null);
-            }
-            updateButtons();
+            showDialog();
             statusJQuery.focus();
-            // $(STATUS_ID).setSelectionRange(stand[1].length,
-            // stand[1].length);
         }
+    }
+
+    /**
+     * Updates the cache variables
+     * @param t
+     * @param s
+     * @param i
+     */
+    function setVariables(t, s, i) {
+        title = t;
+        status = s;
+        image = i;
+        statusJQuery.val(status ? status : '');
+        titleJQuery.val(title ? title : '');
+    }
+
+    function setStatus(s) {
+        status = s;
+        if (status) {
+            status = status.trim();
+        }
+    }
+
+    function setTitle() {
+        title = titleJQuery.val();
+        if (title) {
+            title = title.trim();
+        }
+    }
+
+    function setImage(i) {
+        image = i;
     }
 
     /**
      * Enables and disables the buttons
      */
     function updateButtons() {
-        updateTitle();
+        setTitle();
+        setStatus(statusJQuery.val());
         let sup = $(SUP_ID);
         let eup = $(EUP_ID);
         let submit = $(SUBMIT_ID);
@@ -127,65 +140,27 @@ $(document).ready(function () {
         button.removeClass('disabled');
     }
 
-    function showBoth(height) {
-        dialog.css('height', height + 'px');
-        dialog.css('margin-top', '-' + height / 2 + 'px');
-        $(BG_ID).css('display', 'block');
-        dialog.css('display', 'block');
-    }
-
-    function showBig(pic) {
+    function showDialog() {
         uploaded = false;
-        if (pic) {
-            picJQuery.attr('src', pic);
+        if (image && image !== '') {
+            picJQuery.attr('src', image);
             picJQuery.css('display', 'inline-block');
             dropZoneJQuery.css('display', 'none');
         } else {
             picJQuery.css('display', 'none');
             dropZoneJQuery.css('display', 'inline-block');
         }
-        showBoth(492);
+        let height = 492;
+        dialog.css('height', height + 'px');
+        dialog.css('margin-top', '-' + height / 2 + 'px');
+        bg.css('display', 'block');
+        dialog.css('display', 'block');
+        updateButtons();
     }
 
     function hide() {
-        $(BG_ID).css('display', 'none');
+        bg.css('display', 'none');
         dialog.css('display', 'none');
-    }
-
-    /**
-     * Updates Picture
-     * @param title
-     */
-    function getData(title) {
-        if (!titleElement.checkValidity()) {
-            // title string is invalid
-            showBig(null);
-            return;
-        }
-
-        let serie = series[title];
-        if (serie) {
-            // serie is already known
-            statusJQuery.val(serie.status);
-            showBig(serie.image);
-
-            // TODO: load picture
-            //picJQuery.attr('src', pic);
-        } else {
-            // serie is not known
-            showBig(null);
-        }
-        // TODO: get data from db, lazyload
-    }
-
-    function updateStatus() {
-        status = $(STATUS_ID).val();
-        status = status.trim();
-    }
-
-    function updateTitle() {
-        title = titleJQuery.val();
-        title = title.trim();
     }
 
     $('a').click(function() {
@@ -193,9 +168,18 @@ $(document).ready(function () {
     });
 
     function titleChanged() {
-        updateTitle();
-        getData(title);
-        updateButtons();
+        setTitle();
+        setImage(null);
+        if (titleElement.checkValidity()) {
+            let serie = series[title];
+            if (serie) {
+                // serie is already known
+                setImage(serie.image);
+                setStatus(serie.status);
+                statusJQuery.val(serie.status);
+            }
+        }
+        showDialog();
     }
 
     titleJQuery.change(titleChanged);
@@ -208,7 +192,7 @@ $(document).ready(function () {
     });
 
     function statusChanged() {
-        updateStatus();
+        setStatus(statusJQuery.val());
         updateButtons();
     }
 
@@ -233,16 +217,102 @@ $(document).ready(function () {
     });
 
     $('#form').submit(function() {
-        updateTitle();
-        updateStatus();
-        sendImage();
-        sendSerie();
+        // update everything
+        setTitle();
+        setStatus(statusJQuery.val());
+
+        // send stuff
+        persistSerie();
+        persistImage();
         hide();
     });
 
-    function sendImage() {
+    $(window).on('keypress', e => {
+        if (e.keyCode === KEY.ESCAPE) {
+            hide();
+        }
+    });
+
+    bg.on('click', hide);
+
+    $(SUP_ID).click(() => {
+        clickEvent(buildSE);
+    });
+
+    $(EUP_ID).click(() => {
+        clickEvent(buildE);
+    });
+
+    function clickEvent(builder) {
+        setStatus(statusJQuery.val());
+        if (statusElement.checkValidity()) {
+            // increment episode
+            setStatus(builder());
+            statusJQuery.val(status);
+            statusJQuery.focus();
+        }
+    }
+
+    function buildE() {
+        let episode = status.split('E')[1];
+        let epSize = episode.length;
+        episode = parseInt(episode);
+        episode++;
+        episode = episode.pad(epSize);
+        let s = status.split('E')[0];
+        s = s + 'E' + episode;
+        return s;
+    }
+
+    function buildSE() {
+        let s;
+        let season = status.split('E')[0];
+        if (status.match(REGEX_S)) {
+            season = season.split('S')[1];
+            s = 'S';
+        }
+        season = parseInt(season);
+        season++;
+        season = season.pad(2);
+        s = s + season + 'E01';
+        return s;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Send Data to Server ---------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+    function persistSerie() {
+        if (oldStand !== status) {
+            // new state is entered
+            let titel_ = title.replace(/ /g, '_');
+            if (!oldStand || 0 === oldStand.length) {
+                // insert new serie
+                series[title] = { status: status, image: image };
+                // update website
+                addSerie(title, false);
+            } else {
+                // update old serie
+                series[title].status = status;
+                // update website
+                $('#' + titel_ + '1').html('<br>' + status);
+            }
+            // send the data using post
+            $.post('server/seriesPost.php', {
+                titel: title,
+                stand: status
+            });
+        }
+    }
+
+    function persistImage() {
         if (uploaded && image) {
-            updateImage();
+            let titel_ = title.replace(/ /g, '_');
+            $('#' + titel_).attr('data-src', image);
+            initLazyLoading();
+
+            series[title].image = image;
+
             let formData = new FormData();
             formData.append('titel', title);
             formData.append('image', image);
@@ -258,78 +328,6 @@ $(document).ready(function () {
             });
         }
     }
-
-    function updateImage() {
-        let titel_ = title.replace(/ /g, '_');
-        $('#' + titel_).attr('data-src', image);
-        initLazyLoading();
-    }
-
-    function sendSerie() {
-        if (oldStand !== status) {
-            // new state is entered
-            let titel_ = title.replace(/ /g, '_');
-            // TODO: wenn schon vorhanden, dann
-            // in else rein
-            if (!oldStand || 0 === oldStand.length) {
-                // same logic in series.php
-                // insert new serie
-                addSerie(title, true);
-            } else {
-                // update old serie
-                $('#' + titel_ + '1').html('<br>' + status);
-            }
-            // send the data using post
-            $.post('server/seriesPost.php', {
-                titel: title,
-                stand: status
-            });
-        }
-    }
-
-    $(window).keypress((e) => {
-        if (e.keyCode === KEY.ESCAPE) {
-            hide();
-        }
-    });
-
-    $(BG_ID).click(() => {
-        hide();
-    });
-
-    $(SUP_ID).click(() => {
-        updateStatus();
-        if (statusElement.checkValidity()) {
-            // increment season
-            let season = status.split('E')[0];
-            if (status.match(REGEX_S)) {
-                season = season.split('S')[1];
-                status = 'S';
-            }
-            season = parseInt(season);
-            season++;
-            season = season.pad(2);
-            status = status + season + 'E01';
-            statusJQuery.val(status);
-            statusJQuery.focus();
-        }
-    });
-
-    $(EUP_ID).click(() => {
-        updateStatus();
-        if (statusElement.checkValidity()) {
-            // increment episode
-            let episode = status.split('E')[1];
-            let epSize = episode.length;
-            episode = parseInt(episode);
-            episode++;
-            episode = episode.pad(epSize);
-            status = status.split('E')[0];
-            status = status + 'E' + episode;
-            statusJQuery.val(status);
-            statusJQuery.focus();
-        }
-    });
 
     // -----------------------------------------------------------------------------------------------------------------
     // Add series ------------------------------------------------------------------------------------------------------
@@ -396,8 +394,8 @@ $(document).ready(function () {
             reader.onload = (function(theFile) {
                 return function(e) {
                     // Render thumbnail
-                    image = e.target.result;
-                    showBig(image);
+                    setImage(e.target.result);
+                    showDialog();
                     uploaded = true;
                 };
             })(f);

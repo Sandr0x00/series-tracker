@@ -241,8 +241,15 @@ $(document).ready(function () {
                 // same logic in series.php
                 // insert new serie
                 let body = $('#seriesContent');
+
+                let div = '<div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">';
+                div += '<a class="series lazy" id="' + titel_ + '">';
+                div += '<span class="shadow" id="' + titel_ + '1"><br>' + status + '</span>';
+                div += '</a>';
+                div += '</div>';
+
                 body.prepend(
-                    $('<a class="n" id="' + titel_ + '"><img src="../img/200/unknown.jpg" height="200px" width="130px" alt="' + title + '"/><span class="n" id="' + titel_ + '1"><br>' + status + '</span></a>'));
+                    $(div));
                 body.delegate(
                     '#' + titel_,
                     'click',

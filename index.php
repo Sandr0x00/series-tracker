@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html;"/>
     <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
+    <meta name="viewport" content="maximum-scale=1">
     <link rel="icon" href="img/favicon.png" type="image/png">
     <link type='text/css' href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
@@ -51,10 +52,7 @@ foreach ($serien as $title => $serie) {
         $imgLocation = Helper::replaceHyphen($imgLocation);
     }
     $serie->image = $imgLocation;
-    // write html
-    ?>
 
-<?php
     // add serie to array for auto completion
     array_push($titelList, Helper::replaceHyphen($title));
 }

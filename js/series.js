@@ -23,8 +23,8 @@ $(document).ready(function () {
     const EUP_ID = '#EUP';
     const SUP_ID = '#SUP';
 
-    let overlay = $('#overlay');
     let bg = $('#bg');
+    let overlay = $('#overlay');
 
     let titleElement = document.getElementById('titel');
     let statusElement = document.getElementById('stand');

@@ -6,7 +6,7 @@
     <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
     <meta name="viewport" content="maximum-scale=1">
     <link rel="icon" href="img/favicon.png" type="image/png">
-    <link type='text/css' href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link type='text/css' href="libs/bootstrap-4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
     <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
     <link type="text/css" href="css/series.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -107,12 +107,13 @@ foreach ($serien as $title => $serie) {
     }
     ?>
 </datalist>
-<!-- JQuery -->
-<script type="text/javascript" src="js/jquery.js"></script>
-<!-- Bootstrap -->
-<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- Lazy Loading -->
-<script type="text/javascript" src="node_modules/jquery-lazy/jquery.lazy.min.js"></script>
+<!-- JQuery https://jquery.com/ -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="libs/jquery/jquery-3.2.1.min.js"><\/script>')</script>
+<!-- Bootstrap https://v4-alpha.getbootstrap.com/ -->
+<script type="text/javascript" src="libs/bootstrap-4.0.0-alpha.6/js/bootstrap.min.js"></script>
+<!-- Lazy Loading http://jquery.eisbehr.de/lazy/ -->
+<script type="text/javascript" src="libs/jquery-lazy/jquery.lazy.min.js"></script>
 <!-- Fill const -->
 <script type="text/javascript">
     let allSeries = {

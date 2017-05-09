@@ -1,12 +1,2 @@
-# Eclipse settings
-.settings/
-.settings
-/.project
-/.buildpath
-
 # PHPStorm settings
 .idea
-.idea/
-
-#node-modules
-node_modules/

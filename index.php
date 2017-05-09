@@ -56,9 +56,9 @@ foreach ($serien as $title => $serie) {
     // write html
     ?>
     <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">
-        <a class="series <?= $serie->class ?>" id="<?= $titel_ ?>"<?php
+        <a class="series <?= $serie->class ?> lazy" id="<?= $titel_ ?>"<?php
             if ($imgLocation != null) {
-            ?> style="background-image: url('<?= $imgLocation ?>');"<?php
+            ?> data-src="<?= $imgLocation ?>"<?php
             }
             ?>>
             <span class="shadow <?= $serie->class ?>" id="<?= $titel_ ?>1"><br><?= $serie->status ?></span>
@@ -81,7 +81,7 @@ foreach ($serien as $title => $serie) {
         </div>
         <div>
             <button id="SUP" class="btn btn-link" type="button">
-                <span class="material-icons">add</span>&nbsp;
+                <i class="material-icons">add</i>&nbsp;
             </button>
             <input id="stand" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required
                    placeholder="N&auml;chste Episode" autocomplete="off">
@@ -103,9 +103,15 @@ foreach ($serien as $title => $serie) {
     }
     ?>
 </datalist>
+<!-- JQuery -->
 <script type="text/javascript" src="js/jquery.js"></script>
+<!-- Bootstrap -->
 <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Lazy Loading -->
+<script type="text/javascript" src="node_modules/jquery-lazy/jquery.lazy.min.js"></script>
+<!-- Local Stuff -->
 <script type="text/javascript" src="js/series.js"></script>
+<!-- Fill const -->
 <script type="text/javascript">
     const series = {
     <?php

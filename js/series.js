@@ -149,6 +149,10 @@ $(document).ready(function () {
         dialog.css('display', 'none');
     }
 
+    /**
+     * Updates Picture
+     * @param title
+     */
     function getData(title) {
         if (!titleElement.checkValidity()) {
             // title string is invalid
@@ -345,4 +349,9 @@ $(document).ready(function () {
         evt.preventDefault();
         evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Lazy Load -------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    $('.lazy').Lazy();
 });

@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
+    "jquery-lazy": "^1.7.5",
     "material-design-icons": "^3.0.1"
   },
   "main": "index.php",

@@ -6,9 +6,13 @@
     <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
     <meta name="viewport" content="maximum-scale=1">
     <link rel="icon" href="img/favicon.png" type="image/png">
+    <!-- Bootstrap Standard Theme-->
     <link type='text/css' href="libs/bootstrap-4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Theme for Bootstrap -->
     <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- My Stylesheet -->
     <link type="text/css" href="css/series.css" rel="stylesheet">
+    <!-- Material Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Serien</title>
     <base target="_self">
@@ -130,7 +134,7 @@ foreach ($serien as $title => $serie) {
     ?>
     };
 </script>
-<!-- Local Stuff -->
+<!-- My JS -->
 <script type="text/javascript" src="js/series.js"></script>
 </body>
 </html>

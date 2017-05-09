@@ -30,7 +30,6 @@ $(document).ready(function () {
     let statusElement = document.getElementById('stand');
     let titleJQuery = $(TITLE_ID);
     let statusJQuery = $(STATUS_ID);
-    let picJQuery = $('#pic');
 
     let uploaded = false;
 
@@ -40,6 +39,17 @@ $(document).ready(function () {
     let status = null;
 
     let oldStand = '';
+
+    // Setup the dnd listeners.
+    let picElement = document.getElementById('pic');
+    let picJQuery = $('#pic');
+    let dropZone = document.getElementById('drop_zone');
+    let dropZoneJQuery = $('#drop_zone');
+
+    picElement.addEventListener('dragover', handleDragOver, false);
+    picElement.addEventListener('drop', handleFileSelect, false);
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
 
     function show(btn) {
         let titel_ = $(btn).attr('id');
@@ -150,9 +160,6 @@ $(document).ready(function () {
             picJQuery.css('display', 'none');
             dropZoneJQuery.css('display', 'inline-block');
         }
-        let height = 492;
-        dialog.css('height', height + 'px');
-        dialog.css('margin-top', '-' + height / 2 + 'px');
         bg.css('display', 'block');
         dialog.css('display', 'block');
         updateButtons();
@@ -369,12 +376,6 @@ $(document).ready(function () {
     // File Drop -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
 
-    // Setup the dnd listeners.
-    let dropZone = document.getElementById('drop_zone');
-    let dropZoneJQuery = $('#drop_zone');
-    dropZone.addEventListener('dragover', handleDragOver, false);
-    dropZone.addEventListener('drop', handleFileSelect, false);
-
     function handleFileSelect(evt) {
         // TODO: upload to server
         evt.stopPropagation();
@@ -382,7 +383,8 @@ $(document).ready(function () {
 
         let files = evt.dataTransfer.files; // FileList object
 
-        for (let i = 0, f; f = files[i]; i++) {
+        for (let i = 0, f; i < files.length; i++) {
+            f = files[i];
             // Only process image files.
             if (!f.type.match('image.*')) {
                 continue;

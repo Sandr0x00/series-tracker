@@ -74,19 +74,27 @@ body {
 }
 
 #dialog {
-  top: 50%;
-  left: 50%;
+  top: 100px;
   background: #fff;
-  width: 500px;
-  margin-left: -250px;
-  margin-top: -221px;
-  display: none;
-  font-size: 18px;
+  padding: 20px;
+  border: 2px solid #333;
+  border-radius: 4px;
+  max-width: 600px;
 }
+/*  top: 50%;
+  left: 50%;
+  font-size: 18px;
+  /*height: 492px;
+  margin-top: -250px;
+}*/
+
 
 #pic, #titel, #drop_zone {
-  margin-top: 20px;
   border-width: 2px;
+}
+
+#titel {
+  margin-top: 20px;
 }
 
 #pic, #drop_zone {
@@ -105,8 +113,7 @@ body {
 }
 
 input, .input, #submit {
-  /*left: 88px;*/
-  width: 324px;
+  width:100%
   /*background: #FFF;*/
   /*line-height: 30px;*/
 }
@@ -127,12 +134,6 @@ input:valid, .input:valid {
 input:invalid, .input:invalid {
   background: #FDD;
   -moz-box-shadow: none;
-}
-
-#dialog {
-  border: 2px solid #333;
-  padding: 0 0 0 2px;
-  border-radius: 4px;
 }
 
 .navbar {

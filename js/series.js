@@ -23,7 +23,7 @@ $(document).ready(function () {
     const EUP_ID = '#EUP';
     const SUP_ID = '#SUP';
 
-    let dialog = $('#dialog');
+    let overlay = $('#overlay');
     let bg = $('#bg');
 
     let titleElement = document.getElementById('titel');
@@ -160,14 +160,12 @@ $(document).ready(function () {
             picJQuery.css('display', 'none');
             dropZoneJQuery.css('display', 'inline-block');
         }
-        bg.css('display', 'block');
-        dialog.css('display', 'block');
+        overlay.css('display', 'block');
         updateButtons();
     }
 
     function hide() {
-        bg.css('display', 'none');
-        dialog.css('display', 'none');
+        overlay.css('display', 'none');
     }
 
     $('a').click(function() {

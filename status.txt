@@ -1,8 +1,7 @@
-Kill la Kill;S01E25
+One Piece;E00787
 Vikings;S03E02
 Dragonball Super;E00015
 Gotham;S03E16
-One Piece;E00786
 Lucifer;S02E14
 Rick and Morty;S03E02
 The Flash;S03E19
@@ -124,3 +123,4 @@ Hunter X Hunter;Exxxxx
 Samurai7;Exxxxx
 Ugly Americans;Exxxxx
 Fate stay night UBW;Exxxxx
+Kill la Kill;SxxExx

@@ -42,7 +42,7 @@ $(document).ready(function () {
             titleJQuery.prop('readonly', false);
             statusJQuery.val('');
             oldStand = '';
-            showSmall();
+            showBig(null);
             updateButtons();
             titleJQuery.focus();
         } else {
@@ -68,7 +68,7 @@ $(document).ready(function () {
                 });
             }
             if (!found) {
-                showSmall();
+                showBig(null);
             }
             updateButtons();
             statusJQuery.focus();
@@ -131,15 +131,15 @@ $(document).ready(function () {
         dialog.css('display', 'block');
     }
 
-    function showSmall() {
-        picJQuery.css('display', 'none');
-        $('#titleDiv').css('display', 'inline-flex');
-        showBoth(182);
-    }
-
     function showBig(pic) {
-        picJQuery.attr('src', pic);
-        picJQuery.css('display', 'inline-block');
+        if (pic) {
+            picJQuery.attr('src', pic);
+            picJQuery.css('display', 'inline-block');
+            dropZoneJQuery.css('display', 'none');
+        } else {
+            picJQuery.css('display', 'none');
+            dropZoneJQuery.css('display', 'inline-block');
+        }
         $('#titleDiv').css('display', 'none');
         showBoth(492);
     }
@@ -152,7 +152,7 @@ $(document).ready(function () {
     function getData(title) {
         if (!titleElement.checkValidity()) {
             // title string is invalid
-            showSmall();
+            showBig(null);
             return;
         }
 
@@ -166,7 +166,7 @@ $(document).ready(function () {
             //picJQuery.attr('src', pic);
         } else {
             // serie is not known
-            showSmall();
+            showBig(null);
         }
         // TODO: get data from db, lazyload
     }
@@ -250,7 +250,7 @@ $(document).ready(function () {
                 $('#' + titel_ + '1').html('<br>' + status);
             }
             // send the data using post
-            $.post('seriesPost.php', {
+            $.post('server/seriesPost.php', {
                 titel: title,
                 stand: status
             });
@@ -301,14 +301,48 @@ $(document).ready(function () {
             statusJQuery.focus();
         }
     });
-});
 
-function refresh() {
-    $.ajax({
-        type: 'GET',
-        url: 'recalculate.php',
-        success: function () {
-            location.reload();
+    // -----------------------------------------------------------------------------------------------------------------
+    // File Drop -------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Setup the dnd listeners.
+    let dropZone = document.getElementById('drop_zone');
+    let dropZoneJQuery = $('#drop_zone');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
+
+    function handleFileSelect(evt) {
+        // TODO: upload to server
+        evt.stopPropagation();
+        evt.preventDefault();
+
+        let files = evt.dataTransfer.files; // FileList object
+
+        for (let i = 0, f; f = files[i]; i++) {
+            // Only process image files.
+            if (!f.type.match('image.*')) {
+                continue;
+            }
+
+            let reader = new FileReader();
+
+            // Closure to capture the file information.
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    // Render thumbnail
+                    showBig(e.target.result);
+                };
+            })(f);
+
+            // Read in the image file as a data URL.
+            reader.readAsDataURL(f);
         }
-    });
-}
+    }
+
+    function handleDragOver(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    }
+});

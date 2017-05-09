@@ -1,9 +1,12 @@
 <?php
 
-require_once 'helper.php';
+require_once 'Helper.php';
 require_once 'Serie.php';
 
-const FILE = 'status.txt';
+/**
+ * only use with dirname(__FILE__)
+ */
+const FILE_PATH = '/../status.txt';
 
 class FileHandler {
 
@@ -13,16 +16,17 @@ class FileHandler {
      * @param string $status
      */
     public static function write(string $title, string $status) {
+        $filePath = dirname(__FILE__) . FILE_PATH;
+
         // trim stuff
         $title = trim($title);
         $status = trim($status);
 
         // read current content
-        $serien = file(FILE);
+        $serien = file($filePath);
 
         // open the file for clean write
-        $f = fopen(FILE, 'w');
-
+        $f = fopen($filePath, 'w');
 
         // write current line first when no X
         if (!Helper::endsWith($status, 'x')) {
@@ -30,10 +34,13 @@ class FileHandler {
         }
 
         // write all other lines
-        foreach ($serien as $zeile) {
-            $serie = explode(SEPARATOR, $zeile);
-            if ($serie['0'] != $title) {
-                fwrite($f, $zeile);
+        if ($serien) {
+            // file exists
+            foreach ($serien as $zeile) {
+                $serie = explode(SEPARATOR, $zeile);
+                if ($serie['0'] != $title) {
+                    fwrite($f, $zeile);
+                }
             }
         }
 
@@ -46,11 +53,11 @@ class FileHandler {
 
     /**
      * Appends a single line to the file
-     * @param resource $f file
+     * @param resource $f
      * @param string $title title of the series
      * @param string $status current status
      */
-    public static function writeLine(resource $f, string $title, string $status) {
+    public static function writeLine($f, string $title, string $status) {
         fwrite($f, $title);
         fwrite($f, SEPARATOR);
         fwrite($f, $status);
@@ -62,10 +69,17 @@ class FileHandler {
      * @return array
      */
     public static function read() {
+        $filePath = dirname(__FILE__) . FILE_PATH;
+
         // read whole file
-        $serien = file(FILE);
+        $serien = file($filePath);
 
         $content = [];
+
+        if (!$serien) {
+            // no file found, assume clean start
+            return $content;
+        }
 
         // fill content
         foreach ($serien as $zeile) {

@@ -13,23 +13,6 @@
     <base target="_self">
 </head>
 <body>
-<!--nav class="navbar navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <ul class="nav navbar-nav">
-        <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item pull-xs-right">
-            <a class="nav-link" href="#">Link on the Right</a>
-        </li>
-    </ul>
-</nav-->
 <nav class="navbar navbar-default navbar-toggleable-md navbar-static-top">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -44,8 +27,8 @@
 </nav>
 <div id="seriesContent" class="container-fluid">
 <?php
-require_once 'helper.php';
-require_once 'FileHandler.php';
+require_once 'server/Helper.php';
+require_once 'server/FileHandler.php';
 
 $titelList = array();
 
@@ -89,7 +72,8 @@ foreach ($serien as $title => $serie) {
 </div> <!-- /container -->
 <div id="bg"></div>
 <div id="dialog">
-    <img id="pic" src="" alt="" height="300px"/>
+    <img id="pic" src=""/>
+    <div id="drop_zone">Serien Bild</div>
     <form id="form" action="javascript:void(0);">
         <div>
             <input id="titel" name="titel" type="text" pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required

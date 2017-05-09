@@ -84,9 +84,24 @@ body {
   font-size: 18px;
 }
 
-#pic, #titel {
+#pic, #titel, #drop_zone {
   margin-top: 20px;
   border-width: 2px;
+}
+
+#pic, #drop_zone {
+  height: 300px;
+}
+
+#drop_zone {
+  border: dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px;
+  text-align: center;
+  color: #bbb;
+  min-width: 200px;
 }
 
 input, .input, #submit {

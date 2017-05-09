@@ -31,6 +31,9 @@ $(document).ready(function () {
     let statusJQuery = $(STATUS_ID);
     let picJQuery = $('#pic');
 
+    let image = null;
+    let uploaded = false;
+
     let oldStand = '';
     let title = null;
     let status = null;
@@ -132,6 +135,7 @@ $(document).ready(function () {
     }
 
     function showBig(pic) {
+        uploaded = false;
         if (pic) {
             picJQuery.attr('src', pic);
             picJQuery.css('display', 'inline-block');
@@ -140,7 +144,6 @@ $(document).ready(function () {
             picJQuery.css('display', 'none');
             dropZoneJQuery.css('display', 'inline-block');
         }
-        $('#titleDiv').css('display', 'none');
         showBoth(492);
     }
 
@@ -232,6 +235,37 @@ $(document).ready(function () {
     $('#form').submit(function() {
         updateTitle();
         updateStatus();
+        sendImage();
+        sendSerie();
+        hide();
+    });
+
+    function sendImage() {
+        if (uploaded && image) {
+            updateImage();
+            let formData = new FormData();
+            formData.append('titel', title);
+            formData.append('image', image);
+
+            $.ajax({
+                url: 'server/seriesPost.php',
+                type: 'POST',
+                data: formData,
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        }
+    }
+
+    function updateImage() {
+        let titel_ = title.replace(/ /g, '_');
+        $('#' + titel_).attr('data-src', image);
+        initLazyLoading();
+    }
+
+    function sendSerie() {
         if (oldStand !== status) {
             // new state is entered
             let titel_ = title.replace(/ /g, '_');
@@ -240,22 +274,7 @@ $(document).ready(function () {
             if (!oldStand || 0 === oldStand.length) {
                 // same logic in series.php
                 // insert new serie
-                let body = $('#seriesContent');
-
-                let div = '<div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">';
-                div += '<a class="series lazy" id="' + titel_ + '">';
-                div += '<span class="shadow" id="' + titel_ + '1"><br>' + status + '</span>';
-                div += '</a>';
-                div += '</div>';
-
-                body.prepend(
-                    $(div));
-                body.delegate(
-                    '#' + titel_,
-                    'click',
-                    function() {
-                        show(this);
-                    });
+                addSerie(title, true);
             } else {
                 // update old serie
                 $('#' + titel_ + '1').html('<br>' + status);
@@ -266,8 +285,7 @@ $(document).ready(function () {
                 stand: status
             });
         }
-        hide();
-    });
+    }
 
     $(window).keypress((e) => {
         if (e.keyCode === KEY.ESCAPE) {
@@ -314,6 +332,42 @@ $(document).ready(function () {
     });
 
     // -----------------------------------------------------------------------------------------------------------------
+    // Add series ------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+    Object.keys(series).forEach(serie => addSerie(serie, true));
+
+    function addSerie(title, append) {
+        let serie = series[title];
+        let titel_ = title.replace(/ /g, '_');
+
+        let body = $('#seriesContent');
+
+        let div = '<div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">';
+        div += '<a class="series lazy" id="' + titel_ + '"';
+        if (serie.image) {
+            div += ' data-src="' + serie.image + '"';
+        }
+        div += '>';
+        div += '<span class="shadow" id="' + titel_ + '1"><br>' + serie.status + '</span>';
+        div += '</a>';
+        div += '</div>';
+
+        if (append) {
+            body.append($(div));
+        } else {
+            body.prepend($(div));
+        }
+        body.delegate(
+            '#' + titel_,
+            'click',
+            function() {
+                show(this);
+            });
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
     // File Drop -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -342,7 +396,9 @@ $(document).ready(function () {
             reader.onload = (function(theFile) {
                 return function(e) {
                     // Render thumbnail
-                    showBig(e.target.result);
+                    image = e.target.result;
+                    showBig(image);
+                    uploaded = true;
                 };
             })(f);
 
@@ -360,5 +416,10 @@ $(document).ready(function () {
     // -----------------------------------------------------------------------------------------------------------------
     // Lazy Load -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    $('.lazy').Lazy();
+
+    function initLazyLoading() {
+        $('.lazy').Lazy();
+    }
+
+    initLazyLoading();
 });

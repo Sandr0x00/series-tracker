@@ -100,6 +100,33 @@ class FileHandler {
 
         return $content;
     }
+
+    /**
+     * Converts a base 64 string into a image and saves it as output-file
+     * @param string $base64_string image string to safe
+     * @param string $output_file filename for the output file
+     * @return mixed filename of the output file
+     */
+    public static function writeJPG(string $base64_string, string $output_file) {
+        // sets the correct directory
+        $output_file = dirname(__FILE__) . '/../img/' . $output_file;
+
+        // open the output file for writing
+        $ifp = fopen($output_file, 'w');
+
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode(',', $base64_string);
+
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite($ifp, base64_decode($data[1]));
+
+        // clean up the file resource
+        fclose($ifp);
+
+        return $output_file;
+    }
 }
 
 

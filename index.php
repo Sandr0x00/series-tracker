@@ -39,11 +39,14 @@ foreach ($serien as $title => $serie) {
     $titel_ = str_replace(' ', '_', $title);
 
     // try to find image for serie
-    $imgLocation = '';
-    for ($h = 300; $h <= 500; $h += 100) {
-        $imgLocation = "img/$h/$title.jpg";
-        if (file_exists($imgLocation)) {
-            break;
+    $imgLocation = "img/$title.jpg";
+    if (!file_exists($imgLocation)) {
+        // image does not exist in img/ directory, try sub directories
+        for ($h = 300; $h <= 500; $h += 100) {
+            $imgLocation = "img/$h/$title.jpg";
+            if (file_exists($imgLocation)) {
+                break;
+            }
         }
     }
     if (!file_exists($imgLocation)) {
@@ -55,15 +58,7 @@ foreach ($serien as $title => $serie) {
     $serie->image = $imgLocation;
     // write html
     ?>
-    <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">
-        <a class="series <?= $serie->class ?> lazy" id="<?= $titel_ ?>"<?php
-            if ($imgLocation != null) {
-            ?> data-src="<?= $imgLocation ?>"<?php
-            }
-            ?>>
-            <span class="shadow <?= $serie->class ?>" id="<?= $titel_ ?>1"><br><?= $serie->status ?></span>
-        </a>
-    </div>
+
 <?php
     // add serie to array for auto completion
     array_push($titelList, Helper::replaceHyphen($title));
@@ -115,7 +110,7 @@ foreach ($serien as $title => $serie) {
 <script type="text/javascript">
     const series = {
     <?php
-            $first = true;
+    $first = true;
     foreach ($serien as $serie) {
         if ($first) {
             $first = false;

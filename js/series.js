@@ -300,7 +300,7 @@ $(document).ready(function () {
                 // update old serie
                 series[title].status = status;
                 // update website
-                $('#' + titel_ + '1').html('<br>' + status);
+                $('#' + titel_ + '_status').html(status);
             }
             // send the data using post
             $.post('server/seriesPost.php', {
@@ -352,7 +352,7 @@ $(document).ready(function () {
             div += ' data-src="' + serie.image + '"';
         }
         div += '>';
-        div += '<span class="shadow" id="' + titel_ + '1"><br>' + serie.status + '</span>';
+        div += '<span class="shadow"><span class="text" id="' + titel_ + '_status">' + serie.status + '</span></span>';
         div += '</a>';
         div += '</div>';
 

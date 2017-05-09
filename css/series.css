@@ -12,16 +12,25 @@ body {
   /*font-size: 0*/;
 }
 
+.shadow, .shadow .text {
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
 .shadow {
   z-index: 2;
   font-size: 1.6em;
-  position: absolute;
   bottom: 0;
-  left: 0;
   background: url(../img/bg_span.png) repeat-x;
-  width: 100%;
-  height: 50px;
+  background-size: 100% 100%;
+  height: 25%;
   line-height: 18px;
+}
+
+.shadow .text {
+  bottom: 20%;
+  z-index: 3;
   color: #fafafa;
 }
 

@@ -346,7 +346,7 @@ $(document).ready(function () {
 
         let body = $('#seriesContent');
 
-        let div = '<div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 seriesDiv">';
+        let div = '<div class="seriesDiv col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">';
         div += '<a class="series lazy" id="' + titel_ + '"';
         if (serie.image) {
             div += ' data-src="' + serie.image + '"';

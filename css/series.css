@@ -44,20 +44,10 @@ body {
   left: 0;
   bottom: 0;
   right: 0;
-  display: inline-block;
-  overflow: hidden;
   background: url(../img/200/unknown.jpg) center, no-repeat;
-  width: 100%;
   background-size: cover;
-  margin: 5px 5px 5px 5px;
-}
-
-.seriesDiv {
-  position: relative;
-  overflow: hidden;
-  padding: 0;
-  min-width: 130px;
-  width: 100%; /* desired width */
+  margin: 4px;
+  width: auto;
 }
 
 .seriesDiv:before{
@@ -69,6 +59,9 @@ body {
 #overlay {
   display: none;
   font-size: 16px;
+  position: absolute;
+  top: 0;
+  padding: 0;
 }
 
 #bg, #dialog {
@@ -92,15 +85,8 @@ body {
   padding: 20px;
   border: 2px solid #333;
   border-radius: 4px;
-  max-width: 600px;
+  min-width: 320px;
 }
-/*  top: 50%;
-  left: 50%;
-  font-size: 18px;
-  /*height: 492px;
-  margin-top: -250px;
-}*/
-
 
 #pic, #titel, #drop_zone {
   border-width: 2px;

@@ -62,46 +62,42 @@ foreach ($serien as $title => $serie) {
 }
 ?>
 </div> <!-- /container -->
-<div id="overlay">
+<div id="overlay" class="container-fluid">
     <div id="bg"></div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div id="dialog" class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-6">
-                <img id="pic" src=""/>
-                <div id="drop_zone">Serien Bild</div>
-                <form id="form" action="javascript:void(0);">
-                    <div class="row">
-                        <div class="col-xs-12 offset-sm-2 col-sm-8">
-                            <input id="titel" name="titel" type="text" pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required
-                                   placeholder="Titel" autocomplete="off" list="titelList">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="hidden-xs-down col-sm-2">
-                            <button id="SUP" class="btn btn-link" type="button">
-                                <i class="material-icons">add</i>&nbsp;
-                            </button>
-                        </div>
-                        <div class="col-sm-8">
-                            <input id="stand" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required
-                                   placeholder="N&auml;chste Episode" autocomplete="off">
-                        </div>
-                        <div class="hidden-xs-down col-sm-2">
-                            <button id="EUP" class="btn btn-link" type="button">
-                                <i class="material-icons">add</i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="offset-sm-2 col-sm-8">
-                            <button id="submit" class="btn btn-link" type="button">
-                                <i class="material-icons">done</i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+    <div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <img id="pic" src=""/>
+        <div id="drop_zone">Serien Bild</div>
+        <form id="form" action="javascript:void(0);">
+            <div class="row">
+                <div class="col-12 offset-sm-2 col-sm-8">
+                    <input id="titel" name="titel" type="text" pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required
+                           placeholder="Titel" autocomplete="off" list="titelList">
+                </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="hidden-xs-down col-sm-2">
+                    <button id="SUP" class="btn btn-link" type="button">
+                        <i class="material-icons">add</i>&nbsp;
+                    </button>
+                </div>
+                <div class="col-sm-8">
+                    <input id="stand" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required
+                           placeholder="N&auml;chste Episode" autocomplete="off">
+                </div>
+                <div class="hidden-xs-down col-sm-2">
+                    <button id="EUP" class="btn btn-link" type="button">
+                        <i class="material-icons">add</i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-sm-2 col-sm-8">
+                    <button id="submit" class="btn btn-link" type="button">
+                        <i class="material-icons">done</i>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <datalist id="titelList">

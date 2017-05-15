@@ -1,4 +1,6 @@
-Sense8;S02E10
+Magi;S03E01
+Magi - Adventure of Sinbad;E00001
+Sense8;S03E01
 Stranger Things;S02E01
 One Piece;E00788
 Vikings;S03E02
@@ -32,7 +34,6 @@ Black Lagoon;S04E01
 2 Broke Girls;S02E15
 Mirai Nikki;E00011
 Graceland;S01E01
-Magi;S03E01
 Deadman Wonderland;S02E01
 Hannibal;S03E01
 Steins Gate;E00015

@@ -1,6 +1,6 @@
 <?php
 
-class Serie {
+class Series {
     public $title;
     public $status;
     public $image;

@@ -1,7 +1,7 @@
 <?php
 
 require_once 'Helper.php';
-require_once 'Serie.php';
+require_once 'Series.php';
 
 /**
  * only use with dirname(__FILE__)
@@ -12,15 +12,14 @@ class FileHandler {
 
     /**
      * Rewrites the whole file, only changes given line
-     * @param string $title
-     * @param string $status
+     * @param Series $series series to write
      */
-    public static function write(string $title, string $status) {
+    public static function write(Series $series) {
         $filePath = dirname(__FILE__) . FILE_PATH;
 
         // trim stuff
-        $title = trim($title);
-        $status = trim($status);
+        $title = $series->title;
+        $status = $series->status;
 
         // read current content
         $serien = file($filePath);
@@ -48,6 +47,33 @@ class FileHandler {
         if (Helper::endsWith($status, 'x')) {
             self::writeLine($f, $title, $status);
         }
+        fclose($f);
+    }
+
+    /**
+     * Delete one particular entry. Writes all others to the file
+     * @param Series series title of the entry to delete
+     */
+    public static function delete(Series $series) {
+        $filePath = dirname(__FILE__) . FILE_PATH;
+
+        // read current content
+        $serien = file($filePath);
+
+        // open the file for clean write
+        $f = fopen($filePath, 'w');
+
+        // write all other lines
+        if ($serien) {
+            // file exists
+            foreach ($serien as $zeile) {
+                $serie = explode(SEPARATOR, $zeile);
+                if ($serie['0'] != $series->title) {
+                    fwrite($f, $zeile);
+                }
+            }
+        }
+
         fclose($f);
     }
 
@@ -90,7 +116,7 @@ class FileHandler {
 
             $serie = explode(SEPARATOR, $zeile);
 
-            $obj = new Serie();
+            $obj = new Series();
             $obj->title = trim($serie['0']);
             $obj->status = trim($serie['1']);
             $obj->class = Helper::endsWith($obj->status, 'x') ? 'x' : '';

@@ -92,7 +92,7 @@ body {
   border-width: 2px;
 }
 
-#titel {
+#row-titel {
   margin-top: 20px;
 }
 
@@ -117,7 +117,7 @@ input, .input, #submit {
   /*line-height: 30px;*/
 }
 
-input, #EUP, #SUP, #submit {
+input, #EUP, #SUP, #submit, .btn {
   height: 42px;
   margin: 2px;
 }

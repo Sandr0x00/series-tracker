@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Serie.php';
+require_once 'Series.php';
 
 class DbConnection {
 
@@ -67,7 +67,7 @@ class DbConnection {
         try {
             $manager = $this->connect();
 
-            $filter = ['serie' => $serie];
+            $filter = ['Series' => $serie];
             $options = [
                 'projection' => [ '_id' => 0, 'modified' => 0 ],
             ];
@@ -87,9 +87,9 @@ class DbConnection {
 
     /**
      * Update or insert the given serie
-     * @param Serie $serie
+     * @param Series $serie
      */
-    public function upsert(Serie $serie) {
+    public function upsert(Series $serie) {
         try {
             $manager = $this->connect();
 
@@ -97,8 +97,8 @@ class DbConnection {
 
             $utcdatetime = new MongoDB\BSON\UTCDateTime();
 
-            $bulk->update(['serie' => $serie->title],
-                ['$set' => ['serie' => $serie->title, 'status' => $serie->status,
+            $bulk->update(['Series' => $serie->title],
+                ['$set' => ['Series' => $serie->title, 'status' => $serie->status,
                     'modified' => $utcdatetime->toDateTime()]], ['multi' => false, 'upsert' => true]);
 
             $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
@@ -144,7 +144,7 @@ class DbConnection {
 
             // create bulk write
             foreach ($series as $title => $status) {
-                $bulk->update(['serie' => $title], ['$set' => ['serie' => $title, 'status' => $status, 'modified' => $utcdatetime->toDateTime()]], ['multi' => false, 'upsert' => true]);
+                $bulk->update(['Series' => $title], ['$set' => ['Series' => $title, 'status' => $status, 'modified' => $utcdatetime->toDateTime()]], ['multi' => false, 'upsert' => true]);
             }
 
             // write into db
@@ -169,6 +169,10 @@ class DbConnection {
         } catch (MongoDB\Driver\Exception\Exception $e) {
             $this->logException($e);
         }
+    }
+
+    public function delete(Series $series) {
+        // TODO!
     }
 
     /**

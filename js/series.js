@@ -240,6 +240,10 @@ $(document).ready(function () {
 
     bg.on('click', hide);
 
+    $('#delete').click(postDelete);
+
+    $('#close').click(hide);
+
     $(SUP_ID).click(() => {
         clickEvent(buildSE);
     });
@@ -287,6 +291,22 @@ $(document).ready(function () {
     // Send Data to Server ---------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Delete a row in the file
+     */
+    function postDelete() {
+        // new state is entered
+        let titel_ = title.replace(/ /g, '_');
+        // update website
+        $('#' + titel_ + '_div').remove();
+        hide();
+
+        // send the data using post
+        $.post('server/post_delete.php', {
+            titel: title
+        });
+    }
+
     function persistSerie() {
         if (oldStand !== status) {
             // new state is entered
@@ -303,7 +323,7 @@ $(document).ready(function () {
                 $('#' + titel_ + '_status').html(status);
             }
             // send the data using post
-            $.post('server/seriesPost.php', {
+            $.post('server/post_series.php', {
                 titel: title,
                 stand: status
             });
@@ -323,7 +343,7 @@ $(document).ready(function () {
             formData.append('image', image);
 
             $.ajax({
-                url: 'server/seriesPost.php',
+                url: 'server/post_series.php',
                 type: 'POST',
                 data: formData,
                 async: true,
@@ -346,7 +366,7 @@ $(document).ready(function () {
 
         let body = $('#seriesContent');
 
-        let div = '<div class="seriesDiv col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">';
+        let div = '<div id="' + titel_ + '_div" class="seriesDiv col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">';
         div += '<a class="series lazy" id="' + titel_ + '"';
         if (serie.image) {
             div += ' data-src="' + serie.image + '"';

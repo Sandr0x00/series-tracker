@@ -65,13 +65,27 @@ foreach ($serien as $title => $serie) {
 <div id="overlay" class="container-fluid">
     <div id="bg"></div>
     <div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <img id="pic" src=""/>
-        <div id="drop_zone">Serien Bild</div>
+        <div class="row">
+            <div class="col-8 offset-2">
+                <img id="pic" src=""/>
+                <div id="drop_zone">Serien Bild</div>
+            </div>
+            <div class="col-2">
+                <button id="close" class="btn btn-link" type="button">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+        </div>
         <form id="form" action="javascript:void(0);">
-            <div class="row">
+            <div id="row-titel" class="row">
                 <div class="col-12 offset-sm-2 col-sm-8">
                     <input id="titel" name="titel" type="text" pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required
                            placeholder="Titel" autocomplete="off" list="titelList">
+                </div>
+                <div class="hidden-xs-down col-sm-2">
+                    <button id="delete" class="btn btn-link" type="button">
+                        <i class="material-icons">delete</i>
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -99,6 +113,9 @@ foreach ($serien as $title => $serie) {
             </div>
         </form>
     </div>
+    <!--div id="settings">
+
+    </div-->
 </div>
 <datalist id="titelList">
     <?php

@@ -1,8 +1,9 @@
+House of Cards;S01E06
+One Piece;E00789
+Magi - Adventure of Sinbad;S02E01
 Magi;S03E01
-Magi - Adventure of Sinbad;E00001
 Sense8;S03E01
 Stranger Things;S02E01
-One Piece;E00788
 Vikings;S03E02
 Dragonball Super;E00015
 Gotham;S03E16
@@ -126,3 +127,4 @@ Samurai7;Exxxxx
 Ugly Americans;Exxxxx
 Fate stay night UBW;Exxxxx
 Kill la Kill;SxxExx
+Trinity Blood;Exxxxx

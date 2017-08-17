@@ -229,6 +229,7 @@ $(document).ready(function () {
         // send stuff
         persistSerie();
         persistImage();
+        updateHTML();
         hide();
     });
 
@@ -309,19 +310,6 @@ $(document).ready(function () {
 
     function persistSerie() {
         if (oldStand !== status) {
-            // new state is entered
-            let titel_ = title.replace(/ /g, '_');
-            if (!oldStand || 0 === oldStand.length) {
-                // insert new serie
-                series[title] = { status: status, image: image };
-                // update website
-                addSerie(title, false);
-            } else {
-                // update old serie
-                series[title].status = status;
-                // update website
-                $('#' + titel_ + '_status').html(status);
-            }
             // send the data using post
             $.post('server/post_series.php', {
                 titel: title,
@@ -332,12 +320,6 @@ $(document).ready(function () {
 
     function persistImage() {
         if (uploaded && image) {
-            let titel_ = title.replace(/ /g, '_');
-            $('#' + titel_).attr('data-src', image);
-            initLazyLoading();
-
-            series[title].image = image;
-
             let formData = new FormData();
             formData.append('titel', title);
             formData.append('image', image);
@@ -351,6 +333,35 @@ $(document).ready(function () {
                 contentType: false,
                 processData: false
             });
+        }
+    }
+
+    function updateHTML() {
+        let titel_ = title.replace(/ /g, '_');
+        let update = false;
+        if (oldStand !== status) {
+            // new state is entered
+            if (!oldStand || 0 === oldStand.length) {
+                // insert new serie
+                series[title] = { status: status, image: image };
+                // update website
+                update = true;
+            } else {
+                // update old serie
+                series[title].status = status;
+                series[title].image = image;
+                // update website
+                update = true;
+            }
+        }
+        if (uploaded && image) {
+            update = true;
+
+            series[title].image = image;
+        }
+        if (update) {
+            addSerie(title, false);
+            initLazyLoading();
         }
     }
 
@@ -376,6 +387,11 @@ $(document).ready(function () {
         div += '</a>';
         div += '</div>';
 
+        let old = $('#' + titel_ + '_div');
+        if (old.length > 0) {
+            old.remove();
+        }
+
         if (append) {
             body.append($(div));
         } else {
@@ -386,7 +402,8 @@ $(document).ready(function () {
             'click',
             function() {
                 show(this);
-            });
+            }
+        );
     }
 
 

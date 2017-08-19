@@ -7,6 +7,13 @@ Number.prototype.pad = function (size) {
 };
 
 $(document).ready(function () {
+    // -----------------------------------------------------------------------------------------------------------------
+    // Vars & Constants ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * See index.php
+     */
     let series = allSeries;
 
     const KEY = {
@@ -48,13 +55,13 @@ $(document).ready(function () {
     let dropZone = document.getElementById('drop_zone');
     let dropZoneJQuery = $('#drop_zone');
 
-    picElement.addEventListener('dragover', handleDragOver, false);
-    picElement.addEventListener('drop', handleFileSelect, false);
-    dropZone.addEventListener('dragover', handleDragOver, false);
-    dropZone.addEventListener('drop', handleFileSelect, false);
+    // -----------------------------------------------------------------------------------------------------------------
+    // Functions -------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
 
     function show(btn) {
         let titel_ = $(btn).attr('id');
+        uploaded = false;
         if (titel_ === 'plus') {
             setVariables(null, null, null);
             titleJQuery.prop('readonly', false);
@@ -157,7 +164,6 @@ $(document).ready(function () {
     }
 
     function showDialog() {
-        uploaded = false;
         if (image && image !== '') {
             picJQuery.attr('src', image);
             picJQuery.css('display', 'inline-block');
@@ -174,92 +180,32 @@ $(document).ready(function () {
         overlay.css('display', 'none');
     }
 
-    $('a').click(function () {
-        show(this);
-    });
-
     function titleChanged() {
         setTitle();
-        setImage(null);
+        let serie = null;
         if (titleElement.checkValidity()) {
-            let serie = series[title];
-            if (serie) {
-                // serie is already known
-                setImage(serie.image);
-                setStatus(serie.status);
-                statusJQuery.val(serie.status);
+            serie = series[title];
+        }
+        if (serie) {
+            // serie is already known
+            setImage(serie.image);
+            setStatus(serie.status);
+            statusJQuery.val(serie.status);
+            uploaded = false;
+        } else {
+            if (!uploaded) {
+                setImage(null);
             }
+            setStatus(null);
+            statusJQuery.val('');
         }
         showDialog();
     }
-
-    titleJQuery.change(titleChanged);
-
-    titleJQuery.keyup(function (e) {
-        titleChanged();
-        if (e.keyCode === KEY.ENTER) {
-            $(STATUS_ID).focus();
-        }
-    });
 
     function statusChanged() {
         setStatus(statusJQuery.val());
         updateButtons();
     }
-
-    statusJQuery.change(statusChanged);
-
-    statusJQuery.keyup(function (e) {
-        statusChanged();
-        if (e.keyCode === KEY.ENTER) {
-            // check form validity
-            let form = $('#form');
-            if (form[0].checkValidity()) {
-                form.submit();
-            }
-        }
-    });
-
-    $(SUBMIT_ID).click(() => {
-        let form = $('#form');
-        if (form[0].checkValidity()) {
-            form.submit();
-        }
-    });
-
-    $('#form').submit(function () {
-        // update everything
-        setTitle();
-        setStatus(statusJQuery.val());
-
-        // send stuff
-        persistSerie();
-        persistImage();
-        updateHTML();
-        hide();
-    });
-
-    $(window).on('keypress', e => {
-        if (e.keyCode === KEY.ESCAPE) {
-            hide();
-        }
-    });
-
-    bg.on('click', hide);
-
-    $('#delete').click(() =>
-        clickEvent(archive)
-    );
-
-    $('#close').click(hide);
-
-    $(SUP_ID).click(() =>
-        clickEvent(buildSE)
-    );
-
-    $(EUP_ID).click(() =>
-        clickEvent(buildE)
-    );
 
     function clickEvent(builder) {
         setStatus(statusJQuery.val());
@@ -352,43 +298,9 @@ $(document).ready(function () {
         }
     }
 
-    function updateHTML() {
-        let update = false;
-        if (oldStand !== status) {
-            // new state is entered
-            if (!oldStand || 0 === oldStand.length) {
-                // insert new serie
-                series[title] = {status: status, image: image};
-                // update website
-                update = true;
-            } else {
-                // update old serie
-                series[title].status = status;
-                series[title].image = image;
-                // update website
-                update = true;
-            }
-        }
-        if (uploaded && image) {
-            update = true;
-
-            series[title].image = image;
-        }
-        if (update) {
-            if (status.match(REGEX_X)) {
-                addSerie(title, true);
-            } else {
-                addSerie(title, false);
-            }
-            initLazyLoading();
-        }
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
-    // Add series ------------------------------------------------------------------------------------------------------
+    // HTML Updates ----------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-
-    Object.keys(series).forEach(serie => addSerie(serie, true));
 
     /**
      * Adds a serie and deletes the old one if there is one.
@@ -430,6 +342,37 @@ $(document).ready(function () {
         );
     }
 
+    function updateHTML() {
+        let update = false;
+        if (oldStand !== status) {
+            // new state is entered
+            if (!oldStand || 0 === oldStand.length) {
+                // insert new serie
+                series[title] = {status: status, image: image};
+                // update website
+                update = true;
+            } else {
+                // update old serie
+                series[title].status = status;
+                series[title].image = image;
+                // update website
+                update = true;
+            }
+        }
+        if (uploaded && image) {
+            update = true;
+
+            series[title].image = image;
+        }
+        if (update) {
+            if (status.match(REGEX_X)) {
+                addSerie(title, true);
+            } else {
+                addSerie(title, false);
+            }
+            initLazyLoading();
+        }
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // File Drop -------------------------------------------------------------------------------------------------------
@@ -479,6 +422,86 @@ $(document).ready(function () {
     function initLazyLoading() {
         $('.lazy').Lazy();
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Run -------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+
+    picElement.addEventListener('dragover', handleDragOver, false);
+    picElement.addEventListener('drop', handleFileSelect, false);
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
+
+    $('a').click(function () {
+        show(this);
+    });
+
+    titleJQuery.change(titleChanged);
+
+    titleJQuery.keyup(function (e) {
+        titleChanged();
+        if (e.keyCode === KEY.ENTER) {
+            $(STATUS_ID).focus();
+        }
+    });
+
+    statusJQuery.change(statusChanged);
+
+    statusJQuery.keyup(function (e) {
+        statusChanged();
+        if (e.keyCode === KEY.ENTER) {
+            // check form validity
+            let form = $('#form');
+            if (form[0].checkValidity()) {
+                form.submit();
+            }
+        }
+    });
+
+    $(SUBMIT_ID).click(() => {
+        let form = $('#form');
+        if (form[0].checkValidity()) {
+            form.submit();
+        }
+    });
+
+    $('#form').submit(function () {
+        // update everything
+        setTitle();
+        setStatus(statusJQuery.val());
+
+        // send stuff
+        persistSerie();
+        persistImage();
+        updateHTML();
+        hide();
+    });
+
+    $(window).on('keypress', e => {
+        if (e.keyCode === KEY.ESCAPE) {
+            hide();
+        }
+    });
+
+    bg.on('click', hide);
+
+    $('#delete').click(() =>
+        clickEvent(archive)
+    );
+
+    $('#close').click(hide);
+
+    $(SUP_ID).click(() =>
+        clickEvent(buildSE)
+    );
+
+    $(EUP_ID).click(() =>
+        clickEvent(buildE)
+    );
+
+
+    Object.keys(series).forEach(serie => addSerie(serie, true));
 
     initLazyLoading();
 });

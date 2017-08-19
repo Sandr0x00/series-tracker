@@ -1,15 +1,15 @@
 One Piece;E00802
+Elementary;S01E15
+BoJack Horseman;S02E09
 Rick and Morty;S03E04
 Castlevania;S01E05
 Archer;S09E01
-BoJack Horseman;S02E07
 Attack on Titan;S03E01
 Game of Thrones;S07E06
 Seven Deadly Sins;S02E01
 Silicon Valley;S01E07
 Naruto Shippuuden;E00403
 13 Reasons Why;S01E03
-Elementary;S01E13
 iZombie;S03E01
 Ajin;S03E01
 House of Cards;S01E06

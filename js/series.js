@@ -15,6 +15,7 @@ $(document).ready(function () {
     };
     const REGEX_S = '^S[0-9]{2}E[0-9]{2}$';
     const REGEX_E = '^E[0-9]{5}$';
+    const REGEX_X = '^(SxxE|Exxx)xx$';
 
     const TITLE_ID = '#titel';
     const STATUS_ID = '#stand';
@@ -36,6 +37,7 @@ $(document).ready(function () {
     // Cache variables
     let image = null;
     let title = null;
+    let title_ = null;
     let status = null;
 
     let oldStand = '';
@@ -95,6 +97,7 @@ $(document).ready(function () {
         title = titleJQuery.val();
         if (title) {
             title = title.trim();
+            title_ = title.replace(/ /g, '_');
         }
     }
 
@@ -113,17 +116,20 @@ $(document).ready(function () {
         let submit = $(SUBMIT_ID);
 
         if (status && statusElement.checkValidity()) {
+            enable(sup);
             enable(eup);
             enable(submit);
 
             if (status.match(REGEX_E)) {
                 disable(sup);
-            } else {
-                enable(sup);
+            }
+            if (status.match(REGEX_X)) {
+                disable(sup);
+                disable(eup);
             }
         } else {
-            disable(eup);
             disable(sup);
+            disable(eup);
             disable(submit);
         }
 
@@ -168,7 +174,7 @@ $(document).ready(function () {
         overlay.css('display', 'none');
     }
 
-    $('a').click(function() {
+    $('a').click(function () {
         show(this);
     });
 
@@ -189,7 +195,7 @@ $(document).ready(function () {
 
     titleJQuery.change(titleChanged);
 
-    titleJQuery.keyup(function(e) {
+    titleJQuery.keyup(function (e) {
         titleChanged();
         if (e.keyCode === KEY.ENTER) {
             $(STATUS_ID).focus();
@@ -203,7 +209,7 @@ $(document).ready(function () {
 
     statusJQuery.change(statusChanged);
 
-    statusJQuery.keyup(function(e) {
+    statusJQuery.keyup(function (e) {
         statusChanged();
         if (e.keyCode === KEY.ENTER) {
             // check form validity
@@ -221,7 +227,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#form').submit(function() {
+    $('#form').submit(function () {
         // update everything
         setTitle();
         setStatus(statusJQuery.val());
@@ -241,17 +247,19 @@ $(document).ready(function () {
 
     bg.on('click', hide);
 
-    $('#delete').click(postDelete);
+    $('#delete').click(() =>
+        clickEvent(archive)
+    );
 
     $('#close').click(hide);
 
-    $(SUP_ID).click(() => {
-        clickEvent(buildSE);
-    });
+    $(SUP_ID).click(() =>
+        clickEvent(buildSE)
+    );
 
-    $(EUP_ID).click(() => {
-        clickEvent(buildE);
-    });
+    $(EUP_ID).click(() =>
+        clickEvent(buildE)
+    );
 
     function clickEvent(builder) {
         setStatus(statusJQuery.val());
@@ -261,6 +269,7 @@ $(document).ready(function () {
             statusJQuery.val(status);
             statusJQuery.focus();
         }
+        updateButtons();
     }
 
     function buildE() {
@@ -288,6 +297,14 @@ $(document).ready(function () {
         return s;
     }
 
+    function archive() {
+        let s = 'Exxxxx';
+        if (status.match(REGEX_S)) {
+            s = 'SxxExx';
+        }
+        return s;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // Send Data to Server ---------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -297,9 +314,8 @@ $(document).ready(function () {
      */
     function postDelete() {
         // new state is entered
-        let titel_ = title.replace(/ /g, '_');
         // update website
-        $('#' + titel_ + '_div').remove();
+        $('#' + title_ + '_div').remove();
         hide();
 
         // send the data using post
@@ -337,13 +353,12 @@ $(document).ready(function () {
     }
 
     function updateHTML() {
-        let titel_ = title.replace(/ /g, '_');
         let update = false;
         if (oldStand !== status) {
             // new state is entered
             if (!oldStand || 0 === oldStand.length) {
                 // insert new serie
-                series[title] = { status: status, image: image };
+                series[title] = {status: status, image: image};
                 // update website
                 update = true;
             } else {
@@ -360,7 +375,11 @@ $(document).ready(function () {
             series[title].image = image;
         }
         if (update) {
-            addSerie(title, false);
+            if (status.match(REGEX_X)) {
+                addSerie(title, true);
+            } else {
+                addSerie(title, false);
+            }
             initLazyLoading();
         }
     }
@@ -371,23 +390,28 @@ $(document).ready(function () {
 
     Object.keys(series).forEach(serie => addSerie(serie, true));
 
+    /**
+     * Adds a serie and deletes the old one if there is one.
+     * @param title Use specific title here, not the globally available one.
+     * @param append
+     */
     function addSerie(title, append) {
         let serie = series[title];
-        let titel_ = title.replace(/ /g, '_');
+        let title_ = title.replace(/ /g, '_');
 
         let body = $('#seriesContent');
 
-        let div = '<div id="' + titel_ + '_div" class="seriesDiv col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">';
-        div += '<a class="series lazy" id="' + titel_ + '"';
+        let div = '<div id="' + title_ + '_div" class="seriesDiv col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">';
+        div += '<a class="series lazy" id="' + title_ + '"';
         if (serie.image) {
             div += ' data-src="' + serie.image + '"';
         }
         div += '>';
-        div += '<span class="shadow"><span class="text" id="' + titel_ + '_status">' + serie.status + '</span></span>';
+        div += '<span class="shadow"><span class="text" id="' + title_ + '_status">' + serie.status + '</span></span>';
         div += '</a>';
         div += '</div>';
 
-        let old = $('#' + titel_ + '_div');
+        let old = $('#' + title_ + '_div');
         if (old.length > 0) {
             old.remove();
         }
@@ -398,9 +422,9 @@ $(document).ready(function () {
             body.prepend($(div));
         }
         body.delegate(
-            '#' + titel_,
+            '#' + title_,
             'click',
-            function() {
+            function () {
                 show(this);
             }
         );
@@ -428,8 +452,8 @@ $(document).ready(function () {
             let reader = new FileReader();
 
             // Closure to capture the file information.
-            reader.onload = (function(theFile) {
-                return function(e) {
+            reader.onload = (function (theFile) {
+                return function (e) {
                     // Render thumbnail
                     setImage(e.target.result);
                     showDialog();

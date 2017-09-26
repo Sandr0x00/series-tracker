@@ -24,6 +24,11 @@
             <a id="plus" class="nav-link" type="button"><i class="material-icons">add</i></a>
         </li>
     </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a id="info" class="nav-link" type="button"><i class="material-icons">info_outline</i></a>
+        </li>
+    </ul>
 </nav>
 <div id="seriesContent" class="container-fluid">
 <?php
@@ -63,7 +68,7 @@ foreach ($serien as $title => $serie) {
 ?>
 </div> <!-- /container -->
 <div id="overlay" class="container-fluid">
-    <div id="bg"></div>
+    <div id="bg" class="bg"></div>
     <div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <div class="row">
             <div class="col-8 offset-2">
@@ -113,9 +118,6 @@ foreach ($serien as $title => $serie) {
             </div>
         </form>
     </div>
-    <!--div id="settings">
-
-    </div-->
 </div>
 <datalist id="titelList">
     <?php
@@ -149,5 +151,6 @@ foreach ($serien as $title => $serie) {
 </script>
 <!-- My JS -->
 <script type="text/javascript" src="js/series.js"></script>
+<script type="text/javascript" src="js/info.js"></script>
 </body>
 </html>

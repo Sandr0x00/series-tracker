@@ -64,11 +64,11 @@ body {
   padding: 0;
 }
 
-#bg, #dialog {
+.bg, #dialog {
   position: fixed;
 }
 
-#bg {
+.bg {
   z-index: 4;
   width: 100%;
   height: 100%;
@@ -78,7 +78,7 @@ body {
   opacity: 0.8;
 }
 
-#dialog {
+#dialog, .dialog {
   z-index: 5;
   top: 100px;
   background: #fff;

@@ -314,7 +314,7 @@ $(document).ready(function () {
         let body = $('#seriesContent');
 
         let div = '<div id="' + title_ + '_div" class="seriesDiv col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">';
-        div += '<a class="series lazy" id="' + title_ + '"';
+        div += '<a class="series lazy display" id="' + title_ + '"';
         if (serie.image) {
             div += ' data-src="' + serie.image + '"';
         }
@@ -423,6 +423,7 @@ $(document).ready(function () {
         $('.lazy').Lazy();
     }
 
+
     // -----------------------------------------------------------------------------------------------------------------
     // Run -------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -433,7 +434,11 @@ $(document).ready(function () {
     dropZone.addEventListener('dragover', handleDragOver, false);
     dropZone.addEventListener('drop', handleFileSelect, false);
 
-    $('a').click(function () {
+    $('.display').click(function () {
+        show(this);
+    });
+
+    $('#plus').click(function () {
         show(this);
     });
 

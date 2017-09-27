@@ -6,7 +6,7 @@ let $infoDialog = null;
 
 function showInfoDialog() {
     $infoDialog = $('<div id="overlay2" class="container-fluid">'
-        + '<div class="bg"></div>'
+        + '<div id="bg2" class="bg" onClick="hideInfoDialog()"></div>'
         + '<div class="d-flex align-items-end flex-column" style="height: 200px; position:fixed; top: 110px; right: 20px; z-index: 5;">'
         + '<div class="p-5 dialog" style="text-align: left">'
         + 'Stuff used:<br>'

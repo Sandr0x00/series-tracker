@@ -90,6 +90,16 @@ class FileHandler {
         fwrite($f, "\n");
     }
 
+    public static function dumpAll($series) {
+        $filePath = dirname(__FILE__) . FILE_PATH;
+        $f = fopen($filePath, 'w');
+        
+        // write all found series to to file
+        foreach ($series as $serie) {
+            FileHandler::writeLine($f, $serie->title, $serie->status);
+        }
+    }
+
     /**
      * Reads all entries of the file
      * @return array

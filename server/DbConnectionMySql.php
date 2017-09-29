@@ -14,11 +14,11 @@ class DbConnectionMySql
         $servername = "127.0.0.1";
         $username = "root";
         $password = "";
-        $database = "bla";
-            
+        $database = "series";
+
         // Create connection
         $conn = new mysqli($servername, $username, $password, $database, 3306);
-            
+
         // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
@@ -135,5 +135,10 @@ class DbConnectionMySql
         }
 
         $conn->close();
+    }
+
+    public static function dump() {
+        $series = self::get_all_series();
+        FileHandler::dumpAll($series);
     }
 }

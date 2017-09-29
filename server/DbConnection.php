@@ -2,6 +2,8 @@
 
 require_once 'Series.php';
 
+// Possibly not working, will focus primarily on MySQL instead of Mongo
+
 class DbConnection {
 
     /**

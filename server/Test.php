@@ -9,6 +9,6 @@ $series->title = trim("One Piece");
 $series->status = trim("E00001");
 
 //DbConnectionMySql::upsert($series);
-//DbConnectionMySql::get_all_series();
-DbConnectionMySql::create_and_fill_table();
+//DbConnectionMySql::create_and_fill_table();
+//DbConnectionMySql::dump();
 //FileHandler::write($series);

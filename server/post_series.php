@@ -10,7 +10,6 @@ if (isset($_POST[POST_TITEL]) && isset($_POST[POST_STAND])) {
     $series = new Series();
     $series->title = trim($_POST[POST_TITEL]);
     $series->status = trim($_POST[POST_STAND]);
-    //FileHandler::write($series);
     DbConnectionMySql::write($series);
 }
 

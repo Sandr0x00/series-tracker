@@ -34,10 +34,12 @@
 <?php
 require_once 'server/Helper.php';
 require_once 'server/FileHandler.php';
+require_once 'server/DbConnectionMySql.php';
 
 $titelList = array();
 
-$serien = FileHandler::read();
+//$serien = FileHandler::read();
+$serien = DbConnectionMySql::get_all_series();
 
 foreach ($serien as $title => $serie) {
     //settype($serie, 'Serie/Serie');

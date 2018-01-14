@@ -510,3 +510,19 @@ $(document).ready(function () {
 
     initLazyLoading();
 });
+
+function changeStyle() {
+    let dark = 'dark';
+    let light = 'light';
+
+    let oldClass = dark;
+    let newClass = light;
+    if ($('body').hasClass(light)) {
+        oldClass = light;
+        newClass = dark;
+    }
+
+    $('body').removeClass(oldClass);
+    $('body').addClass(newClass);
+}
+

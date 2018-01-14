@@ -9,6 +9,8 @@ function showInfoDialog() {
         + '<div id="bg2" class="bg" onClick="hideInfoDialog()"></div>'
         + '<div class="d-flex align-items-end flex-column" style="height: 200px; position:fixed; top: 110px; right: 20px; z-index: 5;">'
         + '<div class="p-5 dialog" style="text-align: left">'
+        + 'Style:<br>'
+        + '<a href="#" id="changestyle">Switch Style</a><br><br>'
         + 'Stuff used:<br>'
         + 'Google Material Icons: <a href="https://material.io/icons/">https://material.io/icons/</a><br>'
         + 'Bootstrap: <a href="https://v4-alpha.getbootstrap.com/">https://v4-alpha.getbootstrap.com/</a><br>'
@@ -18,6 +20,7 @@ function showInfoDialog() {
         + '</div>'
         + '</div>');
     $('body').append($infoDialog);
+    $('#changestyle').click(changeStyle);
 }
 
 function hideInfoDialog() {

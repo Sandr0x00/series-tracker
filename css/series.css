@@ -1,5 +1,4 @@
 * {
-  color: #333;
   text-align: center;
   text-decoration: none;
   padding: 0;
@@ -9,8 +8,28 @@
 }
 
 body {
-  /*font-size: 0*/;
+  /*font-size: 0;*/
 }
+
+.dark, .dark .dialog, .dark #dialog, .dark nav {
+  color: #fafafa;
+  background-color: #333;
+}
+
+.light, .light .dialog, .light #dialog, .light nav {
+  background-color: #fafafa;
+  color: #333;
+}
+.dark .btn-link {
+  color: #ccc;
+}
+.dark .btn-link:disabled {
+  color: #ccc;
+}
+.dark .btn-link:hover {
+  background-color: #555555;
+}
+
 
 .shadow, .shadow .text {
   left: 0;
@@ -81,7 +100,6 @@ body {
 #dialog, .dialog {
   z-index: 5;
   top: 100px;
-  background: #fff;
   padding: 20px;
   border: 2px solid #333;
   border-radius: 4px;
@@ -122,17 +140,25 @@ input, #EUP, #SUP, #submit, .btn {
   margin: 2px;
 }
 
-input[readonly], .input[readonly] {
+.light input[readonly], .light .input[readonly] {
   background: #DDD;
 }
-
-input:valid, .input:valid {
-  background: #DFD;
+.dark input[readonly], .dark .input[readonly] {
+  background: #666;
 }
 
-input:invalid, .input:invalid {
+.light input:valid, .light .input:valid {
+  background: #DFD;
+}
+.dark input:valid, .dark .input:valid {
+  background: #494;
+}
+
+.light input:invalid, .light .input:invalid {
   background: #FDD;
-  -moz-box-shadow: none;
+}
+.dark input:invalid, .dark .input:invalid {
+  background: #944;
 }
 
 .navbar {

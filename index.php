@@ -17,8 +17,8 @@
     <title>Serien</title>
     <base target="_self">
 </head>
-<body>
-<nav class="navbar navbar-default navbar-toggleable-md navbar-static-top">
+<body class="dark">
+<nav id="nav" class="navbar navbar-toggleable-md navbar-static-top">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             <a id="plus" class="nav-link" type="button"><i class="material-icons">add</i></a>

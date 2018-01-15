@@ -11,12 +11,12 @@ body {
   /*font-size: 0;*/
 }
 
-.dark, .dark .dialog, .dark #dialog, .dark nav {
+.dark, .dark .dialog, .dark #dialog, .dark nav, .dark .nav-link, .dark .nav-item {
   color: #fafafa;
   background-color: #333;
 }
 
-.light, .light .dialog, .light #dialog, .light nav {
+.light, .light .dialog, .light #dialog, .light nav, .light .nav-link, .light .nav-item {
   background-color: #fafafa;
   color: #333;
 }

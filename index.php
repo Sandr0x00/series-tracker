@@ -18,17 +18,15 @@
     <base target="_self">
 </head>
 <body class="dark">
-<nav id="nav" class="navbar navbar-toggleable-md navbar-static-top">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a id="plus" class="nav-link" type="button"><i class="material-icons">add</i></a>
-        </li>
-    </ul>
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a id="info" class="nav-link" type="button"><i class="material-icons">info_outline</i></a>
-        </li>
-    </ul>
+<nav id="nav" class="navbar navbar-static-top container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <a id="plus" class="pull-left p-4" type="button"><i class="material-icons">add</i></a>
+        </div>
+        <div class="col-6">
+            <a id="info" class="pull-right p-4" type="button"><i class="material-icons">info_outline</i></a>
+        </div>
+    </div>
 </nav>
 <div id="seriesContent" class="container-fluid">
 <?php

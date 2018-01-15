@@ -19,10 +19,13 @@
 </head>
 <body class="dark">
 <nav id="nav" class="navbar navbar-static-top container-fluid">
-    <div class="col-6">
+    <div class="col-2">
         <a id="plus" class="float-left p-4" type="button"><i class="material-icons">add</i></a>
     </div>
-    <div class="col-6">
+    <div class="col-8">
+        <input id="search" name="search" type="text" placeholder="Search" autocomplete="off" list="titelList">
+    </div>
+    <div class="col-2">
         <a id="info" class="float-right p-4" type="button"><i class="material-icons">info_outline</i></a>
     </div>
 </nav>
@@ -132,7 +135,8 @@ foreach ($serien as $title => $serie) {
 <script type="text/javascript" src="libs/bootstrap-4.0.0-beta.3/js/bootstrap.min.js"></script>
 <!-- Lazy Loading http://jquery.eisbehr.de/lazy/ -->
 <script type="text/javascript" src="libs/jquery-lazy/jquery.lazy.min.js"></script>
-<!-- Fill const -->
+<!-- Fuse.js searching http://fusejs.io/ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.0/fuse.min.js" integrity="sha256-CB/G+xw3ep7+dlklAxcIvF20YMfFtF+7xbtauQSMi78=" crossorigin="anonymous"></script><!-- Fill const -->
 <script type="text/javascript">
     let allSeries = {
     <?php

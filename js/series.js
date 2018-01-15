@@ -332,7 +332,7 @@ $(document).ready(function () {
 
         let body = $('#seriesContent');
 
-        let div = '<div id="' + title_ + '_div" class="seriesDiv col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">';
+        let div = '<div id="' + title_ + '_div" class="seriesDiv col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">';
         div += '<a class="series lazy display" id="' + title_ + '"';
         if (serie.image) {
             div += ' data-src="' + serie.image + '"';
@@ -537,6 +537,65 @@ $(document).ready(function () {
     Object.keys(series).forEach(serie => addSerie(serie, true));
 
     initLazyLoading();
+
+    $('#search').on('keyup', function() {
+        let value = this.value;
+
+        let content = $('#seriesContent');
+        //console.log(content.children());
+        content.children().each(function () {
+            //console.log($(this).find('a').data('originalTitle'));//.find('a').title);
+            $(this).toggle(fuzzySearch($(this).find('a').data('originalTitle'), value));
+        });
+    });
+
+    // Fuzzy search
+
+    let grep = function (array, callback, invert) {
+
+        let returnArray = [], callbackValue;
+
+            // we negate the invert
+        invert = !!invert;
+
+        // Go through the array, only saving the items
+        // that pass the validator function
+        for (let i = array.length; i--;) {
+            callbackValue = !!callback(array[i], i);
+            if (invert !== callbackValue) {
+                returnArray.push(array[i]);
+            }
+        }
+
+        return returnArray;
+    };
+
+    let fuzzySearch = function (text, query) {
+        text = text.toLowerCase();
+        query = query.toLowerCase().split('');
+
+        return !grep(query, function (value) {
+            return text.indexOf(value) === -1;
+        }).length;
+    };
+
+
+    // Fuse.js fuzzy search
+    /*let options = {
+        shouldSort: false,
+        threshold: 0.6,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+            'title',
+            'author.firstName'
+        ]
+    };
+    let fuse = new Fuse(list, options); // "list" is the item array
+    let result = fuse.search('grand de');*/
+
 });
 
 function changeStyle() {
@@ -553,4 +612,15 @@ function changeStyle() {
     $('body').removeClass(oldClass);
     $('body').addClass(newClass);
 }
+
+
+/*
+let $list = $('#list');
+
+$('#search').on('keyup', function () {
+    let value = this.value;
+    $list.find('li').each(function () {
+        $(this).toggle(fuzzySearch(this.innerText, value));
+    });
+});*/
 

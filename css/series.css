@@ -147,17 +147,23 @@ input, #EUP, #SUP, #submit, .btn {
   background: #666;
 }
 
-.light input:valid, .light .input:valid {
+.light #titel:valid, .light #stand:valid {
   background: #DFD;
 }
-.dark input:valid, .dark .input:valid {
+.dark #titel:valid, .dark #stand:valid {
   background: #494;
 }
+.dark #search {
+  background: #333;
+}
+.light #search {
+  background: #fafafa;
+}
 
-.light input:invalid, .light .input:invalid {
+.light #titel:invalid, .light #stand:invalid {
   background: #FDD;
 }
-.dark input:invalid, .dark .input:invalid {
+.dark #titel:invalid, .dark #stand:invalid {
   background: #944;
 }
 

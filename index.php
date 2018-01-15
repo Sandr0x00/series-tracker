@@ -7,7 +7,7 @@
     <meta name="viewport" content="maximum-scale=1">
     <link rel="icon" href="img/favicon.png" type="image/png">
     <!-- Bootstrap Standard Theme-->
-    <link type='text/css' href="libs/bootstrap-4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <link type='text/css' href="libs/bootstrap-4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Theme for Bootstrap -->
     <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
     <!-- My Stylesheet -->
@@ -19,13 +19,11 @@
 </head>
 <body class="dark">
 <nav id="nav" class="navbar navbar-static-top container-fluid">
-    <div class="row">
-        <div class="col-6">
-            <a id="plus" class="pull-left p-4" type="button"><i class="material-icons">add</i></a>
-        </div>
-        <div class="col-6">
-            <a id="info" class="pull-right p-4" type="button"><i class="material-icons">info_outline</i></a>
-        </div>
+    <div class="col-6">
+        <a id="plus" class="float-left p-4" type="button"><i class="material-icons">add</i></a>
+    </div>
+    <div class="col-6">
+        <a id="info" class="float-right p-4" type="button"><i class="material-icons">info_outline</i></a>
     </div>
 </nav>
 <div id="seriesContent" class="container-fluid">
@@ -130,7 +128,8 @@ foreach ($serien as $title => $serie) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="libs/jquery/jquery-3.2.1.min.js"><\/script>')</script>
 <!-- Bootstrap https://v4-alpha.getbootstrap.com/ -->
-<script type="text/javascript" src="libs/bootstrap-4.0.0-alpha.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script type="text/javascript" src="libs/bootstrap-4.0.0-beta.3/js/bootstrap.min.js"></script>
 <!-- Lazy Loading http://jquery.eisbehr.de/lazy/ -->
 <script type="text/javascript" src="libs/jquery-lazy/jquery.lazy.min.js"></script>
 <!-- Fill const -->

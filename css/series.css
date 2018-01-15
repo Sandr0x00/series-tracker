@@ -175,3 +175,17 @@ input, #EUP, #SUP, #submit, .btn {
 a:hover {
   cursor: pointer;
 }
+
+/* Tooltip */
+.tooltip-inner {
+  font-size: 1.4em;
+}
+
+.dark .tooltip-inner {
+  color: #fafafa;
+  background-color: #333;
+}
+.light .tooltip-inner {
+  background-color: #fafafa;
+  color: #333;
+}

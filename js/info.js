@@ -30,7 +30,9 @@ $('#info').click(function () {
         + 'Google Material Icons: <a href="https://material.io/icons/">https://material.io/icons/</a><br>'
         + 'Bootstrap: <a href="https://v4-alpha.getbootstrap.com/">https://v4-alpha.getbootstrap.com/</a><br>'
         + 'JQuery: <a href="https://jquery.com/">https://jquery.com/</a><br>'
-        + 'JQuery Lazy: <a href="http://jquery.eisbehr.de/lazy/">http://jquery.eisbehr.de/lazy/</a>'
+        + 'JQuery Lazy: <a href="http://jquery.eisbehr.de/lazy/">http://jquery.eisbehr.de/lazy/</a><br>'
+        + '<br>'
+        + 'Made by <a href="https://github.com/Sandr00">Sandr0</a>'
         + '</div>'
         + '</div>';
         showInfoDialog(infoPanel);

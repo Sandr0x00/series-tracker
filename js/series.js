@@ -337,7 +337,7 @@ $(document).ready(function () {
         if (serie.image) {
             div += ' data-src="' + serie.image + '"';
         }
-        div += '>';
+        div += ' data-toggle="tooltip" data-placement="bottom" title="' + title + '">';
         div += '<span class="shadow"><span class="text" id="' + title_ + '_status">' + serie.status + '</span></span>';
         div += '</a>';
         div += '</div>';
@@ -524,6 +524,15 @@ $(document).ready(function () {
         clickEvent(buildE)
     );
 
+    /*$('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
+    });*/
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+            offset: '0, -80%'
+        });
+    });
 
     Object.keys(series).forEach(serie => addSerie(serie, true));
 

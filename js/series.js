@@ -273,9 +273,28 @@ $(document).ready(function () {
     function persistSerie() {
         if (oldStand !== status) {
             // send the data using post
-            $.post('server/post_series.php', {
-                titel: title,
-                stand: status
+            $.ajax({
+                type: 'POST',
+                url: 'server/post_series.php',
+                data: {
+                    titel: title,
+                    stand: status
+                },
+                success: function(data) {
+                    if (data == null || data === '') {
+                        return false;
+                    }
+                    let infoPanel = '<div class="d-flex align-items-end flex-column" style="height: 200px; position:fixed; top: 110px; right: 20px; z-index: 5;">'
+                    + '<div class="p-5 dialog" style="text-align: left">'
+                    + 'Fehler:<br>'
+                    + data
+                    + '</div>'
+                    + '</div>';
+                    showInfoDialog(infoPanel);
+        
+                    // this would return to the error handler, which does nothing
+                    return false;
+                }
             });
         }
     }

@@ -2,6 +2,7 @@
 
 require_once 'Series.php';
 require_once 'FileHandler.php';
+mysqli_report(MYSQLI_REPORT_STRICT);
 
 class DbConnectionMySql
 {
@@ -17,13 +18,17 @@ class DbConnectionMySql
         $database = "series";
 
         // Create connection
-        $conn = new mysqli($servername, $username, $password, $database, 3306);
-
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+        try {
+            $conn = new mysqli($servername, $username, $password, $database, 3306);
+            return $conn;
+        } catch (Exception $e) {
+            echo "Could not connect to database";
+            exit;
         }
-        return $conn;
+        // Check connection
+        /*if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }*/
     }
 
     /**
@@ -77,6 +82,10 @@ class DbConnectionMySql
     public static function get_all_series()
     {
         $conn = self::connect();
+
+        if ($conn->connect_error) {
+            return null;
+        }
         
         $sql = 'SELECT * FROM series ORDER BY CASE when status LIKE "%x" THEN 2 ELSE 1 END, date_modified DESC;';
         $result = $conn->query($sql);
@@ -131,10 +140,12 @@ class DbConnectionMySql
         }
 
         if ($conn->query($sql) === false) {
-            die("Error updating: " . $conn->error ."<br>");
+            echo json_encode("Could not be written.");
+            //die("Error updating: " . $conn->error ."<br>");
         }
 
         $conn->close();
+
     }
 
     public static function dump() {

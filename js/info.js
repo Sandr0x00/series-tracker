@@ -2,12 +2,27 @@
 // Info Dialog -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------------
 
-let $infoDialog = null;
+let infoDialog = null;
 
-function showInfoDialog() {
-    $infoDialog = $('<div id="overlay2" class="container-fluid">'
+function showInfoDialog(infoPanel) {
+    infoDialog = $('<div id="overlay2" class="container-fluid">'
         + '<div id="bg2" class="bg" onClick="hideInfoDialog()"></div>'
-        + '<div class="d-flex align-items-end flex-column" style="height: 200px; position:fixed; top: 110px; right: 20px; z-index: 5;">'
+        + infoPanel
+        + '</div>');
+    $('body').append(infoDialog);
+    $('#changestyle').click(changeStyle);
+}
+
+function hideInfoDialog() {
+    infoDialog.remove();
+    infoDialog = null;
+}
+
+$('#info').click(function () {
+    if (infoDialog) {
+        hideInfoDialog();
+    } else {
+        let infoPanel = '<div class="d-flex align-items-end flex-column" style="height: 200px; position:fixed; top: 110px; right: 20px; z-index: 5;">'
         + '<div class="p-5 dialog" style="text-align: left">'
         + 'Style:<br>'
         + '<a href="#" id="changestyle">Switch Style</a><br><br>'
@@ -17,21 +32,7 @@ function showInfoDialog() {
         + 'JQuery: <a href="https://jquery.com/">https://jquery.com/</a><br>'
         + 'JQuery Lazy: <a href="http://jquery.eisbehr.de/lazy/">http://jquery.eisbehr.de/lazy/</a>'
         + '</div>'
-        + '</div>'
-        + '</div>');
-    $('body').append($infoDialog);
-    $('#changestyle').click(changeStyle);
-}
-
-function hideInfoDialog() {
-    $infoDialog.remove();
-    $infoDialog = null;
-}
-
-$('#info').click(function () {
-    if ($infoDialog) {
-        hideInfoDialog();
-    } else {
-        showInfoDialog();
+        + '</div>';
+        showInfoDialog(infoPanel);
     }
 });

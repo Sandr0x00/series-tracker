@@ -12,9 +12,14 @@ $(document).ready(function () {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * See index.php
+     * {
+     * '"Jessica Jones":{status: "S01E01", image: "file location"},
+     * ...
+     * }
      */
-    let series = allSeries;
+    let series = null;
+
+    let seriesMd5 = null;
 
     const KEY = {
         ESCAPE: 27,
@@ -362,7 +367,8 @@ $(document).ready(function () {
     }
 
     function updateHTML() {
-        let update = false;
+        refresh();
+        /*let update = false;
         if (oldStand !== status) {
             // new state is entered
             if (!oldStand || 0 === oldStand.length) {
@@ -390,7 +396,7 @@ $(document).ready(function () {
                 addSerie(title, false);
             }
             initLazyLoading();
-        }
+        }*/
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -441,6 +447,34 @@ $(document).ready(function () {
     function initLazyLoading() {
         $('.lazy').Lazy();
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Auto Update -----------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+    function refresh() {
+        let req = new XMLHttpRequest();
+        //console.log("Grabbing Value");
+        req.onreadystatechange = function () {
+            if (req.readyState === 4 && req.status === 200) {
+                let newMd5 = $.md5(req.responseText);
+                series = JSON.parse(req.responseText);
+                console.log(newMd5 + ' - ' + seriesMd5);
+                if (newMd5 !== seriesMd5) {
+                    Object.keys(series).forEach(serie => addSerie(serie, true));
+                    initLazyLoading();
+                    seriesMd5 = newMd5;
+                }
+            }
+        };
+        req.open('GET', 'server/get.php', true); // Grabs whatever you've written in this file
+        req.send(null);
+    }
+
+    refresh(); // Then runs the refresh function for the first time.
+    self.setInterval(function () {
+        refresh();
+    }, 10000); // Set the refresh() function to run every 10 seconds. [1 second would be 1000, and 1/10th of a second would be 100 etc.
 
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -533,10 +567,6 @@ $(document).ready(function () {
             offset: '0, -80%'
         });
     });
-
-    Object.keys(series).forEach(serie => addSerie(serie, true));
-
-    initLazyLoading();
 
     $('#search').on('keyup', function() {
         let value = this.value;

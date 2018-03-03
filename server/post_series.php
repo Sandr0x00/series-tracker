@@ -8,9 +8,11 @@ require_once 'PostHelper.php';
 
 if (isset($_POST[POST_TITEL]) && isset($_POST[POST_STAND])) {
     $series = new Series();
-    $series->title = trim($_POST[POST_TITEL]);
-    $series->status = trim($_POST[POST_STAND]);
-    DbConnectionMySql::write($series);
+    $series->title = sanitize($_POST[POST_TITEL]);
+    $series->status = sanitize($_POST[POST_STAND]);
+    if ($series->valid()) {
+        DbConnectionMySql::write($series);
+    }
 }
 
 if (isset($_POST[POST_TITEL]) && isset($_POST[POST_IMAGE])) {

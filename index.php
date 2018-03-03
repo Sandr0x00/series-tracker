@@ -138,7 +138,7 @@ foreach ($serien as $title => $serie) {
 <!-- Fuse.js searching http://fusejs.io/ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.0/fuse.min.js" integrity="sha256-CB/G+xw3ep7+dlklAxcIvF20YMfFtF+7xbtauQSMi78=" crossorigin="anonymous"></script><!-- Fill const -->
 <script type="text/javascript">
-    let allSeries = {
+   /* let allSeries = {
     <?php
     $first = true;
     foreach ($serien as $serie) {
@@ -150,8 +150,10 @@ foreach ($serien as $title => $serie) {
         echo "'" . Helper::replaceHyphen($serie->title) . "': { status: '" . $serie->status . "', image: '" . $serie->image . "'}\n";
     }
     ?>
-    };
+    };*/
 </script>
+<!-- MD5 https://github.com/blueimp/JavaScript-MD5 -->
+<script type="text/javascript" src="js/md5.js"></script>
 <!-- My JS -->
 <script type="text/javascript" src="js/series.js"></script>
 <script type="text/javascript" src="js/info.js"></script>

@@ -79,8 +79,7 @@ class DbConnectionMySql
         $conn->close();
     }
 
-    public static function get_all_series()
-    {
+    public static function get_all_series() {
         $conn = self::connect();
 
         if ($conn->connect_error) {
@@ -97,6 +96,26 @@ class DbConnectionMySql
                 $obj->id = $row["id"];
                 $obj->title = $row["title"];
                 $obj->status = $row["status"];
+
+                // try to find image for serie
+                $imgLocation = "img/$obj->title.jpg";
+                if (!file_exists("../".$imgLocation)) {
+                    // image does not exist in img/ directory, try sub directories
+                    for ($h = 300; $h <= 500; $h += 100) {
+                        $imgLocation = "img/$h/$obj->title.jpg";
+                        if (file_exists("../".$imgLocation)) {
+                            break;
+                        }
+                    }
+                }
+                if (!file_exists("../".$imgLocation)) {
+                    // no image found
+                    $imgLocation = null;
+                } else {
+                    $imgLocation = Helper::replaceHyphen($imgLocation);
+                }
+                $obj->image = $imgLocation;
+
                 $obj->class = Helper::endsWith($obj->status, 'x') ? 'x' : '';
     
                 $content[$obj->title] = $obj;

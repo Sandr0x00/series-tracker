@@ -147,19 +147,15 @@ class FileHandler {
         // sets the correct directory
         $output_file = dirname(__FILE__) . '/../img/' . $output_file;
 
-        // open the output file for writing
-        $ifp = fopen($output_file, 'w');
-
         // split the string on commas
         // $data[ 0 ] == "data:image/png;base64"
         // $data[ 1 ] == <actual base64 string>
         $data = explode(',', $base64_string);
 
         // we could add validation here with ensuring count( $data ) > 1
-        fwrite($ifp, base64_decode($data[1]));
-
-        // clean up the file resource
-        fclose($ifp);
+        $img = imagecreatefromstring(base64_decode($data[1]));
+        // write file, while stripping all exif data
+        imagejpeg($img, $output_file);
 
         return $output_file;
     }

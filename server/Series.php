@@ -9,4 +9,14 @@ class Series {
     // not persisted
     public $image;
     public $class;
+
+    public function valid() {
+        if ($this->title === null) {
+            return false;
+        }
+        if ($this->status === null) {
+            return false;
+        }
+        return true;
+    }
 }

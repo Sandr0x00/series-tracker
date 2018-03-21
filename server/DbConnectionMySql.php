@@ -126,8 +126,7 @@ class DbConnectionMySql
         return $content;
     }
 
-    public static function write(Series $series)
-    {
+    public static function write(Series $series) {
         $conn = self::connect();
 
         $sql = "SELECT * FROM series WHERE title = '$series->title';";

@@ -459,7 +459,6 @@ $(document).ready(function () {
             if (req.readyState === 4 && req.status === 200) {
                 let newMd5 = $.md5(req.responseText);
                 series = JSON.parse(req.responseText);
-                console.log(newMd5 + ' - ' + seriesMd5);
                 if (newMd5 !== seriesMd5) {
                     Object.keys(series).forEach(serie => addSerie(serie, true));
                     initLazyLoading();
@@ -467,7 +466,7 @@ $(document).ready(function () {
                 }
             }
         };
-        req.open('GET', 'server/get.php', true); // Grabs whatever you've written in this file
+        req.open('GET', 'server/get.php?md5=' + seriesMd5, true); // Grabs whatever you've written in this file
         req.send(null);
     }
 
@@ -475,7 +474,6 @@ $(document).ready(function () {
     self.setInterval(function () {
         refresh();
     }, 10000); // Set the refresh() function to run every 10 seconds. [1 second would be 1000, and 1/10th of a second would be 100 etc.
-
 
     // -----------------------------------------------------------------------------------------------------------------
     // Run -------------------------------------------------------------------------------------------------------------

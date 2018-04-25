@@ -26,6 +26,7 @@
         <input id="search" name="search" type="text" placeholder="Search" autocomplete="off" list="titelList">
     </div>
     <div class="col-2">
+        <span id="circle"></span>
         <a id="info" class="float-right p-4" type="button"><i class="material-icons">info_outline</i></a>
     </div>
 </nav>
@@ -132,6 +133,7 @@ foreach ($serien as $title => $serie) {
 <script>window.jQuery || document.write('<script src="libs/jquery/jquery-3.2.1.min.js"><\/script>')</script>
 <!-- Bootstrap https://v4-alpha.getbootstrap.com/ -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script type="text/javascript" src="libs/jquery-circle/circle-progress.min.js"></script>
 <script type="text/javascript" src="libs/bootstrap-4.0.0-beta.3/js/bootstrap.min.js"></script>
 <!-- Lazy Loading http://jquery.eisbehr.de/lazy/ -->
 <script type="text/javascript" src="libs/jquery-lazy/jquery.lazy.min.js"></script>

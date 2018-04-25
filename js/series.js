@@ -452,6 +452,9 @@ $(document).ready(function () {
     // Auto Update -----------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
 
+    let reverse = false;
+    let refreshCircle = $('#circle');
+
     function refresh() {
         let req = new XMLHttpRequest();
         //console.log("Grabbing Value");
@@ -468,12 +471,35 @@ $(document).ready(function () {
         };
         req.open('GET', 'server/get.php?md5=' + seriesMd5, true); // Grabs whatever you've written in this file
         req.send(null);
+        reverse = !reverse;
+        refreshCircle.circleProgress({
+            value: reverse ? 0 : 1,
+            animationStartValue: reverse ? 1 : 0
+        });
     }
 
     refresh(); // Then runs the refresh function for the first time.
     self.setInterval(function () {
         refresh();
     }, 10000); // Set the refresh() function to run every 10 seconds. [1 second would be 1000, and 1/10th of a second would be 100 etc.
+
+    refreshCircle.circleProgress({
+        startAngle: 1.5 * Math.PI,
+        value: 0,
+        size: 40,
+        fill: {
+            color: '#ddd'
+        },
+        emptyFill: {
+            color: '#000'
+        },
+        lineCap: 'round',
+        animation: {
+            duration: 10000
+        }
+    });
+    refreshCircle.on('click', refresh);
+    refreshCircle.css('cursor', 'pointer');
 
     // -----------------------------------------------------------------------------------------------------------------
     // Run -------------------------------------------------------------------------------------------------------------

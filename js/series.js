@@ -343,7 +343,7 @@ $(document).ready(function () {
             div += ' data-src="' + serie.image + '"';
         }
         div += ' data-toggle="tooltip" data-placement="bottom" title="' + title + '">';
-        div += '<span class="shadow"><span class="text" id="' + title_ + '_status">' + serie.status + '</span></span>';
+        div += '<span class="shadow" id="' + title_ + '_status">' + serie.status + '</span>';
         div += '</a>';
         div += '</div>';
 

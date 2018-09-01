@@ -6,15 +6,20 @@ require_once 'FileHandler.php';
 require_once 'DbConnectionMySql.php';
 require_once 'PostHelper.php';
 
-if (isset($_POST[POST_TITEL]) && isset($_POST[POST_STAND])) {
-    $series = new Series();
+$series = new Series();
+if (isset($_POST[POST_TITEL])) {
     $series->title = sanitize($_POST[POST_TITEL]);
+}
+if (!$series->isTitleValid()) {
+    // title not valid, nothing to do here
+    return;
+}
+if (isset($_POST[POST_STAND])) {
     $series->status = sanitize($_POST[POST_STAND]);
     if ($series->valid()) {
         DbConnectionMySql::write($series);
     }
 }
-
-if (isset($_POST[POST_TITEL]) && isset($_POST[POST_IMAGE])) {
-    FileHandler::writeJPG($_POST[POST_IMAGE], $_POST[POST_TITEL] . '.jpg');
+if (isset($_POST[POST_IMAGE])) {
+    FileHandler::writeJPG($_POST[POST_IMAGE], $series->title . '.jpg');
 }

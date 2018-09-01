@@ -155,7 +155,9 @@ class FileHandler {
         // we could add validation here with ensuring count( $data ) > 1
         $img = imagecreatefromstring(base64_decode($data[1]));
         // write file, while stripping all exif data
-        imagejpeg($img, $output_file);
+        if ($img) {
+            imagejpeg($img, $output_file);
+        }
 
         return $output_file;
     }

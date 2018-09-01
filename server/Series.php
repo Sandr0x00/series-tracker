@@ -10,13 +10,17 @@ class Series {
     public $image;
     public $class;
 
-    public function valid() {
+    public function isTitleValid() {
         if ($this->title === null) {
             return false;
         }
+        return true;
+    }
+
+    public function valid() {
         if ($this->status === null) {
             return false;
         }
-        return true;
+        return $this->isTitleValid();
     }
 }

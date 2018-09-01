@@ -85,34 +85,34 @@ foreach ($serien as $title => $serie) {
         </div>
         <form id="form" action="javascript:void(0);">
             <div id="row-titel" class="row">
-                <div class="col-12 offset-sm-2 col-sm-8">
+                <div class="offset-sm-2 col-10 col-sm-8">
                     <input id="titel" name="titel" type="text" pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required
                            placeholder="Titel" autocomplete="off" list="titelList">
                 </div>
-                <div class="hidden-xs-down col-sm-2">
+                <div class="col-2">
                     <button id="delete" class="btn btn-link" type="button">
                         <i class="material-icons">delete</i>
                     </button>
                 </div>
             </div>
             <div class="row">
-                <div class="hidden-xs-down col-sm-2">
+                <div class="col-2">
                     <button id="SUP" class="btn btn-link" type="button">
-                        <i class="material-icons">add</i>&nbsp;
+                        <i class="material-icons">add</i>
                     </button>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-8">
                     <input id="stand" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required
                            placeholder="N&auml;chste Episode" autocomplete="off">
                 </div>
-                <div class="hidden-xs-down col-sm-2">
+                <div class="col-2">
                     <button id="EUP" class="btn btn-link" type="button">
                         <i class="material-icons">add</i>
                     </button>
                 </div>
             </div>
             <div class="row">
-                <div class="offset-sm-2 col-sm-8">
+                <div class="offset-md-2 col col-md-8">
                     <button id="submit" class="btn btn-link" type="button">
                         <i class="material-icons">done</i>
                     </button>

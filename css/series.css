@@ -11,6 +11,10 @@ body {
   /*font-size: 0;*/
 }
 
+.row div {
+  padding: 0;
+}
+
 .dark, .dark .dialog, .dark #dialog, .dark nav, .dark .nav-link, .dark .nav-item {
   color: #fafafa;
   background-color: #333;
@@ -126,7 +130,7 @@ input, .input, #submit {
   /*line-height: 30px;*/
 }
 
-input, #EUP, #SUP, #submit, .btn {
+input, #EUP, #SUP, .btn {
   height: 42px;
   margin: 2px;
 }

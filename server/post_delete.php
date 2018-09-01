@@ -9,6 +9,6 @@ require_once 'PostHelper.php';
 
 if (isset($_POST[POST_TITEL])) {
     $series = new Series();
-    $series->title = trim($_POST[POST_TITEL]);
+    $series->title = sanitize($_POST[POST_TITEL]);
     //FileHandler::delete($series);
 }

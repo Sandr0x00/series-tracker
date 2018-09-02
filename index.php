@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html;"/>
     <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
-    <meta name="viewport" content="maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="img/favicon.png" type="image/png">
     <!-- Bootstrap Standard Theme-->
-    <link type='text/css' href="libs/bootstrap-4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <!-- Material Design Theme for Bootstrap -->
     <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
     <!-- My Stylesheet -->
     <link type="text/css" href="css/series.css" rel="stylesheet">
+    <link type="text/css" href="css/color.css" rel="stylesheet">
     <!-- Material Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Serien</title>
@@ -25,8 +26,13 @@
     <div class="col-8">
         <input id="search" name="search" type="text" placeholder="Search" autocomplete="off" list="titelList">
     </div>
-    <div class="col-2">
-        <span id="circle"></span>
+    <div class="d-none d-sm-block col-sm-1">
+        <svg id="refresh" class="radial-progress" viewBox="0 0 30 30">
+            <circle class="incomplete" cx="15" cy="15" r="10"></circle>
+            <circle id="refresh-clock" class="complete" cx="15" cy="15" r="10"></circle>
+        </svg>
+    </div>
+    <div class="col-2 col-sm-1">
         <a id="info" class="float-right p-4" type="button"><i class="material-icons">info_outline</i></a>
     </div>
 </nav>
@@ -128,17 +134,16 @@ foreach ($serien as $title => $serie) {
     }
     ?>
 </datalist>
+
+
+
 <!-- JQuery https://jquery.com/ -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="libs/jquery/jquery-3.2.1.min.js"><\/script>')</script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap https://v4-alpha.getbootstrap.com/ -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script type="text/javascript" src="libs/jquery-circle/circle-progress.min.js"></script>
-<script type="text/javascript" src="libs/bootstrap-4.0.0-beta.3/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <!-- Lazy Loading http://jquery.eisbehr.de/lazy/ -->
 <script type="text/javascript" src="libs/jquery-lazy/jquery.lazy.min.js"></script>
-<!-- Fuse.js searching http://fusejs.io/ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.0/fuse.min.js" integrity="sha256-CB/G+xw3ep7+dlklAxcIvF20YMfFtF+7xbtauQSMi78=" crossorigin="anonymous"></script><!-- Fill const -->
 <script type="text/javascript">
    /* let allSeries = {
     <?php

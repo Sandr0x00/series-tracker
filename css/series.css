@@ -11,27 +11,8 @@ body {
   /*font-size: 0;*/
 }
 
-.row div {
+.row div, #nav div {
   padding: 0;
-}
-
-.dark, .dark .dialog, .dark #dialog, .dark nav, .dark .nav-link, .dark .nav-item {
-  color: #fafafa;
-  background-color: #333;
-}
-
-.light, .light .dialog, .light #dialog, .light nav, .light .nav-link, .light .nav-item {
-  background-color: #fafafa;
-  color: #333;
-}
-.dark .btn-link {
-  color: #ccc;
-}
-.dark .btn-link:disabled {
-  color: #ccc;
-}
-.dark .btn-link:hover {
-  background-color: #555555;
 }
 
 .shadow {
@@ -135,32 +116,6 @@ input, #EUP, #SUP, .btn {
   margin: 2px;
 }
 
-.light input[readonly], .light .input[readonly] {
-  background: #DDD;
-}
-.dark input[readonly], .dark .input[readonly] {
-  background: #666;
-}
-
-.light #titel:valid, .light #stand:valid {
-  background: #DFD;
-}
-.dark #titel:valid, .dark #stand:valid {
-  background: #494;
-}
-.dark #search {
-  background: #333;
-}
-.light #search {
-  background: #fafafa;
-}
-
-.light #titel:invalid, .light #stand:invalid {
-  background: #FDD;
-}
-.dark #titel:invalid, .dark #stand:invalid {
-  background: #944;
-}
 
 .navbar {
   min-height: 42px !important;
@@ -181,12 +136,28 @@ a:hover {
 .tooltip-inner {
   font-size: 1.4em;
 }
-
-.dark .tooltip-inner {
-  color: #fafafa;
-  background-color: #333;
+.tooltip {
+  pointer-events: none;
 }
-.light .tooltip-inner {
-  background-color: #fafafa;
-  color: #333;
+.tooltip .arrow {
+  display: none;
+}
+
+/* Refresh circle */
+#refresh {
+  cursor: pointer;
+  height: auto;
+  transform: rotate(-90deg);
+  width: 60px;
+}
+#refresh circle.incomplete {
+  opacity: 0.25;
+}
+#refresh circle.complete {
+  stroke-dasharray: 100px;
+  transition: stroke-dashoffset 10000ms ease-in-out;
+}
+#refresh circle {
+  fill: rgba(0,0,0,0);
+  stroke-width: 2;
 }

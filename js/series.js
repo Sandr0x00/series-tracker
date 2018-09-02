@@ -380,7 +380,7 @@ $(document).ready(function () {
         if (serie.image) {
             div += ' data-src="' + serie.image + '"';
         }
-        div += ' data-toggle="tooltip" data-placement="bottom" title="' + title + '">';
+        div += ' data-toggle="tooltip" data-original-title="' + title + '">';
         div += '<span class="shadow" id="' + title_ + '_status">' + serie.status + '</span>';
         div += '</a>';
         div += '</div>';
@@ -402,6 +402,7 @@ $(document).ready(function () {
                 show(this);
             }
         );
+        registerTooltip();
     }
 
     function updateHTML() {
@@ -483,7 +484,9 @@ $(document).ready(function () {
     // -----------------------------------------------------------------------------------------------------------------
 
     function initLazyLoading() {
-        $('.lazy').Lazy();
+        $('.lazy').Lazy({
+            delay: 0
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -491,7 +494,7 @@ $(document).ready(function () {
     // -----------------------------------------------------------------------------------------------------------------
 
     let reverse = false;
-    let refreshCircle = $('#circle');
+    let refreshCircle = $('#refresh-clock');
 
     function refresh() {
         let req = new XMLHttpRequest();
@@ -510,39 +513,24 @@ $(document).ready(function () {
         req.open('GET', 'server/get.php?md5=' + seriesMd5, true); // Grabs whatever you've written in this file
         req.send(null);
         reverse = !reverse;
-        refreshCircle.circleProgress({
-            value: reverse ? 0 : 1,
-            animationStartValue: reverse ? 1 : 0
-        });
     }
 
     refresh(); // Then runs the refresh function for the first time.
     self.setInterval(function () {
         refresh();
+        refreshCircle.css('transition', 'stroke-dashoffset 10000ms ease-in-out');
+        refreshCircle.css('stroke-dashoffset', reverse ? 100 : 0);
     }, 10000); // Set the refresh() function to run every 10 seconds. [1 second would be 1000, and 1/10th of a second would be 100 etc.
 
-    refreshCircle.circleProgress({
-        startAngle: 1.5 * Math.PI,
-        value: 0,
-        size: 40,
-        fill: {
-            color: '#ddd'
-        },
-        emptyFill: {
-            color: '#000'
-        },
-        lineCap: 'round',
-        animation: {
-            duration: 10000
-        }
+    $('#refresh').on('click', () => {
+        refresh();
+        refreshCircle.css('transition', 'none');
+        refreshCircle.css('stroke-dashoffset', reverse ? 100 : 0);
     });
-    refreshCircle.on('click', refresh);
-    refreshCircle.css('cursor', 'pointer');
 
     // -----------------------------------------------------------------------------------------------------------------
     // Run -------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-
 
     picElement.addEventListener('dragover', handleDragOver, false);
     picElement.addEventListener('drop', handleFileSelect, false);
@@ -620,74 +608,59 @@ $(document).ready(function () {
         clickEvent(buildE)
     );
 
-    /*$('body').tooltip({
-        selector: '[data-toggle="tooltip"]'
-    });*/
+    // Tooltip
 
-    $(function () {
+    function registerTooltip () {
         $('[data-toggle="tooltip"]').tooltip({
-            offset: '0, -80%'
+            placement: 'top',
+            container: 'body',
+            offset: '0, -100%',
+            // boundary: 'window'
         });
-    });
+    }
+
+    // new Tooltip($('#Beyblade'), {
+    //     placement: 'top', // or bottom, left, right, and variations
+    //     title: 'Top'
+    // });
+
+    // -------------------------------------------------
+    // Basic Fuzzy search (use all letters for searching)
+    // -------------------------------------------------
 
     $('#search').on('keyup', function() {
         let value = this.value;
 
         let content = $('#seriesContent');
-        //console.log(content.children());
         content.children().each(function () {
-            //console.log($(this).find('a').data('originalTitle'));//.find('a').title);
             $(this).toggle(fuzzySearch($(this).find('a').data('originalTitle'), value));
         });
     });
 
-    // Fuzzy search
-
     let grep = function (array, callback, invert) {
-
         let returnArray = [], callbackValue;
 
-            // we negate the invert
+        // we negate the invert
         invert = !!invert;
 
-        // Go through the array, only saving the items
-        // that pass the validator function
+        // Go through the array, only saving the items that pass the validator function
         for (let i = array.length; i--;) {
             callbackValue = !!callback(array[i], i);
             if (invert !== callbackValue) {
                 returnArray.push(array[i]);
             }
         }
-
         return returnArray;
     };
 
-    let fuzzySearch = function (text, query) {
+    let fuzzySearch = (text, query) => {
         text = text.toLowerCase();
         query = query.toLowerCase().split('');
 
-        return !grep(query, function (value) {
+        return !grep(query, (value) => {
             return text.indexOf(value) === -1;
         }).length;
     };
-
-
-    // Fuse.js fuzzy search
-    /*let options = {
-        shouldSort: false,
-        threshold: 0.6,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: [
-            'title',
-            'author.firstName'
-        ]
-    };
-    let fuse = new Fuse(list, options); // "list" is the item array
-    let result = fuse.search('grand de');*/
-
 });
 
 function changeStyle() {

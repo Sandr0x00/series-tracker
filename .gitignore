@@ -1,2 +1,4 @@
 # PHPStorm settings
 .idea
+img/*
+!img/unknown.jpg

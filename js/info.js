@@ -32,6 +32,9 @@ $('#info').click(function () {
         + 'JQuery: <a href="https://jquery.com/">https://jquery.com/</a><br>'
         + 'JQuery Lazy: <a href="http://jquery.eisbehr.de/lazy/">http://jquery.eisbehr.de/lazy/</a><br>'
         + '<br>'
+        + 'Download status: <a href="server/get_status.php">status.txt</a><br/>'
+        + 'Upload status: <form action="server/post_status_file.php" method="post" enctype="multipart/form-data"><input type="file" name="file" id="file"><input type="submit" value="Upload" name="submit"></form>'
+        + '<br>'
         + 'Made by <a href="https://github.com/Sandr00">Sandr0</a>'
         + '</div>'
         + '</div>';

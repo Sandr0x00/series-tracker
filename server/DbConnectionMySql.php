@@ -34,8 +34,11 @@ class DbConnectionMySql
     /**
      * Do not use in normal programm, just for migrating from file to db.
      */
-    public static function create_and_fill_table()
+    public static function create_and_fill_table($series_file)
     {
+        if (!$series_file) {
+            return;
+        }
         $conn = self::connect();
 
         // sql to create table
@@ -45,18 +48,34 @@ class DbConnectionMySql
             status VARCHAR(255) NOT NULL,
             date_modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );";
-        
+
         if ($conn->query($sql) === false) {
             die("Error creating table: " . $conn->error);
         }
 
-        $series = FileHandler::read();
+        // fill content
+        foreach ($series_file as $zeile) {
+            // ignore comments
+            if (Helper::startsWith($zeile, '#')) {
+                continue;
+            }
+
+            $serie = explode(SEPARATOR, $zeile);
+
+            $obj = new Series();
+            $obj->title = trim($serie['0']);
+            $obj->status = trim($serie['1']);
+            $obj->class = Helper::endsWith($obj->status, 'x') ? 'x' : '';
+
+            $content[$obj->title] = $obj;
+        }
+
 
         $sql = "";
         $year = 2016;
         $month = 12;
         $day = 27;
-        foreach ($series as $serie) {
+        foreach ($content as $serie) {
             $sql .= "INSERT INTO series (title, status, date_modified)
             VALUES ('$serie->title', '$serie->status', '$year-$month-$day 00:00:01');";
             if ($day <= 11) {
@@ -69,7 +88,7 @@ class DbConnectionMySql
             }
             $day--;
         }
-        
+
         if ($conn->multi_query($sql) === true) {
             echo "New records created successfully<br>";
         } else {
@@ -85,7 +104,7 @@ class DbConnectionMySql
         if ($conn->connect_error) {
             return null;
         }
-        
+
         $sql = 'SELECT * FROM series ORDER BY CASE when status LIKE "%x" THEN 2 ELSE 1 END, date_modified DESC;';
         $result = $conn->query($sql);
 
@@ -117,7 +136,7 @@ class DbConnectionMySql
                 $obj->image = $imgLocation;
 
                 $obj->class = Helper::endsWith($obj->status, 'x') ? 'x' : '';
-    
+
                 $content[$obj->title] = $obj;
             }
         }
@@ -141,7 +160,7 @@ class DbConnectionMySql
             // TODO?
         }
         $result->free();
-        
+
         $sql = null;
         if ($series->id === 0) {
             $sql = "INSERT INTO series
@@ -168,6 +187,6 @@ class DbConnectionMySql
 
     public static function dump() {
         $series = self::get_all_series();
-        FileHandler::dumpAll($series);
+        return FileHandler::dumpAll($series);
     }
 }

@@ -93,11 +93,12 @@ class FileHandler {
     public static function dumpAll($series) {
         $filePath = dirname(__FILE__) . FILE_PATH;
         $f = fopen($filePath, 'w');
-        
+
         // write all found series to to file
         foreach ($series as $serie) {
             FileHandler::writeLine($f, $serie->title, $serie->status);
         }
+        return $filePath;
     }
 
     /**
@@ -162,5 +163,3 @@ class FileHandler {
         return $output_file;
     }
 }
-
-

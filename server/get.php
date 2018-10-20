@@ -12,3 +12,4 @@ if ($md5 !== $_GET['md5']) {
 } else {
     http_response_code(206);
 }
+?>

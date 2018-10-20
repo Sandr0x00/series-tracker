@@ -23,3 +23,4 @@ if (isset($_POST[POST_STAND])) {
 if (isset($_POST[POST_IMAGE])) {
     FileHandler::writeJPG($_POST[POST_IMAGE], $series->title . '.jpg');
 }
+?>

@@ -12,10 +12,11 @@ class DbConnectionMySql
      */
     private static function connect()
     {
-        $servername = "127.0.0.1";
-        $username = "root";
-        $password = "";
-        $database = "series";
+        $servername = $_ENV["SERIES_SERVER"];
+        $username = $_SERVER["SERIES_USER"];
+        $password = $_SERVER["SERIES_PASS"];
+        $database = $_SERVER["SERIES_DB"];
+        // echo $servername . ". " . $username . ", " . $password . ", " . $database;
 
         // Create connection
         try {

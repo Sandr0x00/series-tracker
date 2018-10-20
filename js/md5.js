@@ -7,7 +7,7 @@
  *
  * Licensed under the MIT license:
  * http://creativecommons.org/licenses/MIT/
- * 
+ *
  * Based on
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
@@ -28,7 +28,7 @@
     * to work around bugs in some JS interpreters.
     */
     function safe_add(x, y) {
-        var lsw = (x & 0xFFFF) + (y & 0xFFFF),
+        let lsw = (x & 0xFFFF) + (y & 0xFFFF),
             msw = (x >> 16) + (y >> 16) + (lsw >> 16);
         return (msw << 16) | (lsw & 0xFFFF);
     }
@@ -67,7 +67,7 @@
         x[len >> 5] |= 0x80 << ((len) % 32);
         x[(((len + 64) >>> 9) << 4) + 14] = len;
 
-        var i, olda, oldb, oldc, oldd,
+        let i, olda, oldb, oldc, oldd,
             a =  1732584193,
             b = -271733879,
             c = -1732584194,
@@ -159,7 +159,7 @@
     * Convert an array of little-endian words to a string
     */
     function binl2rstr(input) {
-        var i,
+        let i,
             output = '';
         for (i = 0; i < input.length * 32; i += 8) {
             output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF);
@@ -172,7 +172,7 @@
     * Characters >255 have their high-byte silently ignored.
     */
     function rstr2binl(input) {
-        var i,
+        let i,
             output = [];
         output[(input.length >> 2) - 1] = undefined;
         for (i = 0; i < output.length; i += 1) {
@@ -195,12 +195,12 @@
     * Calculate the HMAC-MD5, of a key and some data (raw strings)
     */
     function rstr_hmac_md5(key, data) {
-        var i,
+        let i,
             bkey = rstr2binl(key),
             ipad = [],
             opad = [],
             hash;
-        ipad[15] = opad[15] = undefined;                        
+        ipad[15] = opad[15] = undefined;
         if (bkey.length > 16) {
             bkey = binl_md5(bkey, key.length * 8);
         }
@@ -216,7 +216,7 @@
     * Convert a raw string to a hex string
     */
     function rstr2hex(input) {
-        var hex_tab = '0123456789abcdef',
+        let hex_tab = '0123456789abcdef',
             output = '',
             x,
             i;
@@ -250,7 +250,7 @@
     function hex_hmac_md5(k, d) {
         return rstr2hex(raw_hmac_md5(k, d));
     }
-    
+
     $.md5 = function (string, key, raw) {
         if (!key) {
             if (!raw) {
@@ -265,5 +265,5 @@
             return raw_hmac_md5(key, string);
         }
     };
-    
+
 }(typeof jQuery === 'function' ? jQuery : this));

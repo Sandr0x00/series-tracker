@@ -106,10 +106,10 @@ body {
 input, .input, #submit {
   width:100%
   /*background: #FFF;*/
-  /*line-height: 30px;*/
 }
 
 input, #EUP, #SUP, .btn {
+  line-height: 42px;
   height: 42px;
   margin: 2px;
 }
@@ -155,4 +155,14 @@ a:hover {
 #refresh circle {
   fill: rgba(0,0,0,0);
   stroke-width: 2;
+}
+#upload_status input {
+  display: inline-block;
+  width: auto;
+  background: none;
+  padding: 2px;
+}
+#upload_status input.submit {
+  padding-left: 10px;
+  padding-right: 10px;
 }

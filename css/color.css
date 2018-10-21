@@ -54,3 +54,6 @@
   color: #000;
   font-weight: bold;
 }
+.dark #upload_status input:hover {
+  background-color: #555555;
+}

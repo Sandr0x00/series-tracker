@@ -1,0 +1,82 @@
+.light {
+  .shadow {
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba(255,255,255,1));
+    color: #000;
+    font-weight: bold;
+  }
+
+  #refresh circle {
+    stroke: #333;
+  }
+
+  #title:invalid, #status:invalid {
+    background: #FDD;
+  }
+
+  .light, .dialog, #dialog, nav, .nav-link, .nav-item, .tooltip-inner, #search {
+    background-color: #fafafa;
+    color: #333;
+  }
+
+  #title:valid, #status:valid {
+    background: #DFD;
+  }
+
+  input[readonly], .input[readonly] {
+    background: #DDD;
+  }
+}
+
+.light {
+  background-color: #fafafa;
+  color: #333;
+}
+
+.dark {
+  color: #fafafa;
+  background-color: #333;
+}
+
+.dark {
+  #refresh circle {
+    stroke: #fafafa;
+  }
+
+  #title:invalid, #status:invalid {
+    background: #944;
+  }
+
+  input[readonly], .input[readonly] {
+    background: #666;
+  }
+
+  #title:valid, #status:valid {
+    background: #494;
+  }
+
+  .dark, .dialog, #dialog, nav, .nav-link, .nav-item, .tooltip-inner, #search {
+    color: #fafafa;
+    background-color: #333;
+  }
+
+  .btn-link {
+    color: #ccc;
+  }
+
+  .btn-link:disabled {
+    color: #ccc;
+  }
+
+  .btn-link:hover {
+    background-color: #555555;
+  }
+
+  .shadow {
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1));
+    color: #fafafa;
+  }
+
+  #upload_status input:hover {
+    background-color: #555555;
+  }
+}

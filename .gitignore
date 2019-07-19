@@ -2,3 +2,4 @@
 .idea
 img/*
 !img/unknown.jpg
+node_modules/

@@ -1,0 +1,21 @@
+{
+  "name": "serientracker",
+  "version": "1.0.0",
+  "description": "Some small project for keeping track of my series.",
+  "scripts": {
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sandr0x00/SerienTracker.git"
+  },
+  "author": "sandr0",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sandr0x00/SerienTracker/issues"
+  },
+  "homepage": "https://github.com/Sandr0x00/SerienTracker#readme",
+  "dependencies": {
+    "lit-element": "^2.2.0"
+  }
+}

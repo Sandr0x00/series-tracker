@@ -1,6 +1,14 @@
 /* global persistSerie, persistImage, refresh, series, setCookie */
 /* exported showEditDialog, showHideInfoDialog */
 
+Number.prototype.pad = function (size) {
+    let s = String(this);
+    while (s.length < size) {
+        s = '0' + s;
+    }
+    return s;
+};
+
 $(document).ready(function () {
     $(window).on('keypress', e => {
         if (e.keyCode === KEY.ESCAPE) {
@@ -17,8 +25,17 @@ $(document).ready(function () {
     });
 });
 
+const KEY = {
+    ESCAPE: 27,
+    ENTER: 13
+};
+
 const TITLE_ID = '#titel';
 const STATUS_ID = '#stand';
+
+const REGEX_S = '^S[0-9]{2}E[0-9]{2}$';
+const REGEX_E = '^E[0-9]{5}$';
+const REGEX_X = '^(SxxE|Exxx)xx$';
 
 
 const SUBMIT_ID = '#submit';
@@ -52,12 +69,37 @@ function showDialog(target, callback) {
     overlayDisplayed = true;
 }
 
+function showHideInfoDialog() {
+    if (overlayDisplayed) {
+        hideDialog();
+    } else {
+        showDialog('dialog_info.html', () => {
+            $('#changestyle').click(() => {
+                $('body').toggleClass(dark);
+                $('body').toggleClass(light);
+
+                if ($('body').hasClass(light)) {
+                    setCookie('theme', light);
+                } else {
+                    setCookie('theme', dark);
+                }
+            });
+        });
+    }
+}
+
 function showEditDialog(button) {
     showDialog('dialog_edit.html', () => {
         show(button);
         updateImage();
         updateButtons();
     });
+}
+
+function hideDialog() {
+    $('#overlay').css('display', 'none');
+    enableScroll();
+    overlayDisplayed = false;
 }
 
 function updateImage() {
@@ -116,12 +158,19 @@ function enableScroll() {
 
 function show(btn) {
     setData();
+    let titel_ = $(btn).attr('id');
     uploaded = false;
     if (titel_ === 'plus') {
+        setVariables(null, null, null);
+        $(TITLE_ID).prop('readonly', false);
         oldStand = '';
         $(TITLE_ID).focus();
     } else {
+        // /g - search all
+        let title = titel_.replace(/_/g, ' ');
+        setVariables(title, series[title].status, series[title].image);
         oldStand = state;
+        $(TITLE_ID).prop('readonly', true);
         $(STATUS_ID).focus();
     }
 }
@@ -204,6 +253,11 @@ function titleChanged() {
     updateImage();
 }
 
+function statusChanged() {
+    setStatus($(STATUS_ID).val());
+    updateButtons();
+}
+
 function clickEvent(builder) {
     setStatus($(STATUS_ID).val());
     if (document.getElementById('stand').checkValidity()) {
@@ -215,6 +269,38 @@ function clickEvent(builder) {
     updateButtons();
 }
 
+function buildE() {
+    let episode = state.split('E')[1];
+    let epSize = episode.length;
+    episode = parseInt(episode);
+    episode++;
+    episode = episode.pad(epSize);
+    let s = state.split('E')[0];
+    s = s + 'E' + episode;
+    return s;
+}
+
+function buildSE() {
+    let s;
+    let season = state.split('E')[0];
+    if (state.match(REGEX_S)) {
+        season = season.split('S')[1];
+        s = 'S';
+    }
+    season = parseInt(season);
+    season++;
+    season = season.pad(2);
+    s = s + season + 'E01';
+    return s;
+}
+
+function archive() {
+    let s = 'Exxxxx';
+    if (state.match(REGEX_S)) {
+        s = 'SxxExx';
+    }
+    return s;
+}
 
 // ---------------------------------------------------------------------
 // File Drop -----------------------------------------------------------

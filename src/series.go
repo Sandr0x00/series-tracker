@@ -4,12 +4,14 @@ import (
 	"log"
 	"regexp"
 	"strings"
+	"time"
 )
 
 type Series struct {
-	Id     string
-	Title  string
-	Status string
+	Id       string
+	Title    string
+	Status   string
+	Modified string
 }
 
 func (s *Series) valid() bool {
@@ -19,11 +21,16 @@ func (s *Series) valid() bool {
 	}
 
 	s.Id = strings.Replace(s.Title, " ", "_", -1)
-	idReg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	s.Id = strings.Replace(s.Id, "-", "_", -1)
+	idReg, err := regexp.Compile("[^a-zA-Z0-9_]+")
 	if err != nil {
 		log.Fatal(err)
 		return false
 	}
 	s.Id = strings.ToLower(idReg.ReplaceAllString(s.Id, ""))
 	return true
+}
+
+func (s *Series) updateTime() {
+	s.Modified = time.Now().Format(time.RFC3339)
 }

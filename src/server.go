@@ -21,6 +21,8 @@ func main() {
 
 	r.HandleFunc("/api/series", s.getSeries).Methods("GET")
 	r.HandleFunc("/api/series", s.postSeries).Methods("POST")
+	r.HandleFunc("/api/image", s.postImage).Methods("POST")
+	r.HandleFunc("/api/upload", s.postSeriesJSON).Methods("POST")
 	// http.HandleFunc("/about/", handleAbout())
 	// r.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	// r.PathPrefix("/node_modules/").Handler(http.FileServer(http.Dir("node_modules")))

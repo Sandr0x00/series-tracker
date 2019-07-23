@@ -25,11 +25,13 @@ export class DialogComp extends Base {
             id: String,
             title: String,
             status: String,
-            imageLocation: String,
+            image: String,
+            imageUrl: String,
             dialog: Number,
             supEnabled: Boolean,
             eupEnabled: Boolean,
-            submitEnabled: Boolean
+            submitEnabled: Boolean,
+            error: String
         };
     }
 
@@ -38,51 +40,70 @@ export class DialogComp extends Base {
         this.dialog = 0;
     }
 
-    showEdit(id, title, status, imageLocation) {
+    showEdit(id, title, status, image) {
         this.id = id;
         this.title = title;
         this.status = status;
-        this.imageLocation = imageLocation;
+        this.image = null;
+        fetch(image, {
+            method: 'get',
+        }).then((response) => {
+            if (response.status === 200) {
+                this.image = image;
+            }
+        });
         this.dialog = 1;
-        this.eupEnabled = this.supEnabled = true;
     }
 
     showInfo() {
         this.dialog = 2;
     }
 
-    post() {
-        console.log(document.getElementById('title').checkValidity());
-        console.log(document.getElementById('status').checkValidity());
+    showError(error) {
+        this.dialog = 3;
+        this.error = error;
+    }
 
-        // update everything
-        // setTitle();
-        // setStatus($(STATUS_ID).val());
+    postSeries() {
+        if (!document.getElementById('title').checkValidity() || !document.getElementById('status').checkValidity()) {
+            return;
+        }
+        this.postImage();
 
-        // // send stuff
-        // persistSerie(title, state, oldStand);
-        // persistImage(uploaded, title, image);
-        // refresh();
-        // hideDialog();
-        // $.ajax({
-        // 	type: 'POST',
-        // 	url: '/api/series',
-        // 	data: {
-        // 		Id: this.id,
-        // 		Title: this.title,
-        // 		Status: this.state
-        // 	},
-        // 	success: function(data) {
-        // 		if (data == null || data === '') {
-        // 			return false;
-        // 		}
-        // 		showInfoDialog('dialog_error.html');
-        // 		$('#error-dialog').html('Fehler:<br>' + data);
+        let series = {
+            Id: this.id,
+            Title: this.title,
+            Status: this.status
+        };
 
-        // 		// this would return to the error handler, which does nothing
-        // 		return false;
-        // 	}
-        // });
+        fetch('api/series', {
+            method: 'post',
+            body: JSON.stringify(series)
+        }).then(response => {
+            if (response.status === 200) {
+                this.close();
+                return response.json();
+            }
+            this.showError('Fucked up');
+            return null;
+        }).then(data => {
+            if (data) {
+                let obj = document.getElementById('seriesContent');
+                obj.data = data.map(obj.single);
+            }
+        });
+    }
+
+    postImage() {
+        let formData = new FormData();
+        formData.append('file', this.image);
+        formData.append('id', this.id);
+
+        fetch('api/image', {
+            method: 'post',
+            body: formData,
+        // }).then(function(response) {
+        });
     }
 
     close() {
@@ -92,7 +113,6 @@ export class DialogComp extends Base {
 
 
     render() {
-        console.log(this.status);
         if (this.dialog === 0) {
             return html``;
         } else {
@@ -115,11 +135,11 @@ export class DialogComp extends Base {
 <div id="bg" class="bg" @click=${this.close}></div>
     <div id="overlay" class="container-fluid">${d}</div>
     <datalist id="titelList">
-    <!--?php
+    <!--
         foreach ($titelList as $element) {
             echo "<option value='$element'/>";
         }
-    ?-->
+    -->
 </datalist>`;
         }
     }
@@ -131,7 +151,7 @@ export class DialogComp extends Base {
 <div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
     <div class="row">
         <div class="col-8 offset-2">
-            ${this.imageLocation ? html`<img id="pic" src="${this.imageLocation}" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}/>` : html`<div id="drop_zone" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}>Serien Bild</div>`}
+            ${this.image ? html`<img id="pic" src="${this.image}" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}/>` : html`<div id="drop_zone" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}>Serien Bild</div>`}
 
         </div>
         <div class="col-2">
@@ -168,7 +188,7 @@ export class DialogComp extends Base {
                 <input id="status" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required placeholder="N&auml;chste Episode" autocomplete="off" .value=${this.status ? this.status : ''} @keyup=${(e) => {
     this.statusChanged();
     if (e.keyCode === KEY.ENTER) {
-        this.post();
+        this.postSeries();
     } else if (e.keyCode === KEY.ESCAPE) {
         this.close();
     }
@@ -182,7 +202,7 @@ export class DialogComp extends Base {
         </div>
         <div class="row">
             <div class="offset-md-2 col col-md-8">
-                <button id="submit" class="btn btn-link" type="button" @click=${this.post} ?disabled=${!this.submitEnabled}>
+                <button id="submit" class="btn btn-link" type="button" @click=${this.postSeries} ?disabled=${!this.submitEnabled}>
                     <i class="fas fa-check fa-2x"></i>
                 </button>
             </div>
@@ -231,33 +251,17 @@ export class DialogComp extends Base {
 
     get errorTemplate() {
         return html`
-<div id="dialog">
-    <div class="d-flex align-items-end flex-column" style="height: 200px; position:fixed; top: 110px; right: 20px; z-index: 5;">
+<div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    <div class="row">
         <div id="error-dialog" class="p-5 dialog" style="text-align: left">
+        ${this.error}
         </div>
     </div>
 </div>`;
     }
 
-
-
     titleChanged() {
         this.title = document.getElementById('title').value;
-        // TODO: already known
-        // if (serie) {
-        //     // serie is already known
-        //     setImage(serie.image);
-        //     setStatus(serie.status);
-        //     $(STATUS_ID).val(serie.status);
-        //     uploaded = false;
-        // } else {
-        //     if (!uploaded) {
-        //         setImage(null);
-        //     }
-        //     setStatus(null);
-        //     $(STATUS_ID).val('');
-        // }
-        // updateImage();
     }
 
     buildE() {
@@ -318,8 +322,16 @@ export class DialogComp extends Base {
                 // Read in the image file as a data URL.
                 reader.readAsDataURL(f);
             }).then(r => {
-                this.imageLocation = r;
+                this.image = r;
             });
+        }
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has('title')) {
+            this.updateButtons();
+        } else if (changedProperties.has('status')) {
+            this.updateButtons();
         }
     }
 
@@ -334,18 +346,20 @@ export class DialogComp extends Base {
     // 	let titel_ = $(btn).attr('id');
     // 	uploaded = false;
     // 	if (titel_ === 'plus') {
-    // 		oldStand = '';
     // 		$(TITLE_ID).focus();
     // 	} else {
     // 		// /g - search all
     // 		let title = titel_.replace(/_/g, ' ');
-    // 		oldStand = state;
     // 		$(STATUS_ID).focus();
     // 	}
     // }
     statusChanged() {
         // TODO: fix when opening
         this.status = document.getElementById('status').value;
+        this.updateButtons();
+    }
+
+    updateButtons() {
         if (this.status && document.getElementById('status').checkValidity()) {
             if (this.status.match(REGEX_E)) {
                 this.eupEnabled = true;
@@ -368,12 +382,6 @@ export class DialogComp extends Base {
             this.submitEnabled = false;
         }
     }
-
-
-    // setImage(i) {
-    // 	image = i;
-    // }
-
 
     // close() {
     // 	$('#overlay').css('display', 'none');

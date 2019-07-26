@@ -16,6 +16,9 @@
   },
   "homepage": "https://github.com/Sandr0x00/SerienTracker#readme",
   "dependencies": {
-    "lit-element": "^2.2.0"
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "lit-element": "^2.2.0",
+    "popper.js": "^1.15.0"
   }
 }

@@ -1,13 +1,3 @@
-$(document).ready(function () {
-    $('#search').on('keyup', function() {
-        let value = this.value;
-        let content = $('#seriesContent');
-        content.children().each(function () {
-            $(this).toggle(fuzzySearch($(this).find('a').data('originalTitle'), value));
-        });
-    });
-});
-
 // -------------------------------------------------
 // Basic Fuzzy search (use all letters for searching)
 // -------------------------------------------------
@@ -28,6 +18,7 @@ function grep(array, callback, invert) {
     return returnArray;
 }
 
+// eslint-disable-next-line no-unused-vars
 function fuzzySearch(text, query) {
     text = text.toLowerCase();
     query = query.toLowerCase().split('');

@@ -7,26 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="img/favicon.png" type="image/png">
     <!-- Bootstrap Standard Theme-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link type='text/css' href="lib/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Theme for Bootstrap -->
     <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
     <!-- My Stylesheet -->
     <link type="text/css" href="css/series.css" rel="stylesheet">
     <link type="text/css" href="css/color.css" rel="stylesheet">
-    <!-- Material Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Serien</title>
     <base target="_self">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"/>
 
 </head>
 <body class="dark">
-    <header-comp></header-comp>
+    <header-comp id="headerComp"></header-comp>
 
-    <all-series id="seriesContent" class="container-fluid"></all-series>
+    <all-series id="seriesComp" class="container-fluid"></all-series>
 
+    <dialog-overlay id="dialogComp"></dialog-overlay>
 
-    <dialog-overlay id="overlayContent"></dialog-overlay>
         <!--?php
 require_once 'server/Helper.php';
 require_once 'server/FileHandler.php';
@@ -66,39 +64,23 @@ foreach ($serien as $title => $serie) {
 ?-->
 
 
-
-<!-- JQuery https://jquery.com/ -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap https://v4-alpha.getbootstrap.com/ -->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <!-- Lazy Loading http://jquery.eisbehr.de/lazy/ -->
-    <!-- <script type="text/javascript" src="libs/jquery-lazy/jquery.lazy.min.js"></script> -->
-    <script type="text/javascript">
-   /* let allSeries = {
-       <?php
-       $first = true;
-       foreach ($serien as $serie) {
-           if ($first) {
-               $first = false;
-            } else {
-                echo ",";
-            }
-            echo "'" . Helper::replaceHyphen($serie->title) . "': { status: '" . $serie->status . "', image: '" . $serie->image . "'}\n";
-        }
-        ?>
-    };*/
-    </script>
-<!-- MD5 https://github.com/blueimp/JavaScript-MD5 -->
-<!-- <script type="text/javascript" src="js/md5.js"></script> -->
-<!-- My JS -->
-<!-- <script type="text/javascript" src="js/series.js"></script>
-    <script type="text/javascript" src="js/cookies.js"></script> -->
-    <!-- <script type="text/javascript" src="js/fuzzy_search.js"></script> -->
-<script type="text/javascript" src="js/interface.js"></script>
-<script type="text/javascript" src="js/tooltip.js"></script>
-<script type="module" src="js/headerComp.js"></script>
-<script type="module" src="js/dialogComp.js"></script>
-<script type="module" src="js/seriesComp.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
+<script type="text/javascript" src="lib/jquery.min.js"></script>
+<script type="text/javascript" src="lib/popper.min.js"></script>
+<script type="text/javascript" src="lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/cookies.js"></script>
+<script type="text/javascript" src="js/fuzzy_search.js"></script>
+
+<script>
+const headerComp = document.getElementById("headerComp");
+const dialogComp = document.getElementById("dialogComp");
+const seriesComp = document.getElementById("seriesComp");
+</script>
+
+<script type="module" src="comp/header.js"></script>
+<script type="module" src="comp/dialog.js"></script>
+<script type="module" src="comp/series.js"></script>
 </body>
 </html>

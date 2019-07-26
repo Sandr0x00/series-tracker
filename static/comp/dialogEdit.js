@@ -1,5 +1,7 @@
+/* global seriesComp, headerComp, dialogComp */
+
 import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
-import {Base} from './base.js';
+import {BaseComp} from './base.js';
 
 const KEY = {
     ESCAPE: 27,
@@ -18,7 +20,7 @@ Number.prototype.pad = function (size) {
     return s;
 };
 
-export class DialogComp extends Base {
+export class DialogEditComp extends BaseComp {
 
     static get properties() {
         return {
@@ -31,37 +33,28 @@ export class DialogComp extends Base {
             supEnabled: Boolean,
             eupEnabled: Boolean,
             submitEnabled: Boolean,
-            error: String
+            error: String,
+            username: String,
+            password: String
         };
     }
 
     constructor() {
         super();
         this.dialog = 0;
+        // fetch(this.image, {
+        //     method: 'get',
+        // }).then((response) => {
+        //     if (response.status === 200) {
+        //         this.image = this.image;
+        //     } else {
+        //         this.image = null;
+        //     }
+        // });
     }
 
-    showEdit(id, title, status, image) {
-        this.id = id;
-        this.title = title;
-        this.status = status;
-        this.image = null;
-        fetch(image, {
-            method: 'get',
-        }).then((response) => {
-            if (response.status === 200) {
-                this.image = image;
-            }
-        });
-        this.dialog = 1;
-    }
-
-    showInfo() {
-        this.dialog = 2;
-    }
-
-    showError(error) {
-        this.dialog = 3;
-        this.error = error;
+    close() {
+        dialogComp.close();
     }
 
     postSeries() {
@@ -88,8 +81,8 @@ export class DialogComp extends Base {
             return null;
         }).then(data => {
             if (data) {
-                let obj = document.getElementById('seriesContent');
-                obj.data = data.map(obj.single);
+                seriesComp.data = seriesComp.setData(data);
+                seriesComp.lazyLoadImg();
             }
         });
     }
@@ -106,47 +99,7 @@ export class DialogComp extends Base {
         });
     }
 
-    close() {
-        this.dialog = 0;
-        // TODO: scrollhandling
-    }
-
-
     render() {
-        if (this.dialog === 0) {
-            return html``;
-        } else {
-            let d = null;
-            switch (this.dialog) {
-                case 1:
-                    d = this.editTemplate;
-                    break;
-                case 2:
-                    d = this.infoTemplate;
-                    break;
-                case 3:
-                    d = this.errorTemplate;
-                    break;
-                default:
-                    return html`Somthing went wrong.`;
-            }
-            this.editTemplate;
-            return html`
-<div id="bg" class="bg" @click=${this.close}></div>
-    <div id="overlay" class="container-fluid">${d}</div>
-    <datalist id="titelList">
-    <!--
-        foreach ($titelList as $element) {
-            echo "<option value='$element'/>";
-        }
-    -->
-</datalist>`;
-        }
-    }
-
-
-    get editTemplate() {
-        // TODO: focus title on plus, else status
         return html`
 <div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
     <div class="row">
@@ -211,53 +164,16 @@ export class DialogComp extends Base {
 </div>`;
     }
 
-    get infoTemplate() {
-        return html`
-<div class="d-flex align-items-end flex-column p-5" >
-    <div id="dialog" style="text-align: left">
-        Style:<br>
-        <a id="changestyle" @click=${() => {
-        const dark = 'dark';
-        const light = 'light';
-        $('body').toggleClass(dark);
-        $('body').toggleClass(light);
-
-        if ($('body').hasClass(light)) {
-            this.setCookie('theme', light);
-        } else {
-            this.setCookie('theme', dark);
-        }
-    }}>Switch Style</a><br><br>
-        Stuff used:<br>
-        Google Material Icons: <a target="_blank" href="https://material.io/icons/">https://material.io/icons/</a><br>
-        Bootstrap: <a target="_blank" href="https://v4-alpha.getbootstrap.com/">https://v4-alpha.getbootstrap.com/</a><br>
-        JQuery: <a target="_blank" href="https://jquery.com/">https://jquery.com/</a><br>
-        JQuery Lazy: <a target="_blank" href="http://jquery.eisbehr.de/lazy/">http://jquery.eisbehr.de/lazy/</a><br>
-        <br>
-        Download status: <a href="server/get_status.php">status.txt</a><br/>
-        Upload status: <form id="upload_status" action="server/post_status_file.php" method="post" enctype="multipart/form-data"><input type="file" name="file" id="file"><input class="submit" type="submit" value="Upload" name="submit"></form>
-        <br>
-        Made by <a href="https://github.com/Sandr00">Sandr0</a>
-    <!-- </div> -->
-</div>`;
-    }
-
-    setCookie(cname, cvalue) {
-        let d = new Date();
-        d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
-        let expires = 'expires=' + d.toUTCString();
-        document.cookie = cname + '=' + cvalue + ';' + expires;
-    }
-
-    get errorTemplate() {
-        return html`
-<div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-    <div class="row">
-        <div id="error-dialog" class="p-5 dialog" style="text-align: left">
-        ${this.error}
-        </div>
-    </div>
-</div>`;
+    firstUpdated() {
+        fetch(this.imageUrl, {
+            method: 'get',
+        }).then((response) => {
+            if (response.status === 200) {
+                this.image = this.imageUrl;
+            } else {
+                this.image = null;
+            }
+        });
     }
 
     titleChanged() {
@@ -299,7 +215,6 @@ export class DialogComp extends Base {
 
 
     handleFileSelect(evt) {
-        // TODO: upload to server
         evt.stopPropagation();
         evt.preventDefault();
 
@@ -311,7 +226,6 @@ export class DialogComp extends Base {
             if (!f.type.match('image.*')) {
                 continue;
             }
-
 
             // Closure to capture the file information.
             new Promise((resolve) => {
@@ -333,6 +247,15 @@ export class DialogComp extends Base {
         } else if (changedProperties.has('status')) {
             this.updateButtons();
         }
+        if (changedProperties.has('dialog')) {
+            if (this.dialog === 1) {
+                if (!this.title) {
+                    document.getElementById('title').focus();
+                } else {
+                    document.getElementById('status').focus();
+                }
+            }
+        }
     }
 
     handleDragOver(evt) {
@@ -341,18 +264,6 @@ export class DialogComp extends Base {
         evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }
 
-    // show(btn) {
-    // 	setData();
-    // 	let titel_ = $(btn).attr('id');
-    // 	uploaded = false;
-    // 	if (titel_ === 'plus') {
-    // 		$(TITLE_ID).focus();
-    // 	} else {
-    // 		// /g - search all
-    // 		let title = titel_.replace(/_/g, ' ');
-    // 		$(STATUS_ID).focus();
-    // 	}
-    // }
     statusChanged() {
         // TODO: fix when opening
         this.status = document.getElementById('status').value;
@@ -382,38 +293,6 @@ export class DialogComp extends Base {
             this.submitEnabled = false;
         }
     }
-
-    // close() {
-    // 	$('#overlay').css('display', 'none');
-    // 	enableScroll();
-    // 	overlayDisplayed = false;
-    // }
-
-
-    // persistSerie(title, state, oldStand) {
-    // 	if (oldStand !== state) {
-    // 		// send the data using post
-    // 		$.ajax({
-    // 			type: 'POST',
-    // 			url: 'server/post_series.php',
-    // 			data: {
-    // 				titel: title,
-    // 				stand: state
-    // 			},
-    // 			success: function(data) {
-    // 				if (data == null || data === '') {
-    // 					return false;
-    // 				}
-    // 				showInfoDialog('dialog_error.html');
-    // 				$('#error-dialog').html('Fehler:<br>' + data);
-
-    // 				// this would return to the error handler, which does nothing
-    // 				return false;
-    // 			}
-    // 		});
-    // 	}
-    // }
-
 }
 
-customElements.define('dialog-overlay', DialogComp);
+customElements.define('dialog-edit', DialogEditComp);

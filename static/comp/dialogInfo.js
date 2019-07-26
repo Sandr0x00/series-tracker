@@ -20,8 +20,7 @@ export class DialogInfoComp extends BaseComp {
 
     render() {
         return html`
-<div class="d-flex align-items-end flex-column p-5" >
-    <div id="dialog" style="text-align: left">
+    <div id="dialog" class="offset-sm-4 offset-md-8 col-md-4 col-sm-8" style="text-align: left">
         Style:<br>
         <a id="changestyle" @click=${() => {
         const dark = 'dark';
@@ -45,7 +44,6 @@ export class DialogInfoComp extends BaseComp {
         Upload status: <form id="upload_status" action="server/post_status_file.php" method="post" enctype="multipart/form-data"><input type="file" name="file" id="file"><input class="submit" type="submit" value="Upload" name="submit"></form>
         <br>
         Made by <a href="https://github.com/Sandr00">Sandr0</a>
-    <!-- </div> -->
 </div>`;
     }
 

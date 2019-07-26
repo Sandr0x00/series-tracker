@@ -1,4 +1,4 @@
-/* global seriesComp, headerComp, dialogComp */
+/* global seriesComp, dialogComp */
 
 import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
 import {BaseComp} from './base.js';
@@ -10,7 +10,7 @@ const KEY = {
 
 const REGEX_S = '^S[0-9]{2}E[0-9]{2}$';
 const REGEX_E = '^E[0-9]{5}$';
-const REGEX_X = '^(SxxE|Exxx)xx$';
+// const REGEX_X = '^(SxxE|Exxx)xx$';
 
 Number.prototype.pad = function (size) {
     let s = String(this);
@@ -29,7 +29,6 @@ export class DialogEditComp extends BaseComp {
             status: String,
             image: String,
             imageUrl: String,
-            dialog: Number,
             supEnabled: Boolean,
             eupEnabled: Boolean,
             submitEnabled: Boolean,
@@ -41,16 +40,6 @@ export class DialogEditComp extends BaseComp {
 
     constructor() {
         super();
-        this.dialog = 0;
-        // fetch(this.image, {
-        //     method: 'get',
-        // }).then((response) => {
-        //     if (response.status === 200) {
-        //         this.image = this.image;
-        //     } else {
-        //         this.image = null;
-        //     }
-        // });
     }
 
     close() {
@@ -77,7 +66,7 @@ export class DialogEditComp extends BaseComp {
                 this.close();
                 return response.json();
             }
-            this.showError('Fucked up');
+            dialogComp.showError('Fucked up');
             return null;
         }).then(data => {
             if (data) {
@@ -95,7 +84,8 @@ export class DialogEditComp extends BaseComp {
         fetch('api/image', {
             method: 'post',
             body: formData,
-        // }).then(function(response) {
+        }).then(function(response) {
+            console.log(`TODO: handle response ${response}`);
         });
     }
 
@@ -105,7 +95,6 @@ export class DialogEditComp extends BaseComp {
     <div class="row">
         <div class="col-8 offset-2">
             ${this.image ? html`<img id="pic" src="${this.image}" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}/>` : html`<div id="drop_zone" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}>Serien Bild</div>`}
-
         </div>
         <div class="col-2">
             <button id="close" class="btn btn-link" type="button" @click=${this.close}>
@@ -213,11 +202,9 @@ export class DialogEditComp extends BaseComp {
         this.status = s;
     }
 
-
     handleFileSelect(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-
         let files = evt.dataTransfer.files; // FileList object
 
         for (let i = 0, f; i < files.length; i++) {
@@ -265,7 +252,6 @@ export class DialogEditComp extends BaseComp {
     }
 
     statusChanged() {
-        // TODO: fix when opening
         this.status = document.getElementById('status').value;
         this.updateButtons();
     }

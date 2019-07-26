@@ -25,7 +25,7 @@ class Series extends BaseComp {
     }
 
     lazyImg(img) {
-        return new Promise((resolve, request) => {
+        return new Promise((resolve) => {
             let bgImg = new Image();
             bgImg.onload = () => {
                 resolve(img);
@@ -113,8 +113,6 @@ class Series extends BaseComp {
             .then(data => {
                 dialogComp.close();
                 this.data = data;
-
-                // this.lazyLoadImg();
             }).catch(err => {
                 if (err) {
                     dialogComp.showError(err);

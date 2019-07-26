@@ -1,4 +1,4 @@
-/* global seriesComp, headerComp */
+/* global headerComp */
 
 import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
 import {BaseComp} from './base.js';
@@ -11,13 +11,14 @@ export class DialogComp extends BaseComp {
 
     static get properties() {
         return {
+            infoShown: Number,
             dialog: String,
         };
     }
 
     constructor() {
         super();
-        this.dialog = 0;
+        this.dialog = '';
     }
 
     showDialog() {
@@ -30,8 +31,14 @@ export class DialogComp extends BaseComp {
     }
 
     showInfo() {
-        this.showDialog();
-        this.dialog = html`<dialog-info></dialog-info>`;
+        if (this.infoShown) {
+            this.close();
+            this.infoShown = false;
+        } else {
+            this.dialog = html`<dialog-info></dialog-info>`;
+            this.infoShown = true;
+            this.showDialog();
+        }
     }
 
     showLogin() {
@@ -47,6 +54,7 @@ export class DialogComp extends BaseComp {
     close() {
         this.dialog = '';
         headerComp.startAutoload();
+        console.log('TODO: Scrollhandling');
         // TODO: scrollhandling
     }
 

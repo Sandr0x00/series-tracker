@@ -1,4 +1,3 @@
-# PHPStorm settings
-.idea
-img/*
-!img/unknown.jpg
+node_modules/
+series
+series.db

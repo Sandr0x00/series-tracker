@@ -7,6 +7,7 @@ build:
 test:
 	go list -f ./src golang.org/x/lint/golint
 	go test -v ./src
+	eslint .
 
 rebuild: build run
 

@@ -18,10 +18,9 @@ export class HeaderComp extends BaseComp {
     }
 
     startAutoload() {
+        // better stop the intervall before starting it, just to be safe
+        this.stopAutoload();
         this.autoload = setInterval(() => {
-            if (this.autoload === 0) {
-                return;
-            }
             if (this.reload === 100) {
                 this.reload = 0;
                 seriesComp.loadStuff();

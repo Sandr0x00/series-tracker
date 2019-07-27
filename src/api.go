@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
-	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image/jpeg"
@@ -62,9 +61,9 @@ func (s *server) getSeries(w http.ResponseWriter, r *http.Request) {
 	// series := make(map[string]Series)
 	var series = s.getData()
 
-	_, md5 := r.URL.Query()["md5"]
-	if md5 {
-		fmt.Fprintf(w, b64.StdEncoding.EncodeToString([]byte(series)))
+	_, b64 := r.URL.Query()["b64"]
+	if b64 {
+		fmt.Fprintf(w, base64.StdEncoding.EncodeToString([]byte(series)))
 		return
 	}
 

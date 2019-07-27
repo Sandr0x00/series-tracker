@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -126,6 +127,7 @@ func (s *server) login(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	port := 8080
 	db, _ := initStorage()
 	s := server{db, sessions.NewCookieStore([]byte("super-secret-key"))}
 
@@ -142,8 +144,9 @@ func main() {
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))
 	http.Handle("/", r)
 
-	fmt.Printf("Starting server for testing HTTP POST...\n")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	hostname, _ := os.Hostname()
+	fmt.Printf("Starting server on http://%s:%d\n", hostname, port)
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
 		log.Fatal(err)
 	}
 }

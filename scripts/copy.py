@@ -41,6 +41,8 @@ def copy(cp_from:str, cp_to:str, eslint_disable:bool=False, src_map:bool=False):
 if __name__ == "__main__":
     folder = 'static/lib'
     for the_file in os.listdir(folder):
+        if the_file == ".gitignore":
+            continue
         file_path = os.path.join(folder, the_file)
         try:
             os.remove(file_path)

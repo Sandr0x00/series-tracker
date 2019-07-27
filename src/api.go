@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image/jpeg"
@@ -30,7 +31,6 @@ func initStorage() (*bolt.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not set up buckets, %v", err)
 	}
-	fmt.Println("DB initialized")
 	return db, nil
 }
 
@@ -61,6 +61,13 @@ func (s *server) getData() []byte {
 func (s *server) getSeries(w http.ResponseWriter, r *http.Request) {
 	// series := make(map[string]Series)
 	var series = s.getData()
+
+	_, md5 := r.URL.Query()["md5"]
+	if md5 {
+		fmt.Fprintf(w, b64.StdEncoding.EncodeToString([]byte(series)))
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, string(series))
 }

@@ -3,18 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html;"/>
+    <link type='text/css' href="lib/bootstrap.min.css" rel="stylesheet">
     <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- My Stylesheet -->
     <link type="text/css" href="css/series.css" rel="stylesheet">
     <link type="text/css" href="css/color.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"/>
     <title>Serien</title>
 </head>
 <body class="dark">
-<single-series id="seriesContent" class="container-fluid">
-</single-series>
+    <div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <div class="row">
+            <div class="offset-10 col-2">
+                <button id="close" class="btn btn-link" type="button" @click=${this.close}>
+                <i class="fas fa-times fa-2x"></i>
+                </button>
+            </div>
+        </div>
+        <form id="form" action="javascript:void(0);">
+            <div id="row-titel" class="row">
+                <div class="offset-sm-2 col col-sm-8">
+                    <input id="title" name="titel" type="text" pattern="[a-zA-Z0-9\-]*" required placeholder="Username" autocomplete="off" list="titelList" ?readonly=false>
 
-<script type="module" src="js/dialogComp.js"></script>
-<script type="module" src="js/comp.js"></script>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-sm-2 col col-sm-8">
+                    <input id="status" name="stand" type="password" required placeholder="Password" autocomplete="off" .value=lol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-sm-2 col col-sm-8">
+                    <button id="submit" class="btn btn-link" type="button" @click=${this.postSeries} ?disabled=${!this.submitEnabled}>
+                        <i class="fas fa-check fa-2x"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/popper.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
 </body>
 </html>

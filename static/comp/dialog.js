@@ -53,6 +53,7 @@ export class DialogComp extends BaseComp {
 
     close() {
         this.dialog = '';
+        this.infoShown = false;
         headerComp.startAutoload();
         console.log('TODO: Scrollhandling');
         // TODO: scrollhandling

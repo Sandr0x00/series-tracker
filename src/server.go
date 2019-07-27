@@ -139,10 +139,6 @@ func main() {
 	api.HandleFunc("/upload", s.postSeriesJSON).Methods("POST")
 
 	r.HandleFunc("/login", s.login).Methods("POST")
-	// r.PathPrefix("/node/").Handler(http.FileServer(http.Dir("node_modules")))
-	// http.HandleFunc("/about/", handleAbout())
-	// r.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	// r.PathPrefix("/node_modules/").Handler(http.FileServer(http.Dir("node_modules")))
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))
 	http.Handle("/", r)
 

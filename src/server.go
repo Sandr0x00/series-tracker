@@ -26,47 +26,6 @@ func (s *server) auth(next http.Handler) http.Handler {
 			return
 		}
 
-		// c, err := r.Cookie("session_token")
-		// if err != nil {
-		// 	if err == http.ErrNoCookie {
-		// 		// If the cookie is not set, return an unauthorized status
-		// 		w.WriteHeader(http.StatusUnauthorized)
-		// 		return
-		// 	}
-		// 	// For any other type of error, return a bad request status
-		// 	w.WriteHeader(http.StatusBadRequest)
-		// 	return
-		// }
-		// sessionToken := c.Value
-
-		// // We then get the name of the user from our cache, where we set the session token
-		// response, err := false, nil
-		// if sessionToken == "token" {
-		// 	response = true
-		// } else {
-		// 	// fmt.Println("li")
-		// 	w.WriteHeader(http.StatusUnauthorized)
-		// 	return
-		// }
-		// if err != nil {
-		// 	// If there is an error fetching from cache, return an internal server error status
-		// 	w.WriteHeader(http.StatusInternalServerError)
-		// 	return
-		// }
-		// if !response {
-		// 	// If the session token is not present in cache, return an unauthorized error
-		// 	w.WriteHeader(http.StatusUnauthorized)
-		// 	return
-		// }
-		// // var header = r.Header.Get("x-access-token")
-		// // header = strings.TrimSpace(header)
-
-		// // if header == "" {
-		// // 	w.WriteHeader(http.StatusForbidden)
-		// // 	return
-		// // }
-
-		// fmt.Println(header)
 		next.ServeHTTP(w, r)
 	})
 }
@@ -95,35 +54,6 @@ func (s *server) login(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 	w.WriteHeader(http.StatusOK)
 
-	// // Get the expected password from our in memory map
-	// expectedPassword, ok := "Blub", true
-
-	// // If a password exists for the given user
-	// // AND, if it is the same as the password we received, the we can move ahead
-	// // if NOT, then we return an "Unauthorized" status
-	// if !ok || expectedPassword != creds.Password {
-	// 	w.WriteHeader(http.StatusUnauthorized)
-	// 	return
-	// }
-
-	// // Create a new random session token
-	// // sessionToken := uuid.NewV4().String()
-	// // Set the token in the cache, along with the user whom it represents
-	// // The token has an expiry time of 120 seconds
-	// // _, err = cache.Do("SETEX", sessionToken, "120", creds.Username)
-	// if err != nil {
-	// 	// If there is an error in setting the cache, return an internal server error
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// Finally, we set the client cookie for "session_token" as the session token we just generated
-	// we also set an expiry time of 120 seconds, the same as the cache
-	// http.SetCookie(w, &http.Cookie{
-	// 	Name:    "session_token",
-	// 	Value:   sessionToken,
-	// 	Expires: time.Now().Add(120 * time.Second),
-	// })
 }
 
 func main() {

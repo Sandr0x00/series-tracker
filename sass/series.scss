@@ -174,3 +174,7 @@ a:hover {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+#nav.disabled {
+  z-index: 0 !important;
+}

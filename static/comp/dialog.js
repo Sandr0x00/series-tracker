@@ -11,7 +11,7 @@ export class DialogComp extends BaseComp {
 
     static get properties() {
         return {
-            infoShown: Number,
+            dialogNr: Number,
             dialog: String,
         };
     }
@@ -19,6 +19,7 @@ export class DialogComp extends BaseComp {
     constructor() {
         super();
         this.dialog = '';
+        this.dialogNr = 0;
     }
 
     showDialog() {
@@ -26,34 +27,51 @@ export class DialogComp extends BaseComp {
     }
 
     showEdit(id, title, status, image) {
+        if (this.dialogNr !== 0) {
+            return;
+        }
+        headerComp.disable();
         this.showDialog();
+        this.dialogNr = 1;
         this.dialog = html`<dialog-edit .id=${id} .title=${title} .status=${status} .imageUrl=${image}></dialog-edit>`;
     }
 
     showInfo() {
-        if (this.infoShown) {
+        if (this.dialogNr === 2) {
             this.close();
-            this.infoShown = false;
-        } else {
+        } else if (this.dialogNr === 0) {
             this.dialog = html`<dialog-info></dialog-info>`;
-            this.infoShown = true;
+            this.dialogNr = 2;
             this.showDialog();
         }
     }
 
     showLogin() {
+        if (this.dialogNr !== 0) {
+            return;
+        }
+        headerComp.disable();
         this.showDialog();
+        this.dialogNr = 3;
         this.dialog = html`<dialog-login></dialog-login>`;
     }
 
     showError(error) {
+        if (this.dialogNr !== 0) {
+            return;
+        }
         this.showDialog();
+        this.dialogNr = 4;
         this.dialog = html`<dialog-error .error=${error}></dialog-error>`;
     }
 
-    close() {
+    close(force) {
+        if (!force && this.dialogNr === 3) {
+            return;
+        }
         this.dialog = '';
-        this.infoShown = false;
+        this.dialogNr = 0;
+        headerComp.enable();
         headerComp.startAutoload();
         console.log('TODO: Scrollhandling');
         // TODO: scrollhandling
@@ -64,17 +82,11 @@ export class DialogComp extends BaseComp {
             return html``;
         } else {
             return html`
-<div id="bg" class="bg" @click=${this.close}></div>
-    <div id="overlay" class="container-fluid">${this.dialog}</div>
-    <!--
-    <datalist id="titelList">
-        foreach ($titelList as $element) {
-            echo "<option value='$element'/>";
-        }
-    -->
+<div id="bg" class="bg" @click=${() => this.close(false)}></div>
+  <div id="overlay" class="container-fluid">${this.dialog}</div>
 </datalist>`;
         }
     }
 }
 
-customElements.define('dialog-overlay', DialogComp);
+customElements.define('dialog-comp', DialogComp);

@@ -15,68 +15,31 @@
     <link type="text/css" href="css/color.css" rel="stylesheet">
     <title>Serien</title>
     <base target="_self">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"/>
-
 </head>
 <body class="dark">
     <header-comp id="headerComp"></header-comp>
 
-    <all-series id="seriesComp" class="container-fluid"></all-series>
+    <series-comp id="seriesComp" class="container-fluid"></series-comp>
 
-    <dialog-overlay id="dialogComp"></dialog-overlay>
+    <dialog-comp id="dialogComp"></dialog-comp>
 
-        <!--?php
-require_once 'server/Helper.php';
-require_once 'server/FileHandler.php';
-require_once 'server/DbConnectionMySql.php';
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/popper.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/cookies.js"></script>
+    <script type="text/javascript" src="js/fuzzy_search.js"></script>
 
-$titelList = array();
+    <script>
+    const headerComp = document.getElementById("headerComp");
+    const dialogComp = document.getElementById("dialogComp");
+    const seriesComp = document.getElementById("seriesComp");
+    </script>
 
-//$serien = FileHandler::read();
-$serien = DbConnectionMySql::get_all_series();
+    <script type="module" src="comp/header.js"></script>
+    <script type="module" src="comp/dialog.js"></script>
+    <script type="module" src="comp/series.js"></script>
 
-foreach ($serien as $title => $serie) {
-    //settype($serie, 'Serie/Serie');
-    $titel_ = str_replace(' ', '_', $title);
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E" crossorigin="anonymous">
 
-    // try to find image for serie
-    $imgLocation = "img/$title.jpg";
-    if (!file_exists($imgLocation)) {
-        // image does not exist in img/ directory, try sub directories
-        for ($h = 300; $h <= 500; $h += 100) {
-            $imgLocation = "img/$h/$title.jpg";
-            if (file_exists($imgLocation)) {
-                break;
-            }
-        }
-    }
-    if (!file_exists($imgLocation)) {
-        // no image found
-        $imgLocation = null;
-    } else {
-        $imgLocation = Helper::replaceHyphen($imgLocation);
-    }
-    $serie->image = $imgLocation;
-
-    // add serie to array for auto completion
-    array_push($titelList, Helper::replaceHyphen($title));
-}
-?-->
-
-<script type="text/javascript" src="lib/jquery.min.js"></script>
-<script type="text/javascript" src="lib/popper.min.js"></script>
-<script type="text/javascript" src="lib/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/cookies.js"></script>
-<script type="text/javascript" src="js/fuzzy_search.js"></script>
-
-<script>
-const headerComp = document.getElementById("headerComp");
-const dialogComp = document.getElementById("dialogComp");
-const seriesComp = document.getElementById("seriesComp");
-</script>
-
-<script type="module" src="comp/header.js"></script>
-<script type="module" src="comp/dialog.js"></script>
-<script type="module" src="comp/series.js"></script>
 </body>
 </html>

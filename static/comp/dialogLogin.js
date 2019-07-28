@@ -23,9 +23,8 @@ export class DialogLoginComp extends BaseComp {
     }
 
     close() {
-        dialogComp.close();
+        dialogComp.close(true);
     }
-
 
     render() {
         return html`

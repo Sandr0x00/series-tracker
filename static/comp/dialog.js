@@ -1,4 +1,4 @@
-/* global headerComp */
+/* global headerComp, loadingComp */
 
 import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
 import {BaseComp} from './base.js';
@@ -50,6 +50,7 @@ export class DialogComp extends BaseComp {
         if (this.dialogNr !== 0) {
             return;
         }
+        loadingComp.close();
         headerComp.disable();
         this.showDialog();
         this.dialogNr = 3;

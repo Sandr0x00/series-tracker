@@ -1,4 +1,4 @@
-/* global seriesComp, dialogComp */
+/* global seriesComp, dialogComp, loadingComp */
 
 import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
 import {BaseComp} from './base.js';
@@ -50,7 +50,7 @@ export class DialogEditComp extends BaseComp {
         if (!document.getElementById('title').checkValidity() || !document.getElementById('status').checkValidity()) {
             return;
         }
-        this.postImage();
+        let imagePromise = this.postImage();
 
         let series = {
             Id: this.id,
@@ -58,21 +58,30 @@ export class DialogEditComp extends BaseComp {
             Status: this.status
         };
 
-        fetch('api/series', {
+        let textPromise = fetch('api/series', {
             method: 'post',
             body: JSON.stringify(series)
         }).then(response => {
-            if (response.status === 200) {
-                this.close();
-                return response.json();
-            }
-            dialogComp.showError('Fucked up');
-            return null;
-        }).then(data => {
-            if (data) {
-                seriesComp.data = seriesComp.setData(data);
-                seriesComp.lazyLoadImg();
-            }
+            return response.json().then(data => {
+                if (response.status === 200) {
+                    return Promise.resolve(data);
+                }
+                return Promise.reject(data);
+            });
+        });
+
+        loadingComp.open();
+        Promise.all([imagePromise, textPromise]).then((values) => {
+            loadingComp.close();
+            console.log(values);
+            this.close();
+            seriesComp.data = seriesComp.setData(values[1]);
+            seriesComp.lazyLoadImg();
+        }).catch((err) => {
+            loadingComp.close();
+            console.log(err.Err);
+            this.close();
+            dialogComp.showError(err.Err);
         });
     }
 
@@ -81,11 +90,16 @@ export class DialogEditComp extends BaseComp {
         formData.append('file', this.image);
         formData.append('id', this.id);
 
-        fetch('api/image', {
+        return fetch('api/image', {
             method: 'post',
             body: formData,
-        }).then(function(response) {
-            console.log(`TODO: handle response ${response}`);
+        }).then(response => {
+            return response.json().then(data => {
+                if (response.status === 200) {
+                    return Promise.resolve(data);
+                }
+                return Promise.reject(data);
+            });
         });
     }
 

@@ -1,4 +1,4 @@
-/* global dialogComp */
+/* global dialogComp, loadingComp */
 
 import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
 import {BaseComp} from './base.js';
@@ -13,7 +13,7 @@ class Series extends BaseComp {
 
     constructor() {
         super();
-        dialogComp.showError('Loading');
+        loadingComp.open();
         this.data = [];
         this.loadStuff();
     }
@@ -97,11 +97,11 @@ class Series extends BaseComp {
         }).then(response => response.json()
         ).then(series => this.setData(series)
         ).then(data => {
-            dialogComp.close(true);
+            loadingComp.close();
             this.data = data;
         }).catch(err => {
             if (err) {
-                dialogComp.close(true);
+                loadingComp.close();
                 dialogComp.showError(err);
             }
         });

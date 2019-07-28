@@ -17,11 +17,15 @@
     <base target="_self">
 </head>
 <body class="dark">
+    <loading-dialog id="loadingComp"></loading-dialog>
+    <script type="module" src="comp/loading.js"></script>
+
     <header-comp id="headerComp"></header-comp>
 
     <series-comp id="seriesComp" class="container-fluid"></series-comp>
 
     <dialog-comp id="dialogComp"></dialog-comp>
+
 
     <script type="text/javascript" src="lib/jquery.min.js"></script>
     <script type="text/javascript" src="lib/popper.min.js"></script>
@@ -33,6 +37,7 @@
     const headerComp = document.getElementById("headerComp");
     const dialogComp = document.getElementById("dialogComp");
     const seriesComp = document.getElementById("seriesComp");
+    const loadingComp = document.getElementById("loadingComp");
     </script>
 
     <script type="module" src="comp/header.js"></script>

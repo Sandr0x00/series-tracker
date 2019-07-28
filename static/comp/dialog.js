@@ -83,8 +83,7 @@ export class DialogComp extends BaseComp {
         } else {
             return html`
 <div id="bg" class="bg" @click=${() => this.close(false)}></div>
-  <div id="overlay" class="container-fluid">${this.dialog}</div>
-</datalist>`;
+<div id="overlay" class="container-fluid">${this.dialog}</div>`;
         }
     }
 }

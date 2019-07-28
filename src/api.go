@@ -101,13 +101,32 @@ func (s *server) postSeries(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(seriesJSON))
 }
 
+func returnError(w http.ResponseWriter, text string) {
+	fmt.Println(text)
+	type err struct {
+		Err string
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusBadRequest)
+	errorJSON, _ := json.Marshal(err{text})
+	fmt.Fprintln(w, string(errorJSON))
+}
+
 func (s *server) postImage(w http.ResponseWriter, r *http.Request) {
 	// Parse our multipart form, 10 << 20 specifies a maximum
 	// upload of 10 MB files.
-	r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		returnError(w, "Image too large")
+		return
+	}
 	id := r.FormValue("id")
 	f64 := r.FormValue("file")
 	if !strings.HasPrefix(f64, "data") {
+		fmt.Println("wrong format")
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprintf(w, "{}")
 		return
 	}
 	f64 = f64[strings.Index(f64, ",")+1:]
@@ -115,18 +134,23 @@ func (s *server) postImage(w http.ResponseWriter, r *http.Request) {
 	res := bytes.NewReader(dec)
 	i, err := jpeg.Decode(res)
 	if err != nil {
-		fmt.Println(err)
+		returnError(w, "Decoding error")
 		return
 	}
 
 	f, err := os.Create("static/img/" + id + ".jpg")
 	if err != nil {
 		fmt.Println(err)
+		returnError(w, "Can't create image")
 		return
 	}
 	var opt jpeg.Options
 	opt.Quality = 95
 	jpeg.Encode(f, i, &opt)
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprint(w, "{\"test\":\"img/"+id+".jpg\"}")
 }
 
 func (s *server) postSeriesJSON(w http.ResponseWriter, r *http.Request) {

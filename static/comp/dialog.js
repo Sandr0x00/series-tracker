@@ -33,7 +33,12 @@ export class DialogComp extends BaseComp {
         headerComp.disable();
         this.showDialog();
         this.dialogNr = 1;
-        this.dialog = html`<dialog-edit .id=${id} .title=${title} .status=${status} .imageUrl=${image}></dialog-edit>`;
+        let readonly = false;
+        console.log(id);
+        if (id) {
+            readonly = true;
+        }
+        this.dialog = html`<dialog-edit .imdbID=${id} .title=${title} .status=${status} .imageUrl=${image} .readonly=${readonly}></dialog-edit>`;
     }
 
     showInfo() {

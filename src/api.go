@@ -75,7 +75,8 @@ func (s *server) postSeries(w http.ResponseWriter, r *http.Request) {
 	var series Series
 	json.NewDecoder(r.Body).Decode(&series)
 	if !series.valid() {
-		w.WriteHeader(http.StatusBadRequest)
+		ret, _ := json.Marshal(series)
+		returnError(w, "Posted Series "+string(ret)+" is not valid.")
 		return
 	}
 	series.updateTime()
@@ -88,7 +89,7 @@ func (s *server) postSeries(w http.ResponseWriter, r *http.Request) {
 			return err
 		}
 
-		return b.Put([]byte(series.Id), []byte(encoded))
+		return b.Put([]byte(series.ImdbID), []byte(encoded))
 	})
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -193,7 +194,7 @@ func (s *server) postSeriesJSON(w http.ResponseWriter, r *http.Request) {
 				return err
 			}
 
-			return b.Put([]byte(ser.Id), []byte(encoded))
+			return b.Put([]byte(ser.ImdbID), []byte(encoded))
 		})
 		if err != nil {
 			fmt.Println(err)

@@ -3,12 +3,11 @@ package main
 import (
 	"log"
 	"regexp"
-	"strings"
 	"time"
 )
 
 type Series struct {
-	Id       string
+	ImdbID   string
 	Title    string
 	Status   string
 	Modified string
@@ -20,15 +19,17 @@ func (s *Series) valid() bool {
 		return false
 	}
 
-	s.Id = strings.Replace(s.Title, " ", "_", -1)
-	s.Id = strings.Replace(s.Id, "-", "_", -1)
-	idReg, err := regexp.Compile("[^a-zA-Z0-9_]+")
+	// s.ImdbID = strings.Replace(s.Title, " ", "_", -1)
+	// s.ImdbID = strings.Replace(s.ImdbID, "-", "_", -1)
+	idReg, err := regexp.Compile("tt[0-9]{7}")
 	if err != nil {
 		log.Fatal(err)
 		return false
 	}
-	s.Id = strings.ToLower(idReg.ReplaceAllString(s.Id, ""))
-	return true
+	return idReg.MatchString(s.ImdbID)
+
+	// s.ImdbID = strings.ToLower(idReg.ReplaceAllString(s.ImdbID, ""))
+	// return true
 }
 
 func (s *Series) updateTime() {

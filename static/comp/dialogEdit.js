@@ -24,7 +24,7 @@ export class DialogEditComp extends BaseComp {
 
     static get properties() {
         return {
-            id: String,
+            imdbID: String,
             title: String,
             status: String,
             image: String,
@@ -34,7 +34,8 @@ export class DialogEditComp extends BaseComp {
             submitEnabled: Boolean,
             error: String,
             username: String,
-            password: String
+            password: String,
+            readonly: Boolean
         };
     }
 
@@ -53,7 +54,7 @@ export class DialogEditComp extends BaseComp {
         let imagePromise = this.postImage();
 
         let series = {
-            Id: this.id,
+            imdbID: this.imdbID,
             Title: this.title,
             Status: this.status
         };
@@ -88,7 +89,7 @@ export class DialogEditComp extends BaseComp {
     postImage() {
         let formData = new FormData();
         formData.append('file', this.image);
-        formData.append('id', this.id);
+        formData.append('id', this.imdbID);
 
         return fetch('api/image', {
             method: 'post',
@@ -106,20 +107,32 @@ export class DialogEditComp extends BaseComp {
     render() {
         return html`
 <div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-    <div class="row">
-        <div class="col-8 offset-2">
-            ${this.image ? html`<img id="pic" src="${this.image}" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}/>` : html`<div id="drop_zone" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}>Serien Bild</div>`}
-        </div>
-        <div class="col-2">
-            <button id="close" class="btn btn-link" type="button" @click=${this.close}>
-            <i class="fas fa-times fa-2x"></i>
-            </button>
-        </div>
+  <div class="row">
+    <div class="col-8 offset-2">
+      ${this.image ? html`<img id="pic" src="${this.image}" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}/>` : html`<div id="drop_zone" @dragover=${this.handleDragOver} @drop=${this.handleFileSelect}>Serien Bild</div>`}
     </div>
-    <form id="form" action="javascript:void(0);">
-        <div id="row-titel" class="row">
+    <div class="col-2">
+      <button id="close" class="btn btn-link" type="button" @click=${this.close}>
+        <i class="fas fa-times fa-2x"></i>
+      </button>
+    </div>
+  </div>
+  <form id="form" action="javascript:void(0);">
+    ${this.readonly ? html`` : html`<div class="row">
             <div class="offset-sm-2 col-10 col-sm-8">
-                <input id="title" name="titel" type="text" pattern="[a-zA-Z0-9]+([a-zA-Z0-9 \-]*[a-zA-Z0-9\-])*" required placeholder="Titel" autocomplete="off" list="titelList" ?readonly=${this.id ? true : false} .value=${this.title ? this.title : ''} @keyup=${(e) => {
+              <input id="imdb-id" type="text" pattern="tt[0-9]{7}" required placeholder="IMDB ID" autocomplete="off" .value=${this.imdbID ? this.imdbID : ''} @keyup=${(e) => {
+    this.imdbIdChanged();
+    if (e.keyCode === KEY.ENTER) {
+        document.getElementById('status').focus();
+    } else if (e.keyCode === KEY.ESCAPE) {
+        this.close();
+    }
+}} @change=${this.imdbIdChanged}>
+              </div>
+          </div>`}
+    <div id="row-titel" class="row">
+      <div class="offset-sm-2 col-10 col-sm-8">
+        <input id="title" name="titel" type="text" required placeholder="Titel" autocomplete="off" ?readonly=${this.id ? true : false} .value=${this.title ? this.title : ''} @keyup=${(e) => {
     this.titleChanged();
     if (e.keyCode === KEY.ENTER) {
         document.getElementById('status').focus();
@@ -127,21 +140,21 @@ export class DialogEditComp extends BaseComp {
         this.close();
     }
 }} @change=${this.titleChanged}>
-            </div>
-            <div class="col-2">
-                <button id="delete" class="btn btn-link" type="button" @click=${this.archive}>
-                    <i class="fas fa-trash-alt fa-2x"></i>
-                </button>
-            </div>
         </div>
-        <div class="row">
-            <div class="col-2">
-                <button id="SUP" class="btn btn-link" type="button" @click=${this.buildSE} ?disabled=${!this.supEnabled}>
-                    <i class="fas fa-plus fa-2x"></i>
-                </button>
-            </div>
-            <div class="col-8">
-                <input id="status" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required placeholder="N&auml;chste Episode" autocomplete="off" .value=${this.status ? this.status : ''} @keyup=${(e) => {
+        <div class="col-2">
+          <button id="delete" class="btn btn-link" type="button" @click=${this.archive}>
+            <i class="fas fa-trash-alt fa-2x"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-2">
+          <button id="SUP" class="btn btn-link" type="button" @click=${this.buildSE} ?disabled=${!this.supEnabled}>
+            <i class="fas fa-plus fa-2x"></i>
+          </button>
+        </div>
+        <div class="col-8">
+          <input id="status" name="stand" type="text" pattern="^((S|B)[0-9x]{2}E[0-9x]{2}|E[0-9x]{5})$" required placeholder="N&auml;chste Episode" autocomplete="off" .value=${this.status ? this.status : ''} @keyup=${(e) => {
     this.statusChanged();
     if (e.keyCode === KEY.ENTER) {
         this.postSeries();
@@ -149,21 +162,21 @@ export class DialogEditComp extends BaseComp {
         this.close();
     }
 }} @change=${this.statusChanged}>
-            </div>
-            <div class="col-2">
-                <button id="EUP" class="btn btn-link" type="button" @click=${this.buildE} ?disabled=${!this.eupEnabled}>
-                    <i class="fas fa-plus fa-2x"></i>
-                </button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="offset-md-2 col col-md-8">
-                <button id="submit" class="btn btn-link" type="button" @click=${this.postSeries} ?disabled=${!this.submitEnabled}>
-                    <i class="fas fa-check fa-2x"></i>
-                </button>
-            </div>
-        </div>
-    </form>
+      </div>
+      <div class="col-2">
+        <button id="EUP" class="btn btn-link" type="button" @click=${this.buildE} ?disabled=${!this.eupEnabled}>
+          <i class="fas fa-plus fa-2x"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="offset-md-2 col col-md-8">
+        <button id="submit" class="btn btn-link" type="button" @click=${this.postSeries} ?disabled=${!this.submitEnabled}>
+          <i class="fas fa-check fa-2x"></i>
+        </button>
+      </div>
+    </div>
+  </form>
 </div>`;
     }
 
@@ -177,6 +190,26 @@ export class DialogEditComp extends BaseComp {
                 this.image = null;
             }
         });
+    }
+
+    imdbIdChanged() {
+        let idField = document.getElementById('imdb-id');
+        this.imdbID = idField.value;
+        if (idField.checkValidity()) {
+            loadingComp.open();
+            fetch(`http://www.omdbapi.com/?i=${this.imdbID}&apikey=970c17bc`, {
+                method: 'get',
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                loadingComp.close();
+                let resp = data.Response;
+                if (resp === 'True') {
+                    this.title = data.Title;
+                }
+            });
+
+        }
     }
 
     titleChanged() {

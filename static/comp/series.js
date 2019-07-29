@@ -69,12 +69,12 @@ class Series extends BaseComp {
 </div>`;
     }
 
-    map({Id, Title, Status}) {
+    map({ImdbID, Title, Status}) {
         return {
-            id: Id,
+            id: ImdbID,
             title: Title,
             status: Status,
-            img: `/img/${Id}.jpg`
+            img: `/img/${ImdbID}.jpg`
         };
     }
 

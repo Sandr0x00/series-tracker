@@ -1,9 +1,14 @@
-build:
+install:
 	npm install
+	./scripts/copy.py
+	go get github.com/gorilla/mux
+	go get github.com/gorilla/sessions
+	go get go.etcd.io/bbolt
+
+build:
 	sassc sass/series.scss static/css/series.css
 	sassc sass/color.scss static/css/color.css
 	go build -o series -v ./src
-	./scripts/copy.py
 
 test:
 	go list -f ./src golang.org/x/lint/golint

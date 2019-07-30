@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image/jpeg"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"sort"
@@ -31,6 +32,30 @@ func initStorage() (*bolt.DB, error) {
 		return nil, fmt.Errorf("could not set up buckets, %v", err)
 	}
 	return db, nil
+}
+
+func (s *server) getOMDB(w http.ResponseWriter, r *http.Request) {
+	apiKey := os.Getenv("OMDB")
+
+	imdbID, ok := r.URL.Query()["imdbID"]
+	if !ok {
+		returnError(w, "Parameter 'imdbID' missing.")
+		return
+	}
+	resp, err := http.Get(fmt.Sprintf("http://www.omdbapi.com/?i=%s&apikey=%s", imdbID[0], apiKey))
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprint(w, string(b))
+
 }
 
 func (s *server) getData() []byte {

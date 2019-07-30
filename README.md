@@ -10,10 +10,9 @@ I'm currently working on a version worth of releasing, but there is still a long
 
 ## Try it yourself
 
+- Get yourself an [OMDB API Key](http://www.omdbapi.com/)
 - Install [npm](https://www.npmjs.com/)
 - Install [golang](https://golang.org/)
-- `go get github.com/gorilla/mux`
-- `go get github.com/gorilla/sessions`
-- `go get go.etcd.io/bbolt`
+- `make install`
 - `make build`
-- `make run`
+- `OMDB=api-key make run`

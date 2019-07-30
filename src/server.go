@@ -69,6 +69,7 @@ func main() {
 	api.HandleFunc("/series", s.postSeries).Methods("POST")
 	api.HandleFunc("/image", s.postImage).Methods("POST")
 	api.HandleFunc("/upload", s.postSeriesJSON).Methods("POST")
+	api.HandleFunc("/omdb", s.getOMDB).Methods("GET")
 
 	r.HandleFunc("/login", s.login).Methods("POST")
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))

@@ -1,4 +1,4 @@
-/* global seriesComp, dialogComp, loadingComp */
+/* global seriesComp, dialogComp, loadingComp, headerComp */
 
 import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
 import {BaseComp} from './base.js';
@@ -45,6 +45,7 @@ export class DialogEditComp extends BaseComp {
 
     close() {
         dialogComp.close();
+        headerComp.updateSearch();
     }
 
     postSeries() {
@@ -77,6 +78,7 @@ export class DialogEditComp extends BaseComp {
             console.log(values);
             this.close();
             seriesComp.data = seriesComp.setData(values[1]);
+            headerComp.clearSearch();
             seriesComp.lazyLoadImg();
         }).catch((err) => {
             loadingComp.close();

@@ -9,13 +9,15 @@ export class HeaderComp extends BaseComp {
         return {
             reload: Number,
             autoload: Number,
-            enabled: Boolean
+            enabled: Boolean,
+            search: String
         };
     }
     constructor() {
         super();
         this.reload = 0;
         this.startAutoload();
+        this.search = null;
     }
 
     disable() {
@@ -45,9 +47,26 @@ export class HeaderComp extends BaseComp {
     }
 
     searchEvent(e) {
-        let content = $('#seriesComp');
-        content.children().each(function () {
-            $(this).toggle(fuzzySearch($(this).find('a').data('originalTitle'), e.target.value));
+        this.search = e.target.value;
+        this.updateSearch();
+    }
+
+    updateSearch() {
+        let search = this.search;
+        console.log("Search: "+ search);
+        if (!search) {
+            return;
+        }
+        $('#seriesComp').children().each(function () {
+            let elem = $(this).find('a');
+            $(this).toggle(fuzzySearch(elem.data('originalTitle') + elem.attr('id'), search));
+        });
+    }
+
+    clearSearch() {
+        this.search = null;
+        $('#seriesComp').children().each(function () {
+            $(this).toggle(true);
         });
     }
 
@@ -58,7 +77,7 @@ export class HeaderComp extends BaseComp {
     <a id="plus" class="float-left p-4" type="button" @click=${() => dialogComp.showEdit()}><i class="fas fa-2x fa-plus-circle"></i></a>
   </div>
   <div class="col-8">
-    <input id="search" name="search" type="text" placeholder="Search" autocomplete="off" list="titelList" @keyup=${this.searchEvent}>
+    <input id="search" name="search" type="text" placeholder="Search" autocomplete="off" list="titelList" @keyup=${this.searchEvent} .value=${this.search}>
   </div>
   <div class="d-none d-sm-block col-sm-1">
     <svg id="refresh" class="radial-progress" viewBox="0 0 44 44" @click=${() => seriesComp.loadStuff()}>

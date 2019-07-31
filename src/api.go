@@ -16,24 +16,6 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-func initStorage() (*bolt.DB, error) {
-	db, err := bolt.Open("series.db", 0600, nil)
-	if err != nil {
-		return nil, fmt.Errorf("could not open db, %v", err)
-	}
-	err = db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists([]byte("Series"))
-		if err != nil {
-			return fmt.Errorf("could not create root bucket: %v", err)
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, fmt.Errorf("could not set up buckets, %v", err)
-	}
-	return db, nil
-}
-
 func (s *server) getOMDB(w http.ResponseWriter, r *http.Request) {
 	apiKey := os.Getenv("OMDB")
 
@@ -58,11 +40,13 @@ func (s *server) getOMDB(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (s *server) getData() []byte {
+func (s *server) getData(r *http.Request) []byte {
 	var series []Series
 
+	session, _ := s.sessions.Get(r, "session")
+
 	s.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("Series"))
+		b := tx.Bucket([]byte("Series")).Bucket([]byte(fmt.Sprintf("%+v", session.Values["username"])))
 		b.ForEach(func(k, v []byte) error {
 			// fmt.Printf("key=%s, value=%s\n", k, v)
 			var single Series
@@ -84,7 +68,7 @@ func (s *server) getData() []byte {
 
 func (s *server) getSeries(w http.ResponseWriter, r *http.Request) {
 	// series := make(map[string]Series)
-	var series = s.getData()
+	var series = s.getData(r)
 
 	_, b64 := r.URL.Query()["b64"]
 	if b64 {
@@ -106,8 +90,10 @@ func (s *server) postSeries(w http.ResponseWriter, r *http.Request) {
 	}
 	series.updateTime()
 
+	session, _ := s.sessions.Get(r, "session")
+
 	err := s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("Series"))
+		b := tx.Bucket([]byte("Series")).Bucket([]byte(fmt.Sprintf("%+v", session.Values["username"])))
 
 		encoded, err := json.Marshal(series)
 		if err != nil {
@@ -122,7 +108,7 @@ func (s *server) postSeries(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("%+v\n", series)
 	w.WriteHeader(http.StatusOK)
-	var seriesJSON = s.getData()
+	var seriesJSON = s.getData(r)
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, string(seriesJSON))
 }
@@ -191,8 +177,10 @@ func (s *server) postSeriesJSON(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(series)
 	var keys []string
 
+	session, _ := s.sessions.Get(r, "session")
+
 	s.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("Series"))
+		b := tx.Bucket([]byte("Series")).Bucket([]byte(fmt.Sprintf("%+v", session.Values["username"])))
 		b.ForEach(func(k, v []byte) error {
 			keys = append(keys, string(k))
 			return nil
@@ -203,7 +191,7 @@ func (s *server) postSeriesJSON(w http.ResponseWriter, r *http.Request) {
 	for _, ser := range keys {
 		s.db.Batch(func(tx *bolt.Tx) error {
 			// fmt.Println(ser)
-			return tx.Bucket([]byte("Series")).Delete([]byte(ser))
+			return tx.Bucket([]byte("Series")).Bucket([]byte(fmt.Sprintf("%+v", session.Values["username"]))).Delete([]byte(ser))
 			// return nil
 		})
 	}
@@ -212,7 +200,7 @@ func (s *server) postSeriesJSON(w http.ResponseWriter, r *http.Request) {
 		ser.valid()
 		fmt.Println(ser)
 		err := s.db.Update(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("Series"))
+			b := tx.Bucket([]byte("Series")).Bucket([]byte(fmt.Sprintf("%+v", session.Values["username"])))
 
 			encoded, err := json.Marshal(ser)
 			if err != nil {

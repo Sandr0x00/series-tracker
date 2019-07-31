@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	bolt "go.etcd.io/bbolt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type server struct {
@@ -17,6 +18,17 @@ type server struct {
 	sessions *sessions.CookieStore
 }
 
+type Credentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type EncryptedCredentials struct {
+	Username string
+	Password []byte
+}
+
+// Authentication middleware
 func (s *server) auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// We can obtain the session token from the requests cookies, which come with every request
@@ -31,10 +43,6 @@ func (s *server) auth(next http.Handler) http.Handler {
 }
 
 func (s *server) login(w http.ResponseWriter, r *http.Request) {
-	type Credentials struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
 	var creds Credentials
 	// Get the JSON body and decode into credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
@@ -44,16 +52,111 @@ func (s *server) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if creds.Password != "lala" {
+	var user EncryptedCredentials
+	err = s.db.View(func(tx *bolt.Tx) error {
+		v := tx.Bucket([]byte("Users")).Get([]byte(creds.Username))
+		json.Unmarshal(v, &user)
+		return nil
+	})
+	// fmt.Printf("%+v\n", user)
+
+	if err = bcrypt.CompareHashAndPassword(user.Password, []byte(creds.Password)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
 	session, _ := s.sessions.Get(r, "session")
 	session.Values["authenticated"] = true
+	session.Values["username"] = creds.Username
 	session.Save(r, w)
 	w.WriteHeader(http.StatusOK)
+}
 
+func initStorage() (*bolt.DB, error) {
+	db, err := bolt.Open("series.db", 0600, nil)
+	if err != nil {
+		return nil, fmt.Errorf("could not open db, %v", err)
+	}
+	err = db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("Series"))
+		if err != nil {
+			return fmt.Errorf("could not create root bucket: %v", err)
+		}
+		_, err = tx.CreateBucketIfNotExists([]byte("Users"))
+		if err != nil {
+			return fmt.Errorf("could not create users bucket: %v", err)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, fmt.Errorf("could not set up buckets, %v", err)
+	}
+	return db, nil
+}
+
+func (s *server) register(w http.ResponseWriter, r *http.Request) {
+
+	var creds Credentials
+	// Get the JSON body and decode into credentials
+	err := json.NewDecoder(r.Body).Decode(&creds)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	log.Printf("Registering %+v\n", creds)
+
+	var user EncryptedCredentials
+	err = s.db.View(func(tx *bolt.Tx) error {
+		v := tx.Bucket([]byte("Users")).Get([]byte(creds.Username))
+		json.Unmarshal(v, &user)
+		return nil
+	})
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	if user.Username != "" {
+		returnError(w, fmt.Sprintf("User %s already exists", user))
+		return
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), 8)
+
+	encrypted := EncryptedCredentials{creds.Username, hashedPassword}
+	err = s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("Users"))
+		encoded, err := json.Marshal(encrypted)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(encrypted.Username), []byte(encoded))
+	})
+
+	if err != nil {
+		returnError(w, "Error while inserting User")
+		return
+	}
+
+	err = s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("Series"))
+		_, err := b.CreateBucketIfNotExists([]byte(encrypted.Username))
+		if err != nil {
+			return fmt.Errorf("could not create %s bucket: %v", encrypted.Username, err)
+		}
+		return nil
+	})
+
+	if err != nil {
+		returnError(w, "Error while creating the child bucket.")
+		return
+	}
+
+	session, _ := s.sessions.Get(r, "session")
+	session.Values["authenticated"] = true
+	session.Values["username"] = creds.Username
+	session.Save(r, w)
+	w.WriteHeader(http.StatusOK)
 }
 
 func main() {
@@ -72,6 +175,7 @@ func main() {
 	api.HandleFunc("/omdb", s.getOMDB).Methods("GET")
 
 	r.HandleFunc("/login", s.login).Methods("POST")
+	r.HandleFunc("/register", s.register).Methods("POST")
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))
 	http.Handle("/", r)
 

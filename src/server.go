@@ -9,8 +9,13 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	"github.com/unrolled/secure"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/crypto/bcrypt"
+)
+
+const (
+	dev = true
 )
 
 type server struct {
@@ -160,11 +165,41 @@ func (s *server) register(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	secureMiddleware := secure.New(secure.Options{
+		// AllowedHosts:         []string{"sandr0\\.tk"},
+		AllowedHostsAreRegex: false,
+		// HostsProxyHeaders:    []string{"X-Forwarded-Host"},
+		SSLRedirect: false,
+		SSLHost:     "sandro.tk",
+		// SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
+		STSSeconds:           31536000,
+		STSIncludeSubdomains: true,
+		STSPreload:           true,
+		ForceSTSHeader:       true,
+		FrameDeny:            true,
+		ContentTypeNosniff:   true,
+		BrowserXssFilter:     true,
+		ContentSecurityPolicy: `
+		default-src 'self' use.fontawesome.com data:;
+		font-src 'self' fonts.gstatic.com use.fontawesome.com;
+		img-src 'self' data:;
+		style-src 'unsafe-inline' 'self' use.fontawesome.com fonts.googleapis.com;
+		script-src 'self' 'unsafe-inline' unpkg.com;
+		base-uri 'none';
+		form-action 'self';`,
+		// PublicKey:             `pin-sha256="base64+primary=="; pin-sha256="base64+backup=="; max-age=5184000; includeSubdomains; report-uri="https://www.example.com/hpkp-report"`,
+		ReferrerPolicy: "same-origin",
+		FeaturePolicy:  "vibrate 'none'; geolocation 'none'; speaker 'none'; camera 'none'; microphone 'none'; notifications 'none';",
+		IsDevelopment:  dev,
+	})
+
 	port := 8080
 	db, _ := initStorage()
 	s := server{db, sessions.NewCookieStore([]byte("super-secret-key"))}
 
 	r := mux.NewRouter()
+
+	r.Use(secureMiddleware.Handler)
 
 	api := r.PathPrefix("/api").Subrouter()
 	api.Use(s.auth)

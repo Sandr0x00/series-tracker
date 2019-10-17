@@ -1,6 +1,6 @@
 /* global headerComp, loadingComp */
 
-import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
+import {html} from 'lit-element';
 import {BaseComp} from './base.js';
 import './dialogEdit.js';
 import './dialogInfo.js';
@@ -63,9 +63,9 @@ export class DialogComp extends BaseComp {
     }
 
     showError(error) {
-        if (this.dialogNr !== 0) {
-            return;
-        }
+        // if (this.dialogNr !== 0) {
+        //     return;
+        // }
         this.showDialog();
         this.dialogNr = 4;
         this.dialog = html`<dialog-error .error=${error}></dialog-error>`;

@@ -1,6 +1,6 @@
 /* global seriesComp, dialogComp, loadingComp, headerComp */
 
-import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
+import {html} from 'lit-element';
 import {BaseComp} from './base.js';
 
 const KEY = {
@@ -208,6 +208,9 @@ export class DialogEditComp extends BaseComp {
                 let resp = data.Response;
                 if (resp === 'True') {
                     this.title = data.Title;
+                } else {
+                    console.log(data);
+                    dialogComp.showError(data.Error);
                 }
             });
 

@@ -1,4 +1,4 @@
-/* global dark, light */
+import $ from 'jquery';
 
 const dark = 'dark';
 const light = 'light';

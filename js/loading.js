@@ -1,6 +1,4 @@
-/* global dialogComp */
-
-import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
+import {html} from 'lit-element';
 import {BaseComp} from './base.js';
 
 export class DialogErrorComp extends BaseComp {

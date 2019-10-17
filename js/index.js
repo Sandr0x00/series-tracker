@@ -1,0 +1,9 @@
+import './jquery-global.js';
+import 'bootstrap';
+import './loading.js';
+import 'popper.js';
+import './header.js';
+import './series.js';
+import './dialog.js';
+import './cookies.js';
+import './fuzzy_search.js';

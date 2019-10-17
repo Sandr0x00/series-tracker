@@ -1,4 +1,4 @@
-import {LitElement} from 'https://unpkg.com/lit-element/lit-element.js?module';
+import {LitElement} from 'lit-element';
 
 export class BaseComp extends LitElement {
     createRenderRoot() {

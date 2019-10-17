@@ -1,7 +1,8 @@
 /* global dialogComp, loadingComp */
 
-import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
+import {html} from 'lit-element';
 import {BaseComp} from './base.js';
+import $ from 'jquery';
 
 class Series extends BaseComp {
 

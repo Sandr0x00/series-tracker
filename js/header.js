@@ -1,7 +1,8 @@
 /* global fuzzySearch,seriesComp,dialogComp */
 
-import {html} from 'https://unpkg.com/lit-element/lit-element.js?module';
+import {html} from 'lit-element';
 import {BaseComp} from './base.js';
+import $ from 'jquery';
 
 export class HeaderComp extends BaseComp {
 
@@ -53,7 +54,7 @@ export class HeaderComp extends BaseComp {
 
     updateSearch() {
         let search = this.search;
-        console.log("Search: "+ search);
+        console.log('Search: ' + search);
         if (!search) {
             return;
         }

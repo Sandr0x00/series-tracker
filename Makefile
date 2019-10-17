@@ -8,6 +8,7 @@ install:
 build:
 	sassc sass/series.scss static/css/series.css
 	sassc sass/color.scss static/css/color.css
+	rollup -c
 	go build -o series -v ./src
 
 test:

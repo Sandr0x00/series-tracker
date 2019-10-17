@@ -2,9 +2,9 @@
 
 Since I may have a little problem with watching series, I created this project for keeping track of the (&gt; 150) series I watched or still watch.
 
-![](overview.jpg)
+![Overview](overview.jpg)
 
-![](edit.png)
+![Edit Dialog](edit.png)
 
 I'm currently working on a version worth of releasing, but there is still a long way to go, see issues.
 

@@ -17,21 +17,19 @@
     <base target="_self">
 </head>
 <body class="dark">
+    <noscript class="col-12 justify">
+        <h1>
+            Bitte aktivieren sie JavaScript.
+        </h1>
+    </noscript>
+
     <loading-dialog id="loadingComp"></loading-dialog>
-    <script type="module" src="comp/loading.js"></script>
 
     <header-comp id="headerComp"></header-comp>
 
     <series-comp id="seriesComp" class="container-fluid"></series-comp>
 
     <dialog-comp id="dialogComp"></dialog-comp>
-
-
-    <script type="text/javascript" src="lib/jquery.min.js"></script>
-    <script type="text/javascript" src="lib/popper.min.js"></script>
-    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/cookies.js"></script>
-    <script type="text/javascript" src="js/fuzzy_search.js"></script>
 
     <script>
     const headerComp = document.getElementById("headerComp");
@@ -40,11 +38,8 @@
     const loadingComp = document.getElementById("loadingComp");
     </script>
 
-    <script type="module" src="comp/header.js"></script>
-    <script type="module" src="comp/dialog.js"></script>
-    <script type="module" src="comp/series.js"></script>
+    <script type="text/javascript" src="index.js"></script>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E" crossorigin="anonymous">
-
 </body>
 </html>

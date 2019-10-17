@@ -193,7 +193,7 @@ func main() {
 		IsDevelopment:  dev,
 	})
 
-	port := 8080
+	port := 8083
 	db, _ := initStorage()
 	s := server{db, sessions.NewCookieStore([]byte("super-secret-key"))}
 

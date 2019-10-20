@@ -183,6 +183,10 @@ export class DialogEditComp extends BaseComp {
     }
 
     firstUpdated() {
+        this.updateImage();
+    }
+
+    updateImage() {
         fetch(this.imageUrl, {
             method: 'get',
         }).then((response) => {
@@ -208,6 +212,8 @@ export class DialogEditComp extends BaseComp {
                 let resp = data.Response;
                 if (resp === 'True') {
                     this.title = data.Title;
+                    this.imageUrl = `/img/${this.imdbID}.jpg`;
+                    this.updateImage();
                 } else {
                     console.log(data);
                     dialogComp.showError(data.Error);

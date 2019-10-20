@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"image/jpeg"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -24,20 +25,42 @@ func (s *server) getOMDB(w http.ResponseWriter, r *http.Request) {
 		returnError(w, "Parameter 'imdbID' missing.")
 		return
 	}
+	fmt.Printf("Requesting OMDB %+v\n", imdbID[0])
+
 	resp, err := http.Get(fmt.Sprintf("http://www.omdbapi.com/?i=%s&apikey=%s", imdbID[0], apiKey))
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
+	}
+
+	resp, err = http.Get(fmt.Sprintf("http://img.omdbapi.com/?i=%s&apikey=%s", imdbID[0], apiKey))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 200 {
+		//open a file for writing
+		file, err := os.Create(fmt.Sprintf("static/img/%s.jpg", imdbID[0]))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer file.Close()
+
+		// Use io.Copy to just dump the response body to the file.
+		_, err = io.Copy(file, resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprint(w, string(b))
-
 }
 
 func (s *server) getData(r *http.Request) []byte {

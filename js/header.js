@@ -1,8 +1,7 @@
-/* global fuzzySearch,seriesComp,dialogComp */
+/* global seriesComp,dialogComp */
 
 import {html} from 'lit-element';
 import {BaseComp} from './base.js';
-import $ from 'jquery';
 
 export class HeaderComp extends BaseComp {
 
@@ -11,7 +10,8 @@ export class HeaderComp extends BaseComp {
             reload: Number,
             autoload: Number,
             enabled: Boolean,
-            search: String
+            search: String,
+            filter: Boolean
         };
     }
     constructor() {
@@ -19,6 +19,7 @@ export class HeaderComp extends BaseComp {
         this.reload = 0;
         this.startAutoload();
         this.search = null;
+        this.filter = false;
     }
 
     disable() {
@@ -49,26 +50,17 @@ export class HeaderComp extends BaseComp {
 
     searchEvent(e) {
         this.search = e.target.value;
-        this.updateSearch();
-    }
-
-    updateSearch() {
-        let search = this.search;
-        console.log('Search: ' + search);
-        if (!search) {
-            return;
-        }
-        $('#seriesComp').children().each(function () {
-            let elem = $(this).find('a');
-            $(this).toggle(fuzzySearch(elem.data('originalTitle') + elem.attr('id'), search));
-        });
+        seriesComp.dataFilter = [this.filter, this.search];
     }
 
     clearSearch() {
-        this.search = null;
-        $('#seriesComp').children().each(function () {
-            $(this).toggle(true);
-        });
+        this.search = '';
+        seriesComp.dataFilter = [this.filter, this.search];
+    }
+
+    doFilter() {
+        this.filter = !this.filter;
+        seriesComp.dataFilter = [this.filter, this.search];
     }
 
     render() {
@@ -77,7 +69,10 @@ export class HeaderComp extends BaseComp {
   <div class="col-2">
     <a id="plus" class="float-left p-4" type="button" @click=${() => dialogComp.showEdit()}><i class="fas fa-2x fa-plus-circle"></i></a>
   </div>
-  <div class="col-8">
+  <div class="col-1">
+    <a id="filter" type="button" @click=${this.doFilter}>Show all <i class="far ${this.filter ? 'fa-square' : 'fa-check-square'}"></i></a>
+  </div>
+  <div class="col-7">
     <input id="search" name="search" type="text" placeholder="Search" autocomplete="off" list="titelList" @keyup=${this.searchEvent} .value=${this.search}>
   </div>
   <div class="d-none d-sm-block col-sm-1">

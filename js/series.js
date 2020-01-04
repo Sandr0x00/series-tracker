@@ -8,19 +8,23 @@ class Series extends BaseComp {
 
     static get properties() {
         return {
-            data: Array
+            data: Object,
+            filteredData: Object,
+            dataFilter: Array
         };
     }
 
     constructor() {
         super();
         loadingComp.open();
-        this.data = [];
+        this.data = {};
+        this.dataFilter = [false, ''];
+        this.filteredData = {};
         this.loadStuff();
     }
 
     render() {
-        return html`${Object.values(this.data).map(i => html`${this.single(i)}`)}`;
+        return html`${Object.values(this.filteredData).map(i => html`${this.single(i)}`)}`;
     }
 
     lazyImg(img) {
@@ -36,14 +40,30 @@ class Series extends BaseComp {
         });
     }
 
+    filter() {
+        console.log(this.dataFilter);
+        if (this.dataFilter[0]) {
+            this.filteredData = Object.fromEntries(Object.entries(this.data).filter(s => !s[1].finished));
+        } else {
+            this.filteredData = this.data;
+        }
+        if (this.dataFilter[1]) {
+            this.filteredData = Object.fromEntries(Object.entries(this.filteredData).filter(s => s[1].title.toLowerCase().includes(this.dataFilter[1].toLowerCase())));
+        }
+    }
+
     updated(changedProperties) {
-        if (changedProperties.has('data')) {
+        if (changedProperties.has('dataFilter')) {
+            this.filter();
+        } else if (changedProperties.has('data')) {
+            this.filter();
+        } else if (changedProperties.has('filteredData')) {
             this.lazyLoadImg();
         }
     }
 
     async lazyLoadImg(){
-        for (const elem in this.data) {
+        for (const elem in this.filteredData) {
             let bgImg = new Image();
             bgImg.onload = () => {
                 $('#' + elem).css('background-image', 'url(' + this.data[elem].img + ')');
@@ -64,7 +84,7 @@ class Series extends BaseComp {
     single(s) {
         return html`
 <div id="${s.id}_div" class="seriesDiv col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
-  <a class="series placeholder display ${s.status.match('^(SxxE|Exxx)xx$') ? 'grayscale' : ''}" id="${s.id}" @click=${() => dialogComp.showEdit(s.id, s.title, s.status, s.img)} data-toggle="tooltip" data-original-title="${s.title}" data-large="${s.img}">
+  <a class="series placeholder display ${s.finished ? 'grayscale' : ''}" id="${s.id}" @click=${() => dialogComp.showEdit(s.id, s.title, s.status, s.img)} data-toggle="tooltip" data-original-title="${s.title}" data-large="${s.img}">
     <span class="shadow" id="${s.id}_status">${s.status}</span>
   </a>
 </div>`;
@@ -75,7 +95,8 @@ class Series extends BaseComp {
             id: ImdbID,
             title: Title,
             status: Status,
-            img: `/img/${ImdbID}.jpg`
+            img: `/img/${ImdbID}.jpg`,
+            finished: Status.match('^(SxxE|Exxx)xx$') != null
         };
     }
 

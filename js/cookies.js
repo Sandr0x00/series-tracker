@@ -25,14 +25,14 @@ function handleCookie() {
     }
 }
 
-function setCookie(cname, cvalue) {
+export function setCookie(cname, cvalue) {
     let d = new Date();
     d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
     let expires = 'expires=' + d.toUTCString();
     document.cookie = cname + '=' + cvalue + ';' + expires;
 }
 
-function getCookie(cname) {
+export function getCookie(cname) {
     let name = cname + '=';
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');

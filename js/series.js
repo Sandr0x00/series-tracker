@@ -3,6 +3,7 @@
 import {html} from 'lit-element';
 import {BaseComp} from './base.js';
 import $ from 'jquery';
+import { getCookie, setCookie } from './cookies.js';
 
 class Series extends BaseComp {
 
@@ -18,7 +19,7 @@ class Series extends BaseComp {
         super();
         loadingComp.open();
         this.data = {};
-        this.dataFilter = [false, ''];
+        this.dataFilter = [getCookie('filter') !== '', ''];
         this.filteredData = {};
         this.loadStuff();
     }
@@ -55,6 +56,7 @@ class Series extends BaseComp {
     updated(changedProperties) {
         if (changedProperties.has('dataFilter')) {
             this.filter();
+            setCookie('filter', this.dataFilter[0]);
         } else if (changedProperties.has('data')) {
             this.filter();
         } else if (changedProperties.has('filteredData')) {

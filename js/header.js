@@ -2,6 +2,7 @@
 
 import {html} from 'lit-element';
 import {BaseComp} from './base.js';
+import { getCookie } from './cookies.js';
 
 export class HeaderComp extends BaseComp {
 
@@ -19,7 +20,7 @@ export class HeaderComp extends BaseComp {
         this.reload = 0;
         this.startAutoload();
         this.search = null;
-        this.filter = false;
+        this.filter = getCookie('filter') !== '';
     }
 
     disable() {

@@ -41,7 +41,7 @@ export class DialogInfoComp extends BaseComp {
   <a target="_blank" href="https://jquery.com/">JQuery <i class="fas fa-external-link-alt"></i></a>,
   <a target="_blank" href="https://lit-element.polymer-project.org/">LitElement <i class="fas fa-external-link-alt"></i></a><br>
   <br>
-  Download status: <a href="/api/series?b64" download="status.txt">status.txt</a>
+  Download status: <a href="api/series?b64" download="status.txt">status.txt</a>
   <!--<br/>Upload status: <form id="upload_status" action="server/post_status_file.php" method="post" enctype="multipart/form-data"><input type="file" name="file" id="file"><input class="submit" type="submit" value="Upload" name="submit"></form>-->
   <br>
   Contribute at <a href="https://github.com/Sandr0x00/SerienTracker">GitHub</a>

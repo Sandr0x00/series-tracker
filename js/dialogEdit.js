@@ -201,7 +201,7 @@ export class DialogEditComp extends BaseComp {
         this.imdbID = idField.value;
         if (idField.checkValidity()) {
             loadingComp.open();
-            fetch(`/api/omdb?imdbID=${this.imdbID}`, {
+            fetch(`api/omdb?imdbID=${this.imdbID}`, {
                 method: 'get',
             }).then(response => {
                 return response.json();

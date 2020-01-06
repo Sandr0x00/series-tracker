@@ -35,14 +35,13 @@ class Series extends BaseComp {
                 resolve(img);
             };
             bgImg.onerror = () => {
-                resolve('/img/unknown.jpg');
+                resolve('img/unknown.jpg');
             };
             bgImg.src = img;
         });
     }
 
     filter() {
-        console.log(this.dataFilter);
         if (this.dataFilter[0]) {
             this.filteredData = Object.fromEntries(Object.entries(this.data).filter(s => !s[1].finished));
         } else {
@@ -71,7 +70,7 @@ class Series extends BaseComp {
                 $('#' + elem).css('background-image', 'url(' + this.data[elem].img + ')');
             };
             bgImg.onerror = () => {
-                $('#' + elem).css('background-image', 'url(' + '/img/unknown.jpg' + ')');
+                $('#' + elem).css('background-image', 'url(' + 'img/unknown.jpg' + ')');
             };
             bgImg.src = this.data[elem].img;
         }
@@ -97,7 +96,7 @@ class Series extends BaseComp {
             id: ImdbID,
             title: Title,
             status: Status,
-            img: `/img/${ImdbID}.jpg`,
+            img: `img/${ImdbID}.jpg`,
             finished: Status.match('^(SxxE|Exxx)xx$') != null
         };
     }
@@ -111,7 +110,7 @@ class Series extends BaseComp {
     }
 
     loadStuff() {
-        fetch('/api/series').then(response => {
+        fetch('api/series').then(response => {
             if (response.status === 401) {
                 dialogComp.close(true);
                 dialogComp.showLogin();

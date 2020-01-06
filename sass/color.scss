@@ -15,7 +15,7 @@
     stroke: $fg;
   }
 
-  #title:invalid, #status:invalid {
+  #title:invalid, #status:invalid, .error  {
     background: #FDD;
   }
 
@@ -34,7 +34,7 @@
   input {
     background-color: #ddd
   }
-  a {
+  a, .error {
     color: #622;
   }
 }
@@ -49,6 +49,10 @@
   background-color: #333;
 }
 
+.error {
+  margin-bottom: 0;
+}
+
 .dark {
   $bg: #333;
   $fg: #fafafa;
@@ -60,7 +64,7 @@
     stroke: #ddd;
   }
 
-  #title:invalid, #status:invalid {
+  #title:invalid, #status:invalid, .error {
     background: #944;
   }
 

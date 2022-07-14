@@ -1,40 +1,64 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
-	"net/url"
+	"net/http/httptest"
 	"testing"
+	"github.com/gorilla/sessions"
+	"os"
+	"io"
+	"encoding/json"
+	// "fmt"
+	"strings"
 )
 
-func TestUserLogin(t *testing.T) {
-	req, err := http.NewRequest("GET", "/api/omdb"+url.Values{"imdbID": {"tt3322314"}}.Encode(), nil)
-	if err != nil {
-		t.Fatal(err)
+func TestGetOMDB(t *testing.T) {
+	os.Chdir("..")
+	db, _ := initStorage()
+	s := server{db, sessions.NewCookieStore([]byte("super-secret-key"))}
+
+	handler := http.HandlerFunc(s.getOMDB)
+	{
+		req := httptest.NewRequest("GET", "/api/omdb?imdbID=tt3322314", nil)
+		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+		rr := httptest.NewRecorder()
+		handler(rr, req)
+
+		body, _ := io.ReadAll(rr.Result().Body)
+
+		var resp map[string]interface{}
+		json.Unmarshal(body, &resp)
+
+		if resp["Response"] != "True" {
+			t.Errorf("OMDB call errors: %v", resp["Error"])
+		}
 	}
 
-	// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
-	// rr := httptest.NewRecorder()
-	// handler := http.HandlerFunc()
+	{
+		req := httptest.NewRequest("GET", "/api/omdb?imdbID=tt3322314a", nil)
+		rr := httptest.NewRecorder()
+		handler(rr, req)
+		body, _ := io.ReadAll(rr.Result().Body)
+		var resp map[string]interface{}
+		json.Unmarshal([]byte(strings.Replace(string(body), "\"3322314a\"", "'3322314a'", -1)), &resp)
+		//fmt.Println(resp)
 
-	fmt.Println(req)
+		if resp["Response"] != "False" || resp["Error"] != "Conversion from string '3322314a' to type 'Double' is not valid." {
+			t.Errorf("Wrong Response: %v", resp)
+		}
+	}
 
-	// TODO: create test
+	{
+		req := httptest.NewRequest("GET", "/api/omdb?imdbID=tt33223145", nil)
+		rr := httptest.NewRecorder()
+		handler(rr, req)
+		body, _ := io.ReadAll(rr.Result().Body)
+		var resp map[string]interface{}
+		json.Unmarshal(body, &resp)
+		//fmt.Println(resp)
 
-	// // Our handlers satisfy http.Handler, so we can call their ServeHTTP method
-	// // directly and pass in our Request and ResponseRecorder.
-	// handler.ServeHTTP(rr, req)
-
-	// // Check the status code is what we expect.
-	// if status := rr.Code; status != http.StatusOK {
-	// 	t.Errorf("handler returned wrong status code: got %v want %v",
-	// 		status, http.StatusOK)
-	// }
-
-	// // Check the response body is what we expect.
-	// expected := `{"alive": true}`
-	// if rr.Body.String() != expected {
-	// 	t.Errorf("handler returned unexpected body: got %v want %v",
-	// 		rr.Body.String(), expected)
-	// }
+		if resp["Response"] != "False" || resp["Error"] != "Incorrect IMDb ID." {
+			t.Errorf("Wrong Response: %v", resp)
+		}
+	}
 }

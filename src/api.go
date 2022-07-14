@@ -45,7 +45,7 @@ func (s *server) getOMDB(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 200 {
-		//open a file for writing
+		// Open image for writing
 		file, err := os.Create(fmt.Sprintf("static/img/%s.jpg", imdbID[0]))
 		if err != nil {
 			log.Fatal(err)

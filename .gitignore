@@ -2,3 +2,5 @@ node_modules/
 series
 *.db
 dist/
+static/lib/*
+static/index.js*

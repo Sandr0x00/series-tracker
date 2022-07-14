@@ -2,20 +2,10 @@
 
 install:
 	npm install
-	./scripts/copy.py
-	go get github.com/gorilla/mux
-	go get github.com/gorilla/sessions
-	go get go.etcd.io/bbolt
-	go get golang.org/x/lint/golint
-
-install-prod:
-	go get github.com/gorilla/mux
-	go get github.com/gorilla/sessions
-	go get go.etcd.io/bbolt
-	go get golang.org/x/lint/golint
+	./scripts/copy_node_modules.py
 
 build-js:
-	rollup -c
+	node_modules/.bin/rollup -c
 
 build-css:
 	sassc sass/series.scss static/css/series.css
@@ -27,7 +17,7 @@ build-go:
 build: build-css build-js build-go
 
 test:
-	eslint .
+	node_modules/.bin/eslint .
 	go list -f ./src golang.org/x/lint/golint
 	go test -v ./src
 
@@ -38,3 +28,7 @@ dist: install build
 
 run:
 	env OMDB=??? ./series
+
+clean:
+	rm -r dist
+	rm -r node_modules

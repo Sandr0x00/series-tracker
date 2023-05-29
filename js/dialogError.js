@@ -1,9 +1,9 @@
-/* global dialogComp */
+/* global dialogError */
 
-import {html} from 'lit-element';
-import {BaseComp} from './base.js';
+import {html} from 'lit';
+import { DialogComp } from './dialog.js';
 
-export class DialogErrorComp extends BaseComp {
+export class DialogErrorComp extends DialogComp {
 
     static get properties() {
         return {
@@ -15,21 +15,32 @@ export class DialogErrorComp extends BaseComp {
         super();
     }
 
+    show(error) {
+        super.show();
+        this.error = error;
+        if (dialogError.open) {
+            dialogError.close();
+        }
+        dialogError.showModal();
+    }
+
     close() {
-        dialogComp.close();
+        super.close();
+        dialogError.close();
     }
 
     render() {
         return html`
-<div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-    <div class="row">
-        <div id="error-dialog" class="p-5 dialog" style="text-align: left">
-        ${this.error}
-        </div>
-    </div>
+<div class="text-end">
+    <button id="close" class="rounded btn-link" type="button" @click=${this.close}>
+        <i class="fas fa-times fa-2x"></i>
+    </button>
+</div>
+
+<div class="text-start p-5">
+    ${this.error}
 </div>`;
     }
-
 }
 
 customElements.define('dialog-error', DialogErrorComp);

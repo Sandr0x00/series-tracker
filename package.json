@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Some small project for keeping track of my series.",
   "scripts": {
+    "build-js": "rollup -c",
     "test": "eslint ."
   },
   "repository": {
@@ -16,14 +17,15 @@
   },
   "homepage": "https://github.com/Sandr0x00/SerienTracker#readme",
   "devDependencies": {
-    "bootstrap": "^4.4.1",
-    "eslint": "^6.8.0",
-    "jquery": "^3.4.1",
-    "lit-element": "^2.3.1",
-    "popper.js": "^1.16.1",
-    "rollup": "^2.3.4",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.3.0"
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-replace": "^5.0.2",
+    "eslint": "^8.41.0",
+    "jquery": "^3.7.0",
+    "lit": "^2.7.4",
+    "rollup": "^2",
+    "rollup-plugin-terser": "^5.3.0",
+    "tailwindcss": "^3.3.2",
+    "tippy.js": "^6.3.7"
   }
 }

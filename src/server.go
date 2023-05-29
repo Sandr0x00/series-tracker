@@ -14,9 +14,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const (
-	dev = true
-)
+var DEV bool
 
 type server struct {
 	db       *bolt.DB
@@ -47,6 +45,18 @@ func (s *server) auth(next http.Handler) http.Handler {
 	})
 }
 
+func (s *server) setCookie(w http.ResponseWriter, r *http.Request, creds Credentials) {
+	session, _ := s.sessions.Get(r, "session")
+	session.Options = &sessions.Options{
+		Secure: !DEV,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	}
+	session.Values["authenticated"] = true
+	session.Values["username"] = creds.Username
+	session.Save(r, w)
+}
+
 func (s *server) login(w http.ResponseWriter, r *http.Request) {
 	var creds Credentials
 	// Get the JSON body and decode into credentials
@@ -70,10 +80,7 @@ func (s *server) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := s.sessions.Get(r, "session")
-	session.Values["authenticated"] = true
-	session.Values["username"] = creds.Username
-	session.Save(r, w)
+	s.setCookie(w, r, creds)
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -157,20 +164,19 @@ func (s *server) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := s.sessions.Get(r, "session")
-	session.Values["authenticated"] = true
-	session.Values["username"] = creds.Username
-	session.Save(r, w)
+	s.setCookie(w, r, creds)
 	w.WriteHeader(http.StatusOK)
 }
 
 func main() {
+	_, DEV = os.LookupEnv("DEV")
+
 	secureMiddleware := secure.New(secure.Options{
-		// AllowedHosts:         []string{"sandr0\\.tk"},
+		AllowedHosts:         []string{"sandr0.xyz"},
 		AllowedHostsAreRegex: false,
 		// HostsProxyHeaders:    []string{"X-Forwarded-Host"},
 		SSLRedirect: false,
-		SSLHost:     "sandro.tk",
+		SSLHost:     "sandr0.xyz",
 		// SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
 		STSSeconds:           31536000,
 		STSIncludeSubdomains: true,
@@ -179,23 +185,15 @@ func main() {
 		FrameDeny:            true,
 		ContentTypeNosniff:   true,
 		BrowserXssFilter:     true,
-		ContentSecurityPolicy: `
-		default-src 'self' use.fontawesome.com data:;
-		font-src 'self' fonts.gstatic.com use.fontawesome.com;
-		img-src 'self' data:;
-		style-src 'unsafe-inline' 'self' use.fontawesome.com fonts.googleapis.com;
-		script-src 'self' 'unsafe-inline' unpkg.com;
-		base-uri 'none';
-		form-action 'self';`,
-		// PublicKey:             `pin-sha256="base64+primary=="; pin-sha256="base64+backup=="; max-age=5184000; includeSubdomains; report-uri="https://www.example.com/hpkp-report"`,
+		ContentSecurityPolicy: "default-src 'self'; font-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none';",
+		PermissionsPolicy:     "camera=(), display-capture=(), fullscreen=(), geolocation=(), microphone=(), web-share=()",
 		ReferrerPolicy: "same-origin",
-		FeaturePolicy:  "vibrate 'none'; geolocation 'none'; speaker 'none'; camera 'none'; microphone 'none'; notifications 'none';",
-		IsDevelopment:  dev,
+		IsDevelopment:  DEV,
 	})
 
 	port := 8083
 	db, _ := initStorage()
-	s := server{db, sessions.NewCookieStore([]byte("super-secret-key"))}
+	s := server{db, sessions.NewCookieStore([]byte(os.Getenv("COOKIEKEY")))}
 
 	r := mux.NewRouter()
 

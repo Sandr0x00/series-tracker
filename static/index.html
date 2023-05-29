@@ -6,40 +6,42 @@
     <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="img/favicon.png" type="image/png">
-    <!-- Bootstrap Standard Theme-->
-    <link type='text/css' href="lib/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Theme for Bootstrap -->
-    <link type='text/css' href="css/bootstrap.min.css" rel="stylesheet">
     <!-- My Stylesheet -->
-    <link type="text/css" href="css/series.css" rel="stylesheet">
-    <link type="text/css" href="css/color.css" rel="stylesheet">
+    <link type="text/css" href="css/main.css" rel="stylesheet">
     <title>Serien</title>
     <base target="_self">
 </head>
-<body class="dark">
-    <noscript class="col-12 justify">
+<body>
+    <noscript class="container justify">
         <h1>
             Bitte aktivieren sie JavaScript.
         </h1>
     </noscript>
 
-    <loading-dialog id="loadingComp"></loading-dialog>
+    <header-comp id="headerComp" class="mx-0"></header-comp>
 
-    <header-comp id="headerComp"></header-comp>
+    <series-comp id="seriesComp" class="mx-1 my-1 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-12"></series-comp>
 
-    <series-comp id="seriesComp" class="container-fluid"></series-comp>
-
-    <dialog-comp id="dialogComp"></dialog-comp>
-
-    <script>
-    const headerComp = document.getElementById("headerComp");
-    const dialogComp = document.getElementById("dialogComp");
-    const seriesComp = document.getElementById("seriesComp");
-    const loadingComp = document.getElementById("loadingComp");
-    </script>
+    <div class="dialog-container">
+        <dialog id="dialogInfo" class="rounded">
+            <dialog-info ></dialog-info>
+        </dialog>
+        <dialog id="dialogError" class="rounded">
+            <dialog-error></dialog-error>
+        </dialog>
+        <dialog id="dialogEdit" class="rounded w-full md:w-1/2">
+            <dialog-edit class="grid grid-cols-6 gap-2"></dialog-edit>
+        </dialog>
+        <dialog id="dialogLogin" class="rounded w-full md:w-1/2">
+            <dialog-login></dialog-login>
+        </dialog>
+        <dialog id="loadingDialog" class="text-center">
+            <i class="fas fa-yin-yang fa-spin fa-5x"></i>
+        </dialog>
+    </div>
 
     <script type="text/javascript" src="index.js"></script>
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/fontawesome.css">
 </body>
 </html>

@@ -1,6 +1,6 @@
-/* global seriesComp,dialogComp */
+/* global seriesComp */
 
-import {html} from 'lit-element';
+import {html} from 'lit';
 import {BaseComp} from './base.js';
 import { getCookie } from './cookies.js';
 
@@ -66,17 +66,17 @@ export class HeaderComp extends BaseComp {
 
     render() {
         return html`
-<nav id="nav" class="navbar navbar-static-top container-fluid ${this.enabled ? '' : 'disabled'}">
-  <div class="col-2">
-    <a id="plus" class="float-left p-4" type="button" @click=${() => dialogComp.showEdit()}><i class="fas fa-2x fa-plus-circle"></i></a>
+<nav id="nav" class="navbar grid grid-flow-col grid-cols-12 fixed-top ${this.enabled ? '' : 'disabled'}">
+  <div class="col-span-2 sm:col-span-1">
+    <button id="plus" class="float-start ps-4" type="button" @click=${() => document.querySelector('dialog-edit').show()}><i class="fas fa-2x fa-plus-circle"></i></button>
   </div>
-  <div class="col-1">
+  <div class="">
     <a id="filter" type="button" @click=${this.doFilter}>Show all <i class="far ${this.filter ? 'fa-square' : 'fa-check-square'}"></i></a>
   </div>
-  <div class="col-7">
+  <div class="col-span-6 sm:col-span-8">
     <input id="search" name="search" type="text" placeholder="Search" autocomplete="off" list="titelList" @keyup=${this.searchEvent} .value=${this.search}>
   </div>
-  <div class="d-none d-sm-block col-sm-1">
+  <div class="flex justify-center">
     <svg id="refresh" class="radial-progress" viewBox="0 0 44 44" @click=${() => seriesComp.loadStuff()}>
       <path id="refresh_bg"
         d="M22 2.0845
@@ -95,8 +95,8 @@ export class HeaderComp extends BaseComp {
         stroke-dasharray="${this.reload}, 100";/>
     </svg>
   </div>
-  <div class="col-2 col-sm-1">
-    <a id="info" class="float-right p-4" type="button" @click=${() => dialogComp.showInfo()}><i class="fas fa-2x fa-info-circle"></i></a>
+  <div class="col-span-col-2 sm:col-span-1">
+    <button id="info" class="float-end pe-4" type="button" @click=${() => document.querySelector('dialog-info').show()}><i class="fas fa-2x fa-info-circle"></i></button>
   </div>
 </nav>`;
     }

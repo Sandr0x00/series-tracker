@@ -1,68 +1,58 @@
-/* global seriesComp, dialogComp */
+/* global seriesComp, dialogLogin */
 
-import {html} from 'lit-element';
-import {BaseComp} from './base.js';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import {html} from 'lit';
+import { DialogComp } from './dialog.js';
 
 const KEY = {
-    ESCAPE: 27,
     ENTER: 13
 };
 
-export class DialogLoginComp extends BaseComp {
+export class DialogLoginComp extends DialogComp {
 
     static get properties() {
         return {
             submitEnabled: Boolean,
             username: String,
             password: String,
-            result: String
+            result: Object
         };
     }
 
     constructor() {
         super();
-        this.result = '';
+        this.result = html``;
+    }
+
+    show() {
+        super.show();
+        dialogLogin.showModal();
     }
 
     close() {
-        dialogComp.close(true);
+        super.close();
+        dialogLogin.close();
     }
 
     render() {
         return html`
-<div id="dialog" class="col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-    ${unsafeHTML(this.result)}
-    <form id="form" action="javascript:void(0);" @submit=${this.postLogin}>
-        <div id="row-titel" class="row">
-            <div class="offset-sm-2 col col-sm-8">
-                <input id="username" name="username" type="text" pattern="[a-zA-Z0-9\-]*" required placeholder="Username" autocomplete="off" @keyup=${(e) => {
-        this.loginUpdateSubmit();
+${this.result}
+<form id="form" class="grid grid-cols-1 gap-2" action="javascript:void(0);" @submit=${this.postLogin}>
+    <input id="username" name="username" type="text" pattern="[a-zA-Z0-9\-]*" required placeholder="Username" autocomplete="off" @input=${() => this.loginUpdateSubmit()} @keyup=${(e) => {
         if (e.keyCode === KEY.ENTER) {
             document.getElementById('password').focus();
         }
     }}>
-            </div>
-        </div>
-        <div class="row">
-            <div class="offset-sm-2 col col-sm-8">
-                <input id="password" name="password" type="password" required placeholder="Password" autocomplete="off" @keyup=${(e) => {
-        this.loginUpdateSubmit();
+
+    <input id="password" name="password" type="password" required placeholder="Password" autocomplete="off" @input=${() => this.loginUpdateSubmit()} @keyup=${(e) => {
         if (e.keyCode === KEY.ENTER) {
             this.postLogin();
         }
     }}>
-            </div>
-        </div>
-        <div class="row">
-            <div class="offset-sm-2 col col-sm-8">
-                <button id="submit" class="btn btn-link" type="submit" ?disabled=${!this.submitEnabled}>
-                    <i class="fas fa-check fa-2x"></i>
-                </button>
-            </div>
-        </div>
-    </form>
-</div>`;
+
+    <button id="submit" type="submit" ?disabled=${!this.submitEnabled}>
+        <i class="fas fa-check fa-2x"></i>
+    </button>
+</form>`;
     }
 
     loginUpdateSubmit() {
@@ -83,14 +73,13 @@ export class DialogLoginComp extends BaseComp {
             })
         }).then(response => {
             if (response.status === 200) {
-                this.result = '';
+                this.result = html``;
                 this.close();
                 seriesComp.loadStuff();
             } else if (response.status === 401) {
-                this.result = '<div class="row"><div class="offset-sm-2 col col-sm-8 alert error">Wrong Username or Password.</div></div>';
+                this.result = html`<div class="offset-sm-2 col col-sm-8 alert error">Wrong Username or Password.</div>`;
             } else {
-                console.log('Fucked up');
-                // this.showError('Fucked up');
+                document.querySelector('dialog-error').show('Fucked up');
             }
         });
 

@@ -1,9 +1,11 @@
-/* global dialogComp, loadingComp */
+/* global loadingDialog */
 
-import {html} from 'lit-element';
+import {html} from 'lit';
 import {BaseComp} from './base.js';
 import $ from 'jquery';
 import { getCookie, setCookie } from './cookies.js';
+import { isDeepEqual } from './utils.js';
+import tippy from 'tippy.js';
 
 class Series extends BaseComp {
 
@@ -17,7 +19,7 @@ class Series extends BaseComp {
 
     constructor() {
         super();
-        loadingComp.open();
+        loadingDialog.showModal();
         this.data = {};
         this.dataFilter = [getCookie('filter') !== '', ''];
         this.filteredData = {};
@@ -67,25 +69,24 @@ class Series extends BaseComp {
         for (const elem in this.filteredData) {
             let bgImg = new Image();
             bgImg.onload = () => {
-                $('#' + elem).css('background-image', 'url(' + this.data[elem].img + ')');
+                $(`#${elem}`).css('background-image', `url(${this.data[elem].img})`);
             };
             bgImg.onerror = () => {
-                $('#' + elem).css('background-image', 'url(' + 'img/unknown.jpg' + ')');
+                $(`#${elem}`).css('background-image', 'url(img/unknown.jpg)');
             };
             bgImg.src = this.data[elem].img;
+            tippy(`#${elem}`, {
+                placement: 'top',
+                arrow: true,
+                content: $(`#${elem}`).data('content')
+            });
         }
-        $('[data-toggle="tooltip"]').tooltip({
-            placement: 'top',
-            container: 'body',
-            offset: '0, -100%',
-            template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
-        });
     }
 
     single(s) {
         return html`
-<div id="${s.id}_div" class="seriesDiv col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1">
-  <a class="series placeholder display ${s.finished ? 'grayscale' : ''}" id="${s.id}" @click=${() => dialogComp.showEdit(s.id, s.title, s.status, s.img)} data-toggle="tooltip" data-original-title="${s.title}" data-large="${s.img}">
+<div id="${s.id}_div" class="relative seriesDiv w-full">
+  <a class="absolute series display ${s.finished ? 'grayscale' : ''}" id="${s.id}" @click=${() => document.querySelector('dialog-edit').show(s.id, s.title, s.status, s.img)} data-content="${s.title}" data-large="${s.img}">
     <span class="shadow" id="${s.id}_status">${s.status}</span>
   </a>
 </div>`;
@@ -112,20 +113,22 @@ class Series extends BaseComp {
     loadStuff() {
         fetch('api/series').then(response => {
             if (response.status === 401) {
-                dialogComp.close(true);
-                dialogComp.showLogin();
+                document.querySelector('dialog-login').show();
                 return Promise.reject(null);
             }
             return response;
         }).then(response => response.json()
         ).then(series => this.setData(series)
         ).then(data => {
-            loadingComp.close();
-            this.data = data;
+            loadingDialog.close();
+            if (!isDeepEqual(this.data, data)) {
+                // only update if the data is really different, otherwise, I spam myself full with image loadings :)
+                this.data = data;
+            }
         }).catch(err => {
             if (err) {
-                loadingComp.close();
-                dialogComp.showError(err);
+                loadingDialog.close();
+                document.querySelector('dialog-error').show(err);
             }
         });
     }

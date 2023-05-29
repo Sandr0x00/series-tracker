@@ -1,35 +1,8 @@
-import $ from 'jquery';
-
-const dark = 'dark';
-const light = 'light';
-
-$(document).ready(function () {
-    handleCookie();
-});
-
-function handleCookie() {
-    let cName = 'theme';
-    let theme = getCookie(cName);
-    if (theme !== '') {
-        if ((theme === dark && $('body').hasClass(light))
-        || (theme === light && $('body').hasClass(dark))) {
-            $('body').toggleClass(light);
-            $('body').toggleClass(dark);
-        }
-    } else {
-        if ($('body').hasClass(light)) {
-            setCookie(cName, light);
-        } else {
-            setCookie(cName, dark);
-        }
-    }
-}
 
 export function setCookie(cname, cvalue) {
     let d = new Date();
     d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
-    let expires = 'expires=' + d.toUTCString();
-    document.cookie = cname + '=' + cvalue + ';' + expires;
+    document.cookie = `${cname}=${cvalue}; expires=${d.toUTCString()}; SameSite=Strict;`;
 }
 
 export function getCookie(cname) {
